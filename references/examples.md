@@ -40,6 +40,32 @@ Good: a trivial one-property block stays compact.
 }
 ```
 
+Good: a parent at-rule containing multiple child blocks has breathing room before the first child, between siblings, and before the parent closes.
+
+```css
+@media (forced-colors: active) {
+
+	.orbit-card {
+
+		border-color: CanvasText;
+		background-color: Canvas;
+		color: CanvasText;
+	}
+
+	.orbit-card__pulse {
+
+		background-color: CanvasText;
+		box-shadow: none;
+	}
+
+	.orbit-card__eyebrow {
+
+		color: CanvasText;
+	}
+
+}
+```
+
 ## HTML and PHP alternative syntax
 
 Bad: PHP is used as a brace-based code island around HTML, with unnecessary PHP indentation and XHTML-style HTML syntax.
@@ -63,6 +89,31 @@ Good: use PHP alternative syntax for template control, indent the HTML in contex
 <?php endif; ?>
 
 <img src="image.jpg">
+```
+
+Good: when a standalone PHP opening tag is followed by a DocBlock, leave a blank line after the tag while keeping the DocBlock directly adjacent to the declaration.
+
+```php
+<?php
+
+/**
+ * Encodes binary data as unpadded URL-safe Base64.
+ *
+ * @since Unknown
+ *
+ * @param string $value Binary data.
+ * @return string URL-safe Base64 data.
+ */
+function constellation_base64url_encode( string $value ): string {
+	return rtrim(
+		strtr(
+			base64_encode( $value ),
+			'+/',
+			'-_'
+		),
+		'='
+	);
+}
 ```
 
 ## JavaScript object and array shape
@@ -163,15 +214,30 @@ Good: pass the source value directly.
 renderUserName( user.profile.displayName );
 ```
 
-Bad: aliases before a call only make the reader track additional names.
+Bad: aliases before a call only make the reader track additional names. The form examples use these explicit shapes:
+
+```js
+/**
+ * @typedef {Object} SubmissionApiSettings
+ * @property {string} baseUrl API base URL.
+ */
+
+/**
+ * @typedef {Object} SubmissionSettings
+ * @property {SubmissionApiSettings} api API settings.
+ * @property {string} formId Form identifier.
+ */
+```
 
 ```js
 /**
  * Submits a form.
  *
+ * @since Unknown
+ *
  * @param {HTMLFormElement} form Form to submit.
- * @param {Object} settings Submission settings.
- * @return {Promise} Form submission request.
+ * @param {SubmissionSettings} settings Submission settings.
+ * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
 	const endpoint = settings.api.baseUrl;
@@ -191,9 +257,11 @@ Good: pass direct values and constructed values where they are needed.
 /**
  * Submits a form.
  *
+ * @since Unknown
+ *
  * @param {HTMLFormElement} form Form to submit.
- * @param {Object} settings Submission settings.
- * @return {Promise} Form submission request.
+ * @param {SubmissionSettings} settings Submission settings.
+ * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
 	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
@@ -203,14 +271,28 @@ function submitForm( form, settings ) {
 }
 ```
 
-Bad: a convenience alias does not improve this call.
+Bad: a convenience alias does not improve this call. The card examples use these explicit shapes:
+
+```js
+/**
+ * @typedef {Object} CardData
+ * @property {Element} element Card element.
+ */
+
+/**
+ * @typedef {Object} UpdatedCardData
+ * @property {string} content Updated card content.
+ */
+```
 
 ```js
 /**
  * Updates a card.
  *
- * @param {Object} card Card data.
- * @param {Object} data Updated card data.
+ * @since Unknown
+ *
+ * @param {CardData} card Card data.
+ * @param {UpdatedCardData} data Updated card data.
  */
 function updateCard( card, data ) {
 	const cardElement = card.element;
@@ -225,8 +307,10 @@ Good: use direct access. If context needs explanation, add a comment instead of 
 /**
  * Updates a card.
  *
- * @param {Object} card Card data.
- * @param {Object} data Updated card data.
+ * @since Unknown
+ *
+ * @param {CardData} card Card data.
+ * @param {UpdatedCardData} data Updated card data.
  */
 function updateCard( card, data ) {
 
@@ -234,6 +318,98 @@ function updateCard( card, data ) {
 	replaceCardContent( card.element, data.content );
 }
 ```
+
+## Pure one-use computations and exact JSDoc shapes
+
+Bad: this function uses a simple one-use computation, a one-use filtered result, and a one-use ternary alias. Its documentation also hides the actual input and output shapes behind generic types.
+
+```js
+/**
+ * Folds incoming signals into a short-lived orbit of attention.
+ *
+ * @since Unknown
+ *
+ * @param {Array<Object>} signals Signal records with a label and start timestamp.
+ * @param {number} [now=Date.now()] Current time as a Unix timestamp in milliseconds.
+ * @return {Array<Object>} Signals ordered by start time with display metadata.
+ */
+function foldBeaconSignals( signals, now = Date.now() ) {
+	const horizon = now + 15 * 60 * 1000;
+	const visibleSignals = signals
+		.slice()
+		.filter( function ( signal ) {
+			return signal.startsAt >= now && signal.startsAt <= horizon;
+		} )
+		.sort( function ( firstSignal, secondSignal ) {
+			return firstSignal.startsAt - secondSignal.startsAt;
+		} );
+
+	return visibleSignals.map( function ( signal, index ) {
+		const minutesUntil = Math.ceil( ( signal.startsAt - now ) / 60000 );
+		const urgency = minutesUntil <= 2 ? `flicker` : `steady`;
+
+		return {
+			...signal,
+			ariaLabel: `${signal.label}; begins in ${minutesUntil} minutes; ${urgency}.`,
+			priority: index + 1,
+		};
+	} );
+}
+```
+
+Good: define the actual record shapes, inline pure one-use values, and document that the function accepts an array and returns an array of concrete records.
+
+```js
+/**
+ * @typedef {Object} BeaconSignal
+ * @property {string} label Signal label.
+ * @property {number} startsAt Signal start timestamp in milliseconds.
+ */
+
+/**
+ * @typedef {Object} FoldedBeaconSignal
+ * @property {string} label Signal label.
+ * @property {number} startsAt Signal start timestamp in milliseconds.
+ * @property {string} ariaLabel Accessible signal label.
+ * @property {number} priority Display priority.
+ */
+
+/**
+ * Folds incoming signals into a short-lived orbit of attention.
+ *
+ * @since Unknown
+ *
+ * @param {BeaconSignal[]} signals Signal records with a label and start timestamp.
+ * @param {number} [now=Date.now()] Current time as a Unix timestamp in milliseconds.
+ * @return {FoldedBeaconSignal[]} Signals ordered by start time with display metadata.
+ */
+function foldBeaconSignals( signals, now = Date.now() ) {
+	return signals
+		.slice()
+		.filter( function ( signal ) {
+			return signal.startsAt >= now &&
+				signal.startsAt <= now + 15 * 60 * 1000;
+		} )
+		.sort( function ( firstSignal, secondSignal ) {
+			return firstSignal.startsAt - secondSignal.startsAt;
+		} )
+		.map( function ( signal, index ) {
+			const minutesUntil = Math.ceil( ( signal.startsAt - now ) / 60000 );
+
+			return {
+				...signal,
+				ariaLabel: `${signal.label}; begins in ${minutesUntil} minutes; ${
+					minutesUntil <= 2
+						? `flicker`
+						: `steady`
+				}.`,
+				priority: index + 1,
+			};
+		} );
+}
+```
+
+The `horizon`, `visibleSignals`, and `urgency` locals are not retained because each is a pure value used once. `minutesUntil` remains because it is used twice and prevents the calculation from being repeated.
 
 ## DRY: repeated literals versus repeated work
 
@@ -252,14 +428,30 @@ const locations = {
 };
 ```
 
-Bad: a computation is repeated unnecessarily.
+Bad: a computation is repeated unnecessarily. The user examples use these explicit shapes:
+
+```js
+/**
+ * @typedef {Object} UserData
+ * @property {string} displayName User display name.
+ */
+
+/**
+ * @typedef {Object} RenderedUserData
+ * @property {string} name User name.
+ * @property {string} label User label.
+ * @property {string} ariaLabel Accessible user label.
+ */
+```
 
 ```js
 /**
  * Renders a user.
  *
- * @param {Object} user User data.
- * @return {Object} Rendered user data.
+ * @since Unknown
+ *
+ * @param {UserData} user User data.
+ * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
 	return {
@@ -276,8 +468,10 @@ Good: store the computed result because it is reused.
 /**
  * Renders a user.
  *
- * @param {Object} user User data.
- * @return {Object} Rendered user data.
+ * @since Unknown
+ *
+ * @param {UserData} user User data.
+ * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
 	const displayName = getDisplayName( user );
@@ -290,14 +484,31 @@ function renderUser( user ) {
 }
 ```
 
-Bad: a fetch or other expensive task is repeated while constructing an object.
+Bad: a fetch or other expensive task is repeated while constructing an object. These examples use explicit profile shapes:
+
+```js
+/**
+ * @typedef {Object} UserProfile
+ * @property {number} id User ID.
+ * @property {string} name User name.
+ */
+
+/**
+ * @typedef {Object} ProfileResult
+ * @property {UserProfile} profile User profile.
+ * @property {string[]} permissions User permissions.
+ * @property {string} summary Profile summary.
+ */
+```
 
 ```js
 /**
  * Builds a profile.
  *
+ * @since Unknown
+ *
  * @param {number} userId User ID.
- * @return {Object} Profile data.
+ * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
 	return {
@@ -314,8 +525,10 @@ Good: perform the work once and reuse its result.
 /**
  * Builds a profile.
  *
+ * @since Unknown
+ *
  * @param {number} userId User ID.
- * @return {Object} Profile data.
+ * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
 	const profile = fetchProfile( userId );
@@ -365,6 +578,8 @@ This example demonstrates the required function-call spacing and documentation s
 ```js
 /**
  * Initializes accordion controls.
+ *
+ * @since Unknown
  *
  * @param {Document|Element} root Root containing the accordion controls.
  */
@@ -417,6 +632,8 @@ Good: document a return value when the function returns one.
 /**
  * Gets the user display name.
  *
+ * @since Unknown
+ *
  * @param int $user_id User ID.
  * @return string User display name.
  */
@@ -430,6 +647,8 @@ Good: omit `@return` when the function has no return value.
 ```php
 /**
  * Logs an administrative message.
+ *
+ * @since Unknown
  *
  * @param string $message Message to log.
  */

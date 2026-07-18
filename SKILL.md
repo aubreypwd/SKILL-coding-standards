@@ -1,11 +1,23 @@
 ---
 name: aubreypwd-coding-standards
-description: Apply project-established coding standards first, then use WordPress Coding Standards and the user's personal code-formatting preferences as the fallback for writing, reviewing, refactoring, or formatting PHP, JavaScript, CSS, HTML, and inline documentation.
+description: Use for every response or task that writes, edits, reviews, refactors, formats, or generates code in PHP, JavaScript, CSS, HTML, or any other language. Inspect project standards first, then strictly validate every code fragment—including chat examples, plans, diffs, CLI output, and UI responses—against WordPress Coding Standards and Aubrey Portwood's exact documentation, whitespace, interpolation, function-call, and Inline Temp rules.
 ---
 
 # Aubrey Portwood's Personal Coding Standards
 
 Use this skill whenever writing, reviewing, refactoring, or formatting code.
+
+## Always-on code output rule
+
+Before producing any response that contains meaningful code, ask internally: **Am I writing code right now?** If the answer is yes, apply this skill before generating the code, even when the code is only:
+
+- an example or snippet in a normal chat response;
+- pseudocode, a plan, a diff, or a patch;
+- a command, configuration fragment, or generated file body;
+- an error correction or explanation that includes replacement code; or
+- output shown in a CLI, IDE, web, or other user interface rather than written to a project file.
+
+Do not output generic illustrative code and assume these standards apply only to file edits. Every code fragment must pass the same standards workflow and compliance gate.
 
 ## Required workflow
 
@@ -18,6 +30,8 @@ Do not treat these standards as a loose checklist. Complete this workflow before
 5. Run the compliance gate in section 4. Correct every failure before presenting the result.
 
 If a check cannot be completed, state the unresolved compatibility or standards question. Do not claim that the code follows these standards based on a partial review.
+
+Do not present code that fails any applicable check. Revise it before showing it; if the check cannot be resolved without project information or user direction, stop before generating the code and state what is missing.
 
 ## 1. Discover the project's standard first
 
@@ -50,6 +64,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
   ```
 
 - In PHP, do not add indentation inside every PHP tag automatically. Indent according to the surrounding template and context.
+- When a standalone `<?php` opening tag is followed by a DocBlock or statement, leave one blank line after the tag. Keep a DocBlock directly adjacent to the declaration it documents; the blank line belongs between `<?php` and the DocBlock, not between the DocBlock and the declaration. This does not apply to inline alternative syntax such as `<?php if ( $visible ) : ?>`.
 - In PHP documentation, add `@return` only when the function actually returns a value.
 - CSS underscores are allowed.
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
@@ -69,6 +84,27 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 
   #overlay {
 	background: #fff;
+  }
+  ```
+
+- Give a parent block breathing room when it contains multiple logical child blocks: leave a blank line after the opening brace before the first child, between sibling blocks, and before the closing brace after the last child. Apply this to CSS at-rules, PHP control regions, and JavaScript blocks when they contain multiple sections. Keep a trivial one-statement or one-property block compact.
+
+  ```css
+  @media (forced-colors: active) {
+
+	.orbit-card {
+
+		border-color: CanvasText;
+		background-color: Canvas;
+		color: CanvasText;
+	}
+
+	.orbit-card__pulse {
+
+		background-color: CanvasText;
+		box-shadow: none;
+	}
+
   }
   ```
 
@@ -114,12 +150,33 @@ This applies to literals, properties, function arguments, return values, constru
 
 Create a variable when it provides real value, such as when it:
 
-- stores a computed, fetched, expensive, or side-effectful result;
-- prevents the same work from happening repeatedly;
+- prevents an expensive, fetched, side-effectful, or otherwise non-repeatable operation from happening repeatedly;
 - is used in multiple places;
 - captures a required snapshot;
-- represents meaningful state that improves understanding; or
+- represents required state that cannot be safely or clearly inlined; or
 - is required by the language or API.
+
+Being computed is not, by itself, a reason to create a variable. A simple pure expression that is used once is still an unnecessary Inline Temp. Do not keep a one-use variable merely because the expression is arithmetic, a ternary, a property path, a string interpolation, or a constructed value. Inline it where it is used:
+
+Bad:
+
+```js
+const horizon = now + 15 * 60 * 1000;
+
+return signals.filter( function ( signal ) {
+	return signal.startsAt <= horizon;
+} );
+```
+
+Good:
+
+```js
+return signals.filter( function ( signal ) {
+	return signal.startsAt <= now + 15 * 60 * 1000;
+} );
+```
+
+The same rule applies to a pure one-use transformation such as `visibleSignals`. Do not split a filter-and-map pipeline into a named intermediate value unless the separate binding is required for a snapshot, repeated use, or correctness.
 
 Do not create a variable solely because a literal is repeated. Repeating a simple literal can be clearer and easier to edit than introducing a shared alias:
 
@@ -140,10 +197,24 @@ Reuse a computed result:
 
 ```js
 /**
+ * @typedef {Object} UserData
+ * @property {string} displayName User display name.
+ */
+
+/**
+ * @typedef {Object} RenderedUserData
+ * @property {string} name User name.
+ * @property {string} label User label.
+ * @property {string} ariaLabel Accessible user label.
+ */
+
+/**
  * Renders a user.
  *
- * @param {Object} user User data.
- * @return {Object} Rendered user data.
+ * @since Unknown
+ *
+ * @param {UserData} user User data.
+ * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
 	const displayName = getDisplayName( user );
@@ -158,23 +229,39 @@ function renderUser( user ) {
 
 If direct code needs explanation, prefer a focused comment above the direct expression over a meaningless alias.
 
+### Document exact data shapes
+
+Function documentation must describe the actual input and output shapes. Never use a bare generic type such as `Object`, `Array`, `Array<Object>`, `any`, or `mixed` when the source, schema, type declarations, or request establish the shape. A named `@typedef {Object}` is acceptable only when its properties are fully declared immediately below it.
+
+For arrays, document both the container and its element type. For returned objects, document the concrete properties and types. The implementation and the documentation must agree: a `.map()` result is an array, while each mapped item is an object.
+
+Inspect the source of the data before writing the DocBlock. If the shape cannot be established, inspect more of the project or ask; do not guess and do not broaden the type to make the documentation easier to write.
+
+Define named shapes before using them, as shown in the `UserData` and `RenderedUserData` definitions above.
+
+Use the exact named shapes in function documentation. Do not write `@param {Object} user`, `@param {Array<Object>} signals`, or `@return {Object}` when those shapes are known.
+
 ## 4. Compliance gate
 
 Before presenting code as compliant, verify all of the following:
+
+Review the exact final code that will be shown, not the intended design or an earlier draft. Treat examples in chat, diffs, plans, and explanations as production code for this gate. Inspect every local variable's use count, every function's documentation, every documented data shape, and every parent-child block boundary before output.
 
 - Project-local instructions and enforced formatter, linter, compiler, type-checker, and runtime rules were inspected.
 - The applicable WordPress language and documentation references were read.
 - The target language/runtime version is known, or the assumption is stated before version-dependent syntax is used; never silently assume support.
 - Every new or modified named function and method has a directly preceding language-appropriate DocBlock or JSDoc block, unless an explicit project standard says otherwise.
-- Function documentation follows the applicable WordPress summary, parameter, return, and version-tag rules. Do not invent version values; use project evidence or the documented unknown convention when required.
+- Function documentation follows the applicable WordPress summary, parameter, return, and version-tag rules. Do not invent version values; use project evidence or `@since Unknown` when the version cannot be established.
+- Function documentation names exact parameter and return shapes. Reject bare generic `Object`, `Array`, `Array<Object>`, `any`, and `mixed` types when the shape can be determined. Verify that array-versus-object documentation matches the actual return expression.
 - `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
+- A standalone `<?php` tag has a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to its declaration.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.
 - Tabs, semicolons, whitespace, line wrapping, braces, comments, and blank lines follow the applicable WordPress rules.
 - Strings in every supported language use native interpolation, templating, formatting, or parameterization instead of concatenation whenever an alternative exists. JavaScript uses template literals by default, and variables are declared separately.
 - Objects and arrays preserve intentional order and are not alphabetized without instruction.
-- No meaningless single-use variables or convenience aliases were introduced.
+- No meaningless single-use variables or convenience aliases were introduced. A pure one-use computation is rejected even when it has a descriptive name or is assigned to a variable for readability.
 - Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.
 - Simple literal repetition has not been turned into a needless alias or abstraction.
 - Ternaries are kept compact when simple and broken at `?` and `:` only when long or complex.
@@ -207,3 +294,5 @@ Read only the relevant local reference when needed:
 - `references/examples.md` — conversation-derived bad and good examples.
 
 Use `references/examples.md` when deciding whether a variable, line break, property order, string form, or function-call layout matches the user's intent.
+
+Any example explicitly labeled `Bad` is a recognition fixture only. Never copy it into code presented as compliant.

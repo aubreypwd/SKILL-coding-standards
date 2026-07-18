@@ -6,6 +6,8 @@ They are primarily based on the [WordPress Coding Standards](https://developer.w
 
 This repository packages the standards as a skill for coding agents—especially Codex—to discover and follow. The agent-facing instructions are in [`SKILL.md`](SKILL.md). The [`references/`](references/) directory contains local snapshots of the WordPress standards and examples from the conversations that defined these preferences.
 
+The standards apply whenever an agent produces code, not only when it edits a project file. That includes code in chat responses, examples, explanations, pseudocode, plans, diffs, patches, commands, configuration fragments, CLI output, IDE output, and other interfaces.
+
 ## How the standards are applied
 
 When working in a project, an agent should:
@@ -17,6 +19,8 @@ When working in a project, an agent should:
 5. Check language and runtime support before using optional syntax.
 
 If the target version is unknown, the agent must ask or state a deliberate compatibility assumption before using version-dependent syntax. It must not silently assume that `export`, `const`, arrow functions, template literals, or trailing commas in function calls are supported.
+
+Before producing any meaningful code, the agent must ask internally, “Am I writing code right now?” If yes, it must apply the full standards workflow and compliance gate before showing the code.
 
 These standards are not intended to override a project's explicit conventions. They guide code when the project is silent or when the user explicitly requests these standards.
 
@@ -91,6 +95,59 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 	background: #fff;
 }
 ```
+
+When a parent block contains multiple child blocks, add breathing room after the parent opening brace, between sibling blocks, and before the parent closing brace. This makes each block visibly separate from the syntax that contains it:
+
+```css
+@media (forced-colors: active) {
+
+	.orbit-card {
+
+		border-color: CanvasText;
+		background-color: Canvas;
+		color: CanvasText;
+	}
+
+	.orbit-card__pulse {
+
+		background-color: CanvasText;
+		box-shadow: none;
+	}
+
+	.orbit-card__eyebrow {
+
+		color: CanvasText;
+	}
+
+}
+```
+
+The same visual separation applies to PHP and JavaScript blocks. Do not cram a DocBlock against a standalone `<?php` tag:
+
+```php
+<?php
+
+/**
+ * Encodes binary data as unpadded URL-safe Base64.
+ *
+ * @since Unknown
+ *
+ * @param string $value Binary data.
+ * @return string URL-safe Base64 data.
+ */
+function constellation_base64url_encode( string $value ): string {
+	return rtrim(
+		strtr(
+			base64_encode( $value ),
+			'+/',
+			'-_'
+		),
+		'='
+	);
+}
+```
+
+The DocBlock remains directly adjacent to the function declaration. The blank line separates the PHP opening tag from the documentation block.
 
 ### Strings and interpolation
 
@@ -168,12 +225,22 @@ Add `@return` only when a function actually returns a value:
 /**
  * Logs an administrative message.
  *
+ * @since Unknown
+ *
  * @param string $message Message to log.
  */
 function log_admin_message( $message ) {
 	error_log( $message );
 }
 ```
+
+## Exact documentation shapes
+
+Every named function and method needs a directly preceding DocBlock or JSDoc block. Its parameter and return types must describe the actual shapes established by the project. Do not use bare `Object`, `Array`, `Array<Object>`, `any`, `mixed`, or an unqualified `Promise` when the source makes the shape knowable.
+
+For an array, document the element type and the array container. For an object, document its concrete properties. If the shape is unknown, inspect the source, schema, or type declarations before documenting it; do not guess a generic type. A function that uses `.map()` returns an array, even though each element is an object.
+
+The complete signal example in [`references/examples.md`](references/examples.md#pure-one-use-computations-and-exact-jsdoc-shapes) demonstrates this distinction with `BeaconSignal[]` input and `FoldedBeaconSignal[]` output.
 
 ## Inline Temp: Don't Use Variables Un-necessarily
 
@@ -184,6 +251,28 @@ The rule is:
 > Do not create a variable merely to rename, relocate, or relay a value that is already available and only needed once.
 
 This is not limited to object properties. It applies to direct values, function arguments, return values, constructed values, nested expressions, and hard-coded strings.
+
+A pure computation used once is also an Inline Temp. Being computed does not make a variable necessary. Do not create a name for a simple arithmetic expression, ternary, property path, interpolation, or constructed value when it can be placed directly at its only use.
+
+Bad:
+
+```js
+const horizon = now + 15 * 60 * 1000;
+
+return signals.filter( function ( signal ) {
+	return signal.startsAt <= horizon;
+} );
+```
+
+Good:
+
+```js
+return signals.filter( function ( signal ) {
+	return signal.startsAt <= now + 15 * 60 * 1000;
+} );
+```
+
+This rule also applies to a pure one-use transformation such as `visibleSignals`. Inline the filter-and-map chain unless a separate binding is required for a snapshot, repeated use, or correctness.
 
 Bad:
 
@@ -199,15 +288,32 @@ Good:
 renderUserName( user.profile.displayName );
 ```
 
+The form examples use these explicit shapes:
+
+```js
+/**
+ * @typedef {Object} SubmissionApiSettings
+ * @property {string} baseUrl API base URL.
+ */
+
+/**
+ * @typedef {Object} SubmissionSettings
+ * @property {SubmissionApiSettings} api API settings.
+ * @property {string} formId Form identifier.
+ */
+```
+
 Bad:
 
 ```js
 /**
  * Submits a form.
  *
+ * @since Unknown
+ *
  * @param {HTMLFormElement} form Form to submit.
- * @param {Object} settings Submission settings.
- * @return {Promise} Form submission request.
+ * @param {SubmissionSettings} settings Submission settings.
+ * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
 	const endpoint = settings.api.baseUrl;
@@ -227,9 +333,11 @@ Good:
 /**
  * Submits a form.
  *
+ * @since Unknown
+ *
  * @param {HTMLFormElement} form Form to submit.
- * @param {Object} settings Submission settings.
- * @return {Promise} Form submission request.
+ * @param {SubmissionSettings} settings Submission settings.
+ * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
 	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
@@ -241,14 +349,28 @@ function submitForm( form, settings ) {
 
 The bad version creates three convenience variables that are each used only once. None of them prevents repeated work or adds meaningful information. The good version passes each value directly where it is needed.
 
-A comment can provide context without creating a meaningless alias:
+A comment can provide context without creating a meaningless alias. The card examples use these explicit shapes:
+
+```js
+/**
+ * @typedef {Object} CardData
+ * @property {Element} element Card element.
+ */
+
+/**
+ * @typedef {Object} UpdatedCardData
+ * @property {string} content Updated card content.
+ */
+```
 
 ```js
 /**
  * Updates a card.
  *
- * @param {Object} card Card data.
- * @param {Object} data Updated card data.
+ * @since Unknown
+ *
+ * @param {CardData} card Card data.
+ * @param {UpdatedCardData} data Updated card data.
  */
 function updateCard( card, data ) {
 
@@ -259,14 +381,32 @@ function updateCard( card, data ) {
 
 ### When a variable is justified
 
-The rule is not “never create variables.” A variable is appropriate when it stores a computed, fetched, expensive, side-effectful, or repeatedly used result:
+The rule is not “never create variables.” A variable is appropriate when it prevents repeated expensive or side-effectful work, is used in multiple places, captures a required snapshot, represents required state that cannot be safely or clearly be inlined, or is required by the language or API. A value being computed once is not enough.
+
+The user example below uses explicit input and output shapes:
+
+```js
+/**
+ * @typedef {Object} UserData
+ * @property {string} displayName User display name.
+ */
+
+/**
+ * @typedef {Object} RenderedUserData
+ * @property {string} name User name.
+ * @property {string} label User label.
+ * @property {string} ariaLabel Accessible user label.
+ */
+```
 
 ```js
 /**
  * Renders a user.
  *
- * @param {Object} user User data.
- * @return {Object} Rendered user data.
+ * @since Unknown
+ *
+ * @param {UserData} user User data.
+ * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
 	const displayName = getDisplayName( user );
@@ -287,12 +427,31 @@ DRY means **Don't Repeat Yourself**. It is useful when repetition would repeat w
 
 Bad: repeat a computation or fetch:
 
+These examples use explicit profile shapes:
+
+```js
+/**
+ * @typedef {Object} UserProfile
+ * @property {number} id User ID.
+ * @property {string} name User name.
+ */
+
+/**
+ * @typedef {Object} ProfileResult
+ * @property {UserProfile} profile User profile.
+ * @property {string[]} permissions User permissions.
+ * @property {string} summary Profile summary.
+ */
+```
+
 ```js
 /**
  * Builds a profile.
  *
+ * @since Unknown
+ *
  * @param {number} userId User ID.
- * @return {Object} Profile data.
+ * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
 	return {
@@ -309,8 +468,10 @@ Good: compute it once and reuse the result:
 /**
  * Builds a profile.
  *
+ * @since Unknown
+ *
  * @param {number} userId User ID.
- * @return {Object} Profile data.
+ * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
 	const profile = fetchProfile( userId );
