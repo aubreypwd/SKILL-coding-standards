@@ -251,7 +251,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
  * @param array{series: string, number: int} $invoice Invoice data.
  * @return string Formatted invoice reference.
  */
-function get_invoice_reference( array $invoice ): string {
+function get_invoice_reference( array $invoice ) : string {
 	return sprintf(
 		'%s-%06d',
 		$invoice['series'],
@@ -271,11 +271,11 @@ function get_invoice_reference( array $invoice ): string {
  * @param array<int, array{code: string, enabled: bool}> $regions Region records.
  * @return array<int, array{code: string, enabled: bool}> Enabled region records.
  */
-function get_enabled_regions( array $regions ): array {
+function get_enabled_regions( array $regions ) : array {
 	return array_values(
 		array_filter(
 			$regions,
-			static function ( array $region ): bool {
+			static function ( array $region ) : bool {
 				return $region['enabled'];
 			}
 		)
@@ -294,7 +294,7 @@ function get_enabled_regions( array $regions ): array {
  * @param array{code: string, name: string} $customer Customer data.
  * @return string Customer label.
  */
-function get_customer_label( array $customer ): string {
+function get_customer_label( array $customer ) : string {
 	return sprintf(
 		'%s (%s)',
 		$customer['name'],
@@ -318,7 +318,7 @@ function get_customer_label( array $customer ): string {
  *     refreshed_at: int
  * } Synchronization payload.
  */
-function build_sync_payload( int $account_id ): array {
+function build_sync_payload( int $account_id ) : array {
 
 	$account = get_account( $account_id );
 
@@ -342,7 +342,7 @@ function build_sync_payload( int $account_id ): array {
  * @param array{source: string, request_id: string} $context Event context.
  * @param int $actor_id Actor ID.
  */
-function write_audit_event( string $event, array $context, int $actor_id ): void {
+function write_audit_event( string $event, array $context, int $actor_id ) : void {
 	do_action(
 		'project_audit_event',
 		$event,
@@ -360,7 +360,7 @@ function write_audit_event( string $event, array $context, int $actor_id ): void
  *
  * @since Unknown
  */
-function register_invoice_status_filter(): void {
+function register_invoice_status_filter() : void {
 	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
 }
 
@@ -372,7 +372,7 @@ function register_invoice_status_filter(): void {
  * @param string $status Invoice status.
  * @return string Formatted invoice status.
  */
-function format_invoice_status_label( string $status ): string {
+function format_invoice_status_label( string $status ) : string {
 	return match ( $status ) {
 		'paid' => 'Paid in full',
 		'pending' => 'Awaiting payment',

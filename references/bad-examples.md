@@ -184,7 +184,7 @@ The first function has no DocBlock. The second says the parameter is a generic a
  * @param string $message Diagnostic message.
  * @return void
  */
-function store_diagnostic_message( string $message ): void {
+function store_diagnostic_message( string $message ) : void {
 	error_log( $message );
 }
 ```
@@ -202,12 +202,32 @@ Do not add `@return` when the function does not return a value.
  *
  * @return array Active workspace.
  */
-function get_active_workspace(): array {
+function get_active_workspace() : array {
 	return get_workspace();
 }
 ```
 
 The DocBlock is crammed against the standalone PHP opening tag. The tag must be separated from the DocBlock by a blank line.
+
+## PHP: missing space before a return type colon
+
+```php
+<?php
+
+/**
+ * Returns an invoice label.
+ *
+ * @since Unknown
+ *
+ * @param string $status Invoice status.
+ * @return string Invoice status.
+ */
+function get_invoice_label( string $status ): string {
+	return $status;
+}
+```
+
+Put a space before the colon in PHP return type declarations: `function get_invoice_label( string $status ) : string`.
 
 ## CSS block breathing room
 
@@ -340,7 +360,7 @@ Short list items with one simple link do not need individual multiline blocks or
  * @param array{title: string, count: int} $report Report data.
  * @return array{title: string, count: int} Report summary.
  */
-function build_report_summary( array $report ): array {
+function build_report_summary( array $report ) : array {
 
 	$summary = [
 		'title' => $report['title'],

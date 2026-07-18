@@ -105,7 +105,7 @@ Good: when a standalone PHP opening tag is followed by a DocBlock, leave a blank
  * @param string $value Binary data.
  * @return string URL-safe Base64 data.
  */
-function constellation_base64url_encode( string $value ): string {
+function constellation_base64url_encode( string $value ) : string {
 	return rtrim(
 		strtr(
 			base64_encode( $value ),

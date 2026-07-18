@@ -66,6 +66,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 
 - In PHP, do not add indentation inside every PHP tag automatically. Indent according to the surrounding template and context.
 - When a standalone `<?php` opening tag is followed by a DocBlock or statement, leave one blank line after the tag. Keep a DocBlock directly adjacent to the declaration it documents; the blank line belongs between `<?php` and the DocBlock, not between the DocBlock and the declaration. This does not apply to inline alternative syntax such as `<?php if ( $visible ) : ?>`.
+- In PHP return type declarations, put a space before the colon: `function example( string $value ) : string`. This is Aubrey's spacing override to the WordPress PHP baseline. Do not apply it to PHP alternative-syntax control statements such as `<?php if ( $visible ) : ?>`.
 - In PHP documentation, add `@return` only when the function actually returns a value.
 - CSS underscores are allowed.
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
@@ -258,6 +259,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Parent blocks and HTML elements with multiple logical child blocks have a blank line after their opening syntax and between sibling blocks. Curly-braced languages have no trailing blank line immediately before the closing brace; HTML has no corresponding trailing-curly rule.
 - Simple HTML lists remain compact: keep short `li` items on one line and adjacent to one another without blank lines inside the list. Do not apply the general parent-spacing rule mechanically to a short list.
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
+- PHP return type declarations have a space before the colon. Do not confuse this with the colon in PHP alternative syntax.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.

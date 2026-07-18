@@ -140,7 +140,7 @@ The same visual separation applies to PHP, JavaScript, and HTML blocks. Do not c
  * @param string $value Binary data.
  * @return string URL-safe Base64 data.
  */
-function constellation_base64url_encode( string $value ): string {
+function constellation_base64url_encode( string $value ) : string {
 	return rtrim(
 		strtr(
 			base64_encode( $value ),
@@ -153,6 +153,24 @@ function constellation_base64url_encode( string $value ): string {
 ```
 
 The DocBlock remains directly adjacent to the function declaration. The blank line separates the PHP opening tag from the documentation block.
+
+For PHP return type declarations, Aubrey puts a space before the colon:
+
+```php
+/**
+ * Returns an invoice label.
+ *
+ * @since Unknown
+ *
+ * @param string $status Invoice status.
+ * @return string Invoice label.
+ */
+function get_invoice_label( string $status ) : string {
+	return $status;
+}
+```
+
+This spacing override applies to return type declarations, not to the colon in PHP alternative syntax such as `<?php if ( $visible ) : ?>`.
 
 ### Strings and interpolation
 
