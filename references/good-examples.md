@@ -117,7 +117,7 @@ These examples do not use trailing commas in function calls.
 
 ## HTML
 
-Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Do not add a trailing blank line before an HTML closing tag.
+Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Short lists with simple items are a compact exception: keep each `li` on one line and keep the items adjacent. Do not add a trailing blank line before an HTML closing tag.
 
 ```html
 <main id="notification-settings" aria-labelledby="notification-settings-title">
@@ -156,18 +156,9 @@ Parent elements with multiple logical child blocks have a blank line after the o
 ```html
 <nav aria-label="Project sections">
 	<ul>
-
-		<li>
-			<a aria-current="page" href="/overview">Overview</a>
-		</li>
-
-		<li>
-			<a href="/activity">Activity</a>
-		</li>
-
-		<li>
-			<a href="/members">Members</a>
-		</li>
+		<li><a aria-current="page" href="/overview">Overview</a></li>
+		<li><a href="/activity">Activity</a></li>
+		<li><a href="/members">Members</a></li>
 	</ul>
 </nav>
 ```

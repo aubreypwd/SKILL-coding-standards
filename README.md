@@ -125,6 +125,8 @@ When a parent block contains multiple child blocks, add breathing room after the
 }
 ```
 
+Short HTML lists are a deliberate compact exception. When each list item contains simple content, keep each `li` on one line and keep the items adjacent without blank lines inside the `ul` or `ol`. Expand an item only when it contains complex or multiple meaningful child elements.
+
 The same visual separation applies to PHP, JavaScript, and HTML blocks. Do not cram a DocBlock against a standalone `<?php` tag:
 
 ```php

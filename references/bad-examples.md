@@ -308,6 +308,25 @@ The blank line before the function's closing brace adds no useful separation. Ke
 
 The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening `main` tag before the first child block. HTML does not need a trailing blank line before `</main>`.
 
+## HTML: over-formatting a simple list
+
+```html
+<nav aria-label="Project sections">
+	<ul>
+
+		<li>
+			<a href="/overview">Overview</a>
+		</li>
+
+		<li>
+			<a href="/activity">Activity</a>
+		</li>
+	</ul>
+</nav>
+```
+
+Short list items with one simple link do not need individual multiline blocks or blank lines between siblings. Keep each `li` compact and keep the list items adjacent.
+
 ## PHP: trailing blank line before a closing brace
 
 ```php
