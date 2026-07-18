@@ -77,6 +77,8 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 
 When an HTML opening tag spans multiple lines, put the closing `>` immediately after the final attribute. Do not place it on a separate line.
 
+When that opening tag contains text or nested elements, indent the contents one additional tab beyond the attributes by default. This keeps the contents visually nested instead of aligning them with the attributes.
+
 ### CSS
 
 - Underscores are allowed in CSS names.

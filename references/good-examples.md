@@ -118,7 +118,7 @@ Named function and method bodies have breathing room after their opening brace, 
 
 ## HTML
 
-Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Short lists with simple items are a compact exception: keep each `li` on one line and keep the items adjacent. Do not add a trailing blank line before an HTML closing tag.
+Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Short lists with simple items are a compact exception: keep each `li` on one line and keep the items adjacent. For multiline opening tags, the contents are indented one additional tab beyond the attributes. Do not add a trailing blank line before an HTML closing tag.
 
 ```html
 <main id="notification-settings" aria-labelledby="notification-settings-title">
@@ -657,11 +657,11 @@ const workflow = {
 	id="command-palette"
 	role="dialog">
 
-	<h2 id="command-palette-title">Command palette</h2>
+		<h2 id="command-palette-title">Command palette</h2>
 
-	<button id="command-palette-close" type="button">Close command palette</button>
+		<button id="command-palette-close" type="button">Close command palette</button>
 
-	<input aria-label="Search commands" id="command-palette-search" type="search">
+		<input aria-label="Search commands" id="command-palette-search" type="search">
 </div>
 ```
 

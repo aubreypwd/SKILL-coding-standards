@@ -376,13 +376,27 @@ Short list items with one simple link do not need individual multiline blocks or
 	aria-controls="command-palette"
 	aria-expanded="false"
 	id="command-palette-trigger"
-	type="button"
+type="button"
 >
-	Open command palette
+		Open command palette
 </button>
 ```
 
 When a multiline HTML opening tag is used, put the closing `>` immediately after the final attribute: `type="button">`.
+
+## HTML: multiline-tag contents aligned with attributes
+
+```html
+<button
+	aria-controls="command-palette"
+	aria-expanded="false"
+	id="command-palette-trigger"
+	type="button">
+	Open command palette
+</button>
+```
+
+Indent the contents of a multiline opening tag one additional tab beyond its attributes by default. The text above is aligned with the attributes instead of being nested beneath them.
 
 ## PHP: trailing blank line before a closing brace
 
