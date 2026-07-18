@@ -468,7 +468,7 @@ function groupTasksByDay( tasks ) {
 
 		const day = task.dueDate.slice( 0, 10 );
 
-		if ( ! groupedTasks[ day ] ) {
+		if ( undefined === groupedTasks[ day ] ) {
 			groupedTasks[ day ] = [];
 		}
 
@@ -691,12 +691,11 @@ const workflow = {
  */
 function toggleCommandPalette( trigger, palette ) {
 
-	const isHidden = palette.hidden;
+	palette.hidden = false === palette.hidden;
+	trigger.setAttribute( `aria-expanded`, `${palette.hidden}` );
 
-	palette.hidden = ! isHidden;
-	trigger.setAttribute( `aria-expanded`, `${isHidden}` );
+	if ( palette.hidden ) {
 
-	if ( isHidden ) {
 		const searchInput = palette.querySelector( `#command-palette-search` );
 
 		if ( searchInput instanceof HTMLInputElement ) {

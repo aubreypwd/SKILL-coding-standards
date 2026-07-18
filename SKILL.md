@@ -125,6 +125,8 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 	: valueWhenFalse;
   ```
 
+- When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the known value such as `null === value` or `undefined === value`; do not change the data test's meaning merely to avoid `!`.
+
 - Keep one- and two-parameter function calls inline when they remain readable. For calls with more than two parameters, put one parameter on each line and add a trailing comma only when the target language and version support trailing commas in function calls.
 - Apply WordPress function-call spacing exactly: no space between a function or method name and its opening parenthesis, and one space inside the opening and closing parentheses. Use `fetch( requestUrl, { ... } );`, not `fetch(requestUrl, { ... });` and not `fetch ( requestUrl, { ... } );`.
 - For multiline calls, put a space between the final argument expression and the closing parenthesis. An object argument therefore closes as `} );`, never `});`.
@@ -275,6 +277,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.
 - Simple literal repetition has not been turned into a needless alias or abstraction.
 - Ternaries are kept compact when simple and broken at `?` and `:` only when long or complex.
+- Known boolean false checks use explicit comparisons such as `false === value`, not bang negation. Nullable and missing-value checks use their actual known values.
 - Accessibility behavior is complete and accurate before it is described as accessibility-compliant.
 - Every example included in the answer follows all unrelated standards too; an example must not teach one rule while violating another.
 

@@ -227,6 +227,8 @@ Apply the equivalent native interpolation or formatting mechanism in other langu
 - Close multiline calls as `} );`, never `});`.
 - Never add a trailing comma to a function call unless support is confirmed.
 
+When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the actual known value, such as `null === value` or `undefined === value`, so the test does not change meaning.
+
 ```js
 const point = { x: 10, y: 20 };
 

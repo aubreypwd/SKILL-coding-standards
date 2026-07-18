@@ -602,13 +602,13 @@ function initAccordion( root ) {
 		trigger.addEventListener( `click`, () => {
 			const panel = document.getElementById( trigger.getAttribute( `aria-controls` ) );
 
-			if ( ! panel ) {
+			if ( null === panel ) {
 				return;
 			}
 
 			const isExpanded = trigger.getAttribute( `aria-expanded` ) === `true`;
 
-			trigger.setAttribute( `aria-expanded`, `${! isExpanded}` );
+			trigger.setAttribute( `aria-expanded`, `${false === isExpanded}` );
 			panel.hidden = isExpanded;
 		} );
 	} );

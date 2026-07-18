@@ -290,6 +290,40 @@ function revealDetails( panel ) {
 
 The logical child block is visually crammed against the surrounding parent syntax. Separate multiple logical sections with blank lines while preserving the required adjacency of a DocBlock and its declaration.
 
+## JavaScript: unnecessary boolean alias and bang negation
+
+```js
+/**
+ * Toggles the command palette.
+ *
+ * @since Unknown
+ *
+ * @param {HTMLButtonElement} trigger Palette trigger.
+ * @param {HTMLElement} palette Palette element.
+ */
+function toggleCommandPalette( trigger, palette ) {
+
+	const isHidden = palette.hidden;
+
+	palette.hidden = ! isHidden;
+	trigger.setAttribute( `aria-expanded`, `${isHidden}` );
+
+	if ( isHidden ) {
+		const searchInput = palette.querySelector( `#command-palette-search` );
+
+		if ( searchInput instanceof HTMLInputElement ) {
+			searchInput.focus();
+		}
+
+		return;
+	}
+
+	trigger.focus();
+}
+```
+
+Do not create `isHidden` merely to rename a directly available boolean property. Use `false === palette.hidden` for the toggle and reference `palette.hidden` directly. Use explicit boolean comparisons instead of bang negation.
+
 ## Breathing Room: named function body starts immediately
 
 ```js
