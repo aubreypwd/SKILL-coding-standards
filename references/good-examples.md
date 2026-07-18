@@ -224,6 +224,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <article aria-labelledby="release-note-title">
+
 	<header>
 
 		<p>Version 4.2</p>
@@ -603,6 +604,7 @@ const workflow = {
 	<section aria-labelledby="profile-contact-title">
 
 		<h2 id="profile-contact-title">Contact details</h2>
+
 		<dl>
 
 			<div>

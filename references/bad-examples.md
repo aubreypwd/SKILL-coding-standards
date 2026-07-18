@@ -306,7 +306,7 @@ The blank line before the function's closing brace adds no useful separation. Ke
 </main>
 ```
 
-The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening `main` tag before the first child block. HTML does not need a trailing blank line before `</main>`.
+The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening parent tag before the first child block. This applies to every HTML parent with multiple logical child blocks, not only `main`. HTML does not need a trailing blank line before the closing tag.
 
 ## HTML: over-formatting a simple list
 
