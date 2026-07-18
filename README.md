@@ -141,6 +141,7 @@ The same visual separation applies to PHP, JavaScript, and HTML blocks. Do not c
  * @return string URL-safe Base64 data.
  */
 function constellation_base64url_encode( string $value ) : string {
+
 	return rtrim(
 		strtr(
 			base64_encode( $value ),
@@ -166,11 +167,18 @@ For PHP return type declarations, Aubrey puts a space before the colon:
  * @return string Invoice label.
  */
 function get_invoice_label( string $status ) : string {
+
 	return $status;
 }
 ```
 
 This spacing override applies to return type declarations, not to the colon in PHP alternative syntax such as `<?php if ( $visible ) : ?>`.
+
+## Breathing Room Principle
+
+Every non-empty named function or method gets a blank line immediately after its opening brace, even when its body contains only one statement. Anonymous functions, callbacks, and closures get the same spacing when they contain multiple statements or logical sections; a one-statement callback may remain compact.
+
+The same principle applies to parent blocks with multiple logical child blocks in CSS, PHP, JavaScript, and HTML: separate the parent from its first child and separate sibling blocks. Keep compact exceptions such as simple one-property CSS blocks and short HTML lists. Never add a trailing blank line immediately before a closing curly brace.
 
 ### Strings and interpolation
 
@@ -253,6 +261,7 @@ Add `@return` only when a function actually returns a value:
  * @param string $message Message to log.
  */
 function log_admin_message( $message ) {
+
 	error_log( $message );
 }
 ```
@@ -339,6 +348,7 @@ Bad:
  * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
+
 	const endpoint = settings.api.baseUrl;
 	const formData = new FormData( form );
 	const requestUrl = `${endpoint}/forms/${settings.formId}`;
@@ -363,6 +373,7 @@ Good:
  * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
+
 	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
 		method: `POST`,
 		body: new FormData( form ),
@@ -432,6 +443,7 @@ The user example below uses explicit input and output shapes:
  * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
+
 	const displayName = getDisplayName( user );
 
 	return {
@@ -477,6 +489,7 @@ These examples use explicit profile shapes:
  * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
+
 	return {
 		profile: fetchProfile( userId ),
 		permissions: getPermissions( fetchProfile( userId ) ),
@@ -497,6 +510,7 @@ Good: compute it once and reuse the result:
  * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
+
 	const profile = fetchProfile( userId );
 
 	return {

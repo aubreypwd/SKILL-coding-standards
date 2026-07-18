@@ -68,6 +68,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - When a standalone `<?php` opening tag is followed by a DocBlock or statement, leave one blank line after the tag. Keep a DocBlock directly adjacent to the declaration it documents; the blank line belongs between `<?php` and the DocBlock, not between the DocBlock and the declaration. This does not apply to inline alternative syntax such as `<?php if ( $visible ) : ?>`.
 - In PHP return type declarations, put a space before the colon: `function example( string $value ) : string`. This is Aubrey's spacing override to the WordPress PHP baseline. Do not apply it to PHP alternative-syntax control statements such as `<?php if ( $visible ) : ?>`.
 - In PHP documentation, add `@return` only when the function actually returns a value.
+- Follow the **Breathing Room Principle** for function-like code: every non-empty named function or method body gets a blank line immediately after its opening brace, even when it contains only one statement. Apply the same spacing to an anonymous function, callback, or closure when its body contains multiple statements or logical sections; a one-statement callback may remain compact.
 - CSS underscores are allowed.
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
@@ -218,6 +219,7 @@ Reuse a computed result:
  * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
+
 	const displayName = getDisplayName( user );
 
 	return {
@@ -257,6 +259,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
 - A standalone `<?php` tag has a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to its declaration.
 - Parent blocks and HTML elements with multiple logical child blocks have a blank line after their opening syntax and between sibling blocks. Curly-braced languages have no trailing blank line immediately before the closing brace; HTML has no corresponding trailing-curly rule.
+- The Breathing Room Principle was applied to every non-empty named function or method, including one-statement bodies. Nested callbacks and closures with multiple statements or logical sections also have breathing room after their opening brace.
 - Simple HTML lists remain compact: keep short `li` items on one line and adjacent to one another without blank lines inside the list. Do not apply the general parent-spacing rule mechanically to a short list.
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
 - PHP return type declarations have a space before the colon. Do not confuse this with the colon in PHP alternative syntax.

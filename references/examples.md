@@ -106,6 +106,7 @@ Good: when a standalone PHP opening tag is followed by a DocBlock, leave a blank
  * @return string URL-safe Base64 data.
  */
 function constellation_base64url_encode( string $value ) : string {
+
 	return rtrim(
 		strtr(
 			base64_encode( $value ),
@@ -241,6 +242,7 @@ Bad: aliases before a call only make the reader track additional names. The form
  * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
+
 	const endpoint = settings.api.baseUrl;
 	const formData = new FormData( form );
 	const requestUrl = `${endpoint}/forms/${settings.formId}`;
@@ -265,6 +267,7 @@ Good: pass direct values and constructed values where they are needed.
  * @return {Promise<Response>} Form submission request.
  */
 function submitForm( form, settings ) {
+
 	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
 		method: `POST`,
 		body: new FormData( form ),
@@ -296,6 +299,7 @@ Bad: a convenience alias does not improve this call. The card examples use these
  * @param {UpdatedCardData} data Updated card data.
  */
 function updateCard( card, data ) {
+
 	const cardElement = card.element;
 
 	replaceCardContent( cardElement, data.content );
@@ -335,6 +339,7 @@ Bad: this function uses a simple one-use computation, a one-use filtered result,
  * @return {Array<Object>} Signals ordered by start time with display metadata.
  */
 function foldBeaconSignals( signals, now = Date.now() ) {
+
 	const horizon = now + 15 * 60 * 1000;
 	const visibleSignals = signals
 		.slice()
@@ -385,6 +390,7 @@ Good: define the actual record shapes, inline pure one-use values, and document 
  * @return {FoldedBeaconSignal[]} Signals ordered by start time with display metadata.
  */
 function foldBeaconSignals( signals, now = Date.now() ) {
+
 	return signals
 		.slice()
 		.filter( function ( signal ) {
@@ -395,6 +401,7 @@ function foldBeaconSignals( signals, now = Date.now() ) {
 			return firstSignal.startsAt - secondSignal.startsAt;
 		} )
 		.map( function ( signal, index ) {
+
 			const minutesUntil = Math.ceil( ( signal.startsAt - now ) / 60000 );
 
 			return {
@@ -455,6 +462,7 @@ Bad: a computation is repeated unnecessarily. The user examples use these explic
  * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
+
 	return {
 		name: getDisplayName( user ),
 		label: `User: ${getDisplayName( user )}`,
@@ -475,6 +483,7 @@ Good: store the computed result because it is reused.
  * @return {RenderedUserData} Rendered user data.
  */
 function renderUser( user ) {
+
 	const displayName = getDisplayName( user );
 
 	return {
@@ -512,6 +521,7 @@ Bad: a fetch or other expensive task is repeated while constructing an object. T
  * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
+
 	return {
 		profile: fetchProfile( userId ),
 		permissions: getPermissions( fetchProfile( userId ) ),
@@ -532,6 +542,7 @@ Good: perform the work once and reuse its result.
  * @return {ProfileResult} Profile data.
  */
 function buildProfile( userId ) {
+
 	const profile = fetchProfile( userId );
 
 	return {
@@ -585,6 +596,7 @@ This example demonstrates the required function-call spacing and documentation s
  * @param {Document|Element} root Root containing the accordion controls.
  */
 function initAccordion( root ) {
+
 	root.querySelectorAll( `[data-accordion-trigger]` ).forEach( ( trigger ) => {
 
 		trigger.addEventListener( `click`, () => {
@@ -639,6 +651,7 @@ Good: document a return value when the function returns one.
  * @return string User display name.
  */
 function get_user_display_name( $user_id ) {
+
 	return get_the_author_meta( 'display_name', $user_id );
 }
 ```
@@ -654,6 +667,7 @@ Good: omit `@return` when the function has no return value.
  * @param string $message Message to log.
  */
 function log_admin_message( $message ) {
+
 	error_log( $message );
 }
 ```

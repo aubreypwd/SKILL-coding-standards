@@ -6,6 +6,7 @@ snapshots and the conversation history.
 
 Verify the target language and version before using version-sensitive syntax.
 These examples do not use trailing commas in function calls.
+Named function and method bodies have breathing room after their opening brace, even when they contain one statement. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
 
 ## CSS
 
@@ -252,6 +253,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
  * @return string Formatted invoice reference.
  */
 function get_invoice_reference( array $invoice ) : string {
+
 	return sprintf(
 		'%s-%06d',
 		$invoice['series'],
@@ -272,6 +274,7 @@ function get_invoice_reference( array $invoice ) : string {
  * @return array<int, array{code: string, enabled: bool}> Enabled region records.
  */
 function get_enabled_regions( array $regions ) : array {
+
 	return array_values(
 		array_filter(
 			$regions,
@@ -295,6 +298,7 @@ function get_enabled_regions( array $regions ) : array {
  * @return string Customer label.
  */
 function get_customer_label( array $customer ) : string {
+
 	return sprintf(
 		'%s (%s)',
 		$customer['name'],
@@ -343,6 +347,7 @@ function build_sync_payload( int $account_id ) : array {
  * @param int $actor_id Actor ID.
  */
 function write_audit_event( string $event, array $context, int $actor_id ) : void {
+
 	do_action(
 		'project_audit_event',
 		$event,
@@ -361,6 +366,7 @@ function write_audit_event( string $event, array $context, int $actor_id ) : voi
  * @since Unknown
  */
 function register_invoice_status_filter() : void {
+
 	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
 }
 
@@ -373,6 +379,7 @@ function register_invoice_status_filter() : void {
  * @return string Formatted invoice status.
  */
 function format_invoice_status_label( string $status ) : string {
+
 	return match ( $status ) {
 		'paid' => 'Paid in full',
 		'pending' => 'Awaiting payment',
@@ -431,6 +438,7 @@ function format_invoice_status_label( string $status ) : string {
  * @return {AlertItem} Alert item with live-region metadata.
  */
 function buildAlertItem( alert ) {
+
 	return {
 		...alert,
 		ariaLive: alert.severity === `critical` ? `assertive` : `polite`,
@@ -455,7 +463,9 @@ function buildAlertItem( alert ) {
  * @return {Record<string, TaskRecord[]>} Tasks keyed by calendar date.
  */
 function groupTasksByDay( tasks ) {
+
 	return tasks.reduce( function ( groupedTasks, task ) {
+
 		const day = task.dueDate.slice( 0, 10 );
 
 		if ( ! groupedTasks[ day ] ) {
@@ -479,6 +489,7 @@ function groupTasksByDay( tasks ) {
  * @return {Array<{ id: string, priority: number }>} Sorted queue entries.
  */
 function sortQueueEntries( entries ) {
+
 	return entries.slice().sort( function ( firstEntry, secondEntry ) {
 		return firstEntry.priority - secondEntry.priority;
 	} );
@@ -502,6 +513,7 @@ function sortQueueEntries( entries ) {
  * @return {Promise<DashboardData>} Dashboard data.
  */
 async function loadDashboardData( endpoint ) {
+
 	return fetch( endpoint ).then( function ( response ) {
 		return response.json();
 	} );
@@ -519,6 +531,7 @@ async function loadDashboardData( endpoint ) {
  * @return {string} Connection status message.
  */
 function getConnectionMessage( isOffline, hasError ) {
+
 	return ( isOffline || hasError )
 		? `The service is temporarily unavailable.`
 		: `The service is ready.`;
@@ -534,7 +547,9 @@ function getConnectionMessage( isOffline, hasError ) {
  * @param {HTMLElement} panel Panel element.
  */
 function bindDismissiblePanel( panel ) {
+
 	panel.addEventListener( `keydown`, function ( event ) {
+
 		if ( event.key !== `Escape` ) {
 			return;
 		}
@@ -561,6 +576,7 @@ function bindDismissiblePanel( panel ) {
  * @return {string} Encoded query string.
  */
 function buildSearchQuery( filters ) {
+
 	return new URLSearchParams( {
 		phrase: filters.phrase,
 		owner: filters.owner,
@@ -580,6 +596,7 @@ function buildSearchQuery( filters ) {
  * @param {number} value Metric value.
  */
 function renderSummaryMetric( root, label, value ) {
+
 	renderMetric(
 		root,
 		label,

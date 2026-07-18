@@ -290,6 +290,28 @@ function revealDetails( panel ) {
 
 The logical child block is visually crammed against the surrounding parent syntax. Separate multiple logical sections with blank lines while preserving the required adjacency of a DocBlock and its declaration.
 
+## Breathing Room: named function body starts immediately
+
+```js
+/**
+ * @typedef {Object} Workspace
+ * @property {string} id Workspace identifier.
+ */
+
+/**
+ * Returns the current workspace.
+ *
+ * @since Unknown
+ *
+ * @return {Workspace} Current workspace.
+ */
+function getCurrentWorkspace() {
+	return readWorkspace();
+}
+```
+
+Named function and method bodies always get a blank line immediately after the opening brace, even when the body contains only one statement.
+
 ## JavaScript: trailing blank line before a closing brace
 
 ```js
