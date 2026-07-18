@@ -1,4 +1,4 @@
-# Aubrey Portwood Coding Standards
+# Aubrey Portwood's Personal Coding Standards (Codex SKILL)
 
 These are Aubrey Portwood's personal coding standards for writing readable, direct, maintainable code.
 
