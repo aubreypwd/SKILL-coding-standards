@@ -646,9 +646,8 @@ const workflow = {
 	aria-controls="command-palette"
 	aria-expanded="false"
 	id="command-palette-trigger"
-	type="button"
->
-	Open command palette
+	type="button">
+		Open command palette
 </button>
 
 <div
@@ -656,8 +655,7 @@ const workflow = {
 	aria-modal="true"
 	hidden
 	id="command-palette"
-	role="dialog"
->
+	role="dialog">
 
 	<h2 id="command-palette-title">Command palette</h2>
 

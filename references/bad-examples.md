@@ -369,6 +369,21 @@ The header is a separate child block and is jammed against the containing `main`
 
 Short list items with one simple link do not need individual multiline blocks or blank lines between siblings. Keep each `li` compact and keep the list items adjacent.
 
+## HTML: standalone closing angle bracket on a multiline opening tag
+
+```html
+<button
+	aria-controls="command-palette"
+	aria-expanded="false"
+	id="command-palette-trigger"
+	type="button"
+>
+	Open command palette
+</button>
+```
+
+When a multiline HTML opening tag is used, put the closing `>` immediately after the final attribute: `type="button">`.
+
 ## PHP: trailing blank line before a closing brace
 
 ```php

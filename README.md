@@ -75,6 +75,8 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 <img src="image.jpg">
 ```
 
+When an HTML opening tag spans multiple lines, put the closing `>` immediately after the final attribute. Do not place it on a separate line.
+
 ### CSS
 
 - Underscores are allowed in CSS names.

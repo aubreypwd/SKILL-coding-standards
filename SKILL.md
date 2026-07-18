@@ -56,6 +56,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - Use tabs for indentation. Use spaces only when a syntax or data format requires them.
 - For JSON, use spaces for indentation and remember that JSON does not support JavaScript trailing commas.
 - Do not use XHTML-style self-closing syntax in HTML. Use `<img>` rather than `<img />`.
+- For multiline HTML opening tags, put the closing `>` immediately after the final attribute on that same line. Do not put the closing `>` on its own line.
 - When PHP controls an HTML region, prefer PHP alternative syntax and indent the controlled HTML in context:
 
   ```php
