@@ -100,7 +100,7 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 }
 ```
 
-When a parent block contains multiple child blocks, add breathing room after the parent opening brace and between sibling blocks. Do not add a trailing blank line before the parent closing brace. This makes each block visibly separate without leaving an unnecessary gap before the closing syntax:
+When a parent block contains multiple child blocks, add breathing room after the parent opening brace or opening HTML tag and between sibling blocks. Do not add a trailing blank line before a CSS, PHP, or JavaScript closing brace. This makes each block visibly separate without leaving an unnecessary gap before closing curly syntax:
 
 ```css
 @media (forced-colors: active) {
@@ -125,7 +125,7 @@ When a parent block contains multiple child blocks, add breathing room after the
 }
 ```
 
-The same visual separation applies to PHP and JavaScript blocks. Do not cram a DocBlock against a standalone `<?php` tag:
+The same visual separation applies to PHP, JavaScript, and HTML blocks. Do not cram a DocBlock against a standalone `<?php` tag:
 
 ```php
 <?php

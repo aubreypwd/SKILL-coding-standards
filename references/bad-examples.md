@@ -294,6 +294,20 @@ function revealDrawer( drawer, trigger ) {
 
 The blank line before the function's closing brace adds no useful separation. Keep the opening and sibling spacing, then close the function directly after its final statement.
 
+## HTML: no breathing room after an opening element
+
+```html
+<main id="billing-summary" aria-labelledby="billing-summary-title">
+	<header>
+		<h1 id="billing-summary-title">Billing summary</h1>
+	</header>
+
+	<p>Your current balance is shown below.</p>
+</main>
+```
+
+The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening `main` tag before the first child block. HTML does not need a trailing blank line before `</main>`.
+
 ## PHP: trailing blank line before a closing brace
 
 ```php

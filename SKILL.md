@@ -88,7 +88,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
   }
   ```
 
-- Give a parent block breathing room when it contains multiple logical child blocks: leave a blank line after the opening brace before the first child and between sibling blocks. Do not add a trailing blank line immediately before the closing curly brace; close the block directly after its final child or statement. Apply this to CSS at-rules, PHP blocks, and JavaScript blocks when they contain multiple sections. This override does not apply to HTML.
+- Give a parent block breathing room when it contains multiple logical child blocks: leave a blank line after the opening brace or opening HTML tag before the first child and between sibling blocks. Do not add a trailing blank line immediately before the closing curly brace; close the block directly after its final child or statement. Apply this to CSS at-rules, PHP blocks, JavaScript blocks, and HTML elements when they contain multiple sections. HTML follows the opening and sibling-spacing rule, but has no curly-brace closing rule.
 
   ```css
   @media (forced-colors: active) {
@@ -255,6 +255,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Function documentation names exact parameter and return shapes. Reject bare generic `Object`, `Array`, `Array<Object>`, `any`, and `mixed` types when the shape can be determined. Verify that array-versus-object documentation matches the actual return expression.
 - `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
 - A standalone `<?php` tag has a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to its declaration.
+- Parent blocks and HTML elements with multiple logical child blocks have a blank line after their opening syntax and between sibling blocks. Curly-braced languages have no trailing blank line immediately before the closing brace; HTML has no corresponding trailing-curly rule.
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.

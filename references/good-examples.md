@@ -117,17 +117,24 @@ These examples do not use trailing commas in function calls.
 
 ## HTML
 
+Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Do not add a trailing blank line before an HTML closing tag.
+
 ```html
 <main id="notification-settings" aria-labelledby="notification-settings-title">
+
 	<header>
+
 		<h1 id="notification-settings-title">Notification settings</h1>
+
 		<p id="notification-settings-help">
 			Choose which updates should reach your team.
 		</p>
 	</header>
 
 	<form aria-describedby="notification-settings-help" action="/settings/notifications" method="post">
+
 		<fieldset>
+
 			<legend>Delivery channels</legend>
 
 			<label>
@@ -149,12 +156,15 @@ These examples do not use trailing commas in function calls.
 ```html
 <nav aria-label="Project sections">
 	<ul>
+
 		<li>
 			<a aria-current="page" href="/overview">Overview</a>
 		</li>
+
 		<li>
 			<a href="/activity">Activity</a>
 		</li>
+
 		<li>
 			<a href="/members">Members</a>
 		</li>
@@ -165,7 +175,9 @@ These examples do not use trailing commas in function calls.
 ```html
 <dialog aria-labelledby="archive-dialog-title" id="archive-dialog">
 	<form method="dialog">
+
 		<h2 id="archive-dialog-title">Archive this report?</h2>
+
 		<p>The report will leave the active workspace.</p>
 
 		<div>
@@ -178,7 +190,9 @@ These examples do not use trailing commas in function calls.
 
 ```html
 <table>
+
 	<caption>Upcoming maintenance windows</caption>
+
 	<thead>
 		<tr>
 			<th scope="col">Service</th>
@@ -186,12 +200,15 @@ These examples do not use trailing commas in function calls.
 			<th scope="col">Owner</th>
 		</tr>
 	</thead>
+
 	<tbody>
+
 		<tr>
 			<th scope="row">Search index</th>
 			<td>June 12, 2026</td>
 			<td>Platform team</td>
 		</tr>
+
 		<tr>
 			<th scope="row">Billing export</th>
 			<td>June 19, 2026</td>
@@ -203,10 +220,13 @@ These examples do not use trailing commas in function calls.
 
 ```html
 <section aria-labelledby="import-status-title">
+
 	<h2 id="import-status-title">Import status</h2>
+
 	<p aria-live="polite" id="import-status-message">
 		The import is ready to begin.
 	</p>
+
 	<progress aria-label="Import progress" max="100" value="0">0%</progress>
 </section>
 ```
@@ -214,10 +234,14 @@ These examples do not use trailing commas in function calls.
 ```html
 <article aria-labelledby="release-note-title">
 	<header>
+
 		<p>Version 4.2</p>
+
 		<h2 id="release-note-title">Scheduled exports are now available</h2>
 	</header>
+
 	<p>Send a report to a saved destination without opening the dashboard.</p>
+
 	<a href="/exports">Manage scheduled exports</a>
 </article>
 ```
@@ -370,14 +394,18 @@ function format_invoice_status_label( string $status ): string {
 <?php if ( $reservation['confirmed'] ) : ?>
 
 	<section aria-labelledby="reservation-confirmed-title">
+
 		<h2 id="reservation-confirmed-title">Reservation confirmed</h2>
+
 		<p>Your reservation code is <?php echo esc_html( $reservation['code'] ); ?>.</p>
 	</section>
 
 <?php else : ?>
 
 	<section aria-labelledby="reservation-pending-title">
+
 		<h2 id="reservation-pending-title">Reservation pending</h2>
+
 		<p>We are waiting for the venue to confirm your request.</p>
 	</section>
 
@@ -582,12 +610,15 @@ const workflow = {
 <?php if ( $profile['show_contact'] ) : ?>
 
 	<section aria-labelledby="profile-contact-title">
+
 		<h2 id="profile-contact-title">Contact details</h2>
 		<dl>
+
 			<div>
 				<dt>Email</dt>
 				<dd><?php echo esc_html( $profile['email'] ); ?></dd>
 			</div>
+
 			<div>
 				<dt>Phone</dt>
 				<dd><?php echo esc_html( $profile['phone'] ); ?></dd>
@@ -617,8 +648,11 @@ const workflow = {
 	id="command-palette"
 	role="dialog"
 >
+
 	<h2 id="command-palette-title">Command palette</h2>
+
 	<button id="command-palette-close" type="button">Close command palette</button>
+
 	<input aria-label="Search commands" id="command-palette-search" type="search">
 </div>
 ```
