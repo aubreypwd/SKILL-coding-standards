@@ -3,7 +3,7 @@ name: aubreypwd-coding-standards
 description: Apply project-established coding standards first, then use WordPress Coding Standards and the user's personal code-formatting preferences as the fallback for writing, reviewing, refactoring, or formatting PHP, JavaScript, CSS, HTML, and inline documentation.
 ---
 
-# Personal Coding Standards
+# Aubrey Portwood's Personal Coding Standards
 
 Use this skill whenever writing, reviewing, refactoring, or formatting code.
 
