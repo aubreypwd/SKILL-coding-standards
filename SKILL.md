@@ -75,7 +75,8 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - Small JavaScript objects and arrays may stay compact. Once they are large enough to benefit from reordering or scanning, put each item on its own line and use a trailing comma when the syntax and target version support it.
 - Preserve intentional object and array order. Do not alphabetize them automatically.
 - Declare variables separately. Do not use comma-separated variable declarations.
-- Prefer JavaScript template literals for strings by default. This avoids deciding between quote types and avoids unnecessary escaping. Do not use `+` for JavaScript string interpolation.
+- Avoid string concatenation in every supported language. Prefer the language's native interpolation, templating, formatting, or parameterized-string mechanism instead of assembling a string with `+`, `.`, or an equivalent concatenation operator. In JavaScript, use template literals; in PHP, use interpolation or the applicable formatting mechanism. Use concatenation only when the language or target version provides no viable alternative, and state that constraint.
+- Prefer JavaScript template literals for strings by default. This avoids deciding between quote types and avoids unnecessary escaping.
 - Format a simple ternary without unnecessary parentheses. Use parentheses when combining multiple tests. For long ternaries, put the question mark and colon on continuation lines:
 
   ```js
@@ -171,7 +172,7 @@ Before presenting code as compliant, verify all of the following:
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.
 - Tabs, semicolons, whitespace, line wrapping, braces, comments, and blank lines follow the applicable WordPress rules.
-- JavaScript uses template literals by default, does not concatenate strings with `+`, and declares variables separately.
+- Strings in every supported language use native interpolation, templating, formatting, or parameterization instead of concatenation whenever an alternative exists. JavaScript uses template literals by default, and variables are declared separately.
 - Objects and arrays preserve intentional order and are not alphabetized without instruction.
 - No meaningless single-use variables or convenience aliases were introduced.
 - Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.

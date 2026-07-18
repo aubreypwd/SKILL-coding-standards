@@ -92,9 +92,11 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 }
 ```
 
-### JavaScript strings
+### Strings and interpolation
 
-Use template literals by default. This avoids repeatedly deciding whether a string should use single or double quotes, and avoids unnecessary escaping when a string contains an apostrophe or quotation mark.
+Avoid string concatenation in every supported language. Prefer the language's native interpolation, templating, formatting, or parameterized-string mechanism instead of assembling a string with `+`, `.`, or an equivalent operator. Concatenation is acceptable only when the language or target version leaves no viable alternative.
+
+In JavaScript, use template literals by default. This avoids repeatedly deciding whether a string should use single or double quotes, and avoids unnecessary escaping when a string contains an apostrophe or quotation mark.
 
 ```js
 const message = `I can't save this file.`;
@@ -109,6 +111,18 @@ const message = 'Hello, ' + name + '!';
 ```
 
 The concatenation example is intentionally shown as bad code. It demonstrates the pattern agents should recognize and replace.
+
+In PHP, use interpolation when it expresses the value clearly:
+
+```php
+// Avoid.
+$message = 'Hello, ' . $name . '!';
+
+// Prefer.
+$message = "Hello, {$name}!";
+```
+
+Apply the equivalent native interpolation or formatting mechanism in other languages. If the language forces concatenation, use it only when necessary and document the constraint.
 
 ### JavaScript objects, arrays, and calls
 

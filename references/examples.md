@@ -96,7 +96,9 @@ const menu = {
 
 The lifecycle order is intentional, so preserve it.
 
-## Strings and template literals
+## Strings, interpolation, and concatenation
+
+Avoid string concatenation in every supported language when native interpolation, templating, formatting, or parameterization is available.
 
 Bad: JavaScript string concatenation creates unnecessary quote and spacing decisions.
 
@@ -116,6 +118,20 @@ Good: use a template literal by default for JavaScript strings.
 const message = `Hello, ${name}!`;
 const warning = `I can't save this file.`;
 ```
+
+Bad: PHP concatenation is unnecessary when interpolation expresses the value clearly.
+
+```php
+$message = 'Hello, ' . $name . '!';
+```
+
+Good:
+
+```php
+$message = "Hello, {$name}!";
+```
+
+If a language or target version provides no viable interpolation, templating, formatting, or parameterized-string alternative, concatenation may be used only as a documented compatibility constraint.
 
 ## Variable declarations and single-use aliases
 
