@@ -4,7 +4,7 @@ These are Aubrey Portwood's personal coding standards for writing readable, dire
 
 They are primarily based on the [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/), because WordPress pays unusually close attention to code readability, visual formatting, documentation, accessibility, and consistency. Aubrey agrees with most of those standards, but has several intentional differences and personal principles.
 
-This repository packages the standards as a skill for coding agents—especially Codex—to discover and follow. The agent-facing instructions are in [`SKILL.md`](SKILL.md). The [`references/`](references/) directory contains local snapshots of the WordPress standards and examples from the conversations that defined these preferences.
+This repository packages the standards as a skill for coding agents—especially Codex—to discover and follow. The agent-facing instructions are in [`SKILL.md`](SKILL.md). The [`references/`](references/) directory contains local snapshots of the WordPress standards, a canonical good-example corpus, and a canonical bad-example reject list.
 
 The standards apply whenever an agent produces code, not only when it edits a project file. That includes code in chat responses, examples, explanations, pseudocode, plans, diffs, patches, commands, configuration fragments, CLI output, IDE output, and other interfaces.
 
@@ -38,6 +38,10 @@ The baseline is the complete WordPress standards family:
 - [PHP inline documentation](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/)
 
 Local snapshots and their retrieval information are listed in [`references/source-index.md`](references/source-index.md).
+
+## Canonical example files
+
+Before generating code, compare the intended code shape with [`references/good-examples.md`](references/good-examples.md). Before showing the result, check it against [`references/bad-examples.md`](references/bad-examples.md) and reject every matching failure pattern. The good examples are intentionally unique to this skill and cover CSS, HTML, PHP, JavaScript, and combined templates. The bad examples record the mistakes Aubrey has identified so far.
 
 ## Personal differences from WordPress standards
 
@@ -240,7 +244,7 @@ Every named function and method needs a directly preceding DocBlock or JSDoc blo
 
 For an array, document the element type and the array container. For an object, document its concrete properties. If the shape is unknown, inspect the source, schema, or type declarations before documenting it; do not guess a generic type. A function that uses `.map()` returns an array, even though each element is an object.
 
-The complete signal example in [`references/examples.md`](references/examples.md#pure-one-use-computations-and-exact-jsdoc-shapes) demonstrates this distinction with `BeaconSignal[]` input and `FoldedBeaconSignal[]` output.
+The complete signal example in [`references/examples.md`](references/examples.md#pure-one-use-computations-and-exact-jsdoc-shapes) demonstrates this distinction with `BeaconSignal[]` input and `FoldedBeaconSignal[]` output. The canonical positive examples are in [`references/good-examples.md`](references/good-examples.md).
 
 ## Inline Temp: Don't Use Variables Un-necessarily
 
@@ -511,8 +515,8 @@ The practical rule is:
 
 ## For coding agents
 
-This skill exists to make an agent's code look and read the way Aubrey expects. The agent should study the project's own standards first, then use these standards and the local WordPress references as the fallback. [`references/examples.md`](references/examples.md) contains more bad-versus-good examples for ambiguous cases.
+This skill exists to make an agent's code look and read the way Aubrey expects. The agent should study the project's own standards first, then use these standards and the local WordPress references as the fallback. [`references/good-examples.md`](references/good-examples.md) contains the canonical positive examples, and [`references/bad-examples.md`](references/bad-examples.md) contains the reject list for ambiguous cases.
 
-The standards must be validated before code is presented as compliant. The agent must check project configuration, the applicable WordPress references, language-version compatibility, function-call spacing, documentation, indentation, comments, variables, strings, object order, ternaries, and accessibility behavior. If a check cannot be completed, the agent must say so instead of claiming that the code follows the standards.
+The standards must be validated before code is presented as compliant. The agent must check project configuration, the applicable WordPress references, [`references/good-examples.md`](references/good-examples.md), [`references/bad-examples.md`](references/bad-examples.md), language-version compatibility, function-call spacing, documentation, indentation, comments, variables, strings, object order, ternaries, and accessibility behavior. If a check cannot be completed, the agent must say so instead of claiming that the code follows the standards.
 
 When a project standard and a personal preference disagree, the project standard normally wins unless Aubrey explicitly asks for the personal standard. When two project standards conflict, the agent should explain the conflict and ask rather than guessing.

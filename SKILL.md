@@ -25,9 +25,10 @@ Do not treat these standards as a loose checklist. Complete this workflow before
 
 1. Discover the project rules, enforced tooling, and target language/runtime version.
 2. Read the applicable WordPress Coding Standards and inline documentation reference.
-3. Apply Aubrey's explicit overrides only where they are stated below.
-4. Generate the code.
-5. Run the compliance gate in section 4. Correct every failure before presenting the result.
+3. Read `references/good-examples.md` for positive code shapes and `references/bad-examples.md` for reject patterns.
+4. Apply Aubrey's explicit overrides only where they are stated below.
+5. Generate the code.
+6. Run the compliance gate in section 4. Correct every failure before presenting the result.
 
 If a check cannot be completed, state the unresolved compatibility or standards question. Do not claim that the code follows these standards based on a partial review.
 
@@ -291,8 +292,10 @@ Read only the relevant local reference when needed:
 - `references/javascript.md` — JavaScript baseline.
 - `references/javascript-documentation.md` — JavaScript documentation baseline.
 - `references/php-documentation.md` — PHP documentation baseline.
-- `references/examples.md` — conversation-derived bad and good examples.
+- `references/good-examples.md` — canonical positive examples for CSS, HTML, PHP, JavaScript, and combined templates.
+- `references/bad-examples.md` — canonical reject list of known failure patterns.
+- `references/examples.md` — earlier conversation-derived examples retained as supporting history.
 
-Use `references/examples.md` when deciding whether a variable, line break, property order, string form, or function-call layout matches the user's intent.
+Read `references/good-examples.md` before generating code and compare the final output with `references/bad-examples.md` before presenting it. Use `references/examples.md` only as supporting history when a decision is not covered by the canonical files.
 
 Any example explicitly labeled `Bad` is a recognition fixture only. Never copy it into code presented as compliant.

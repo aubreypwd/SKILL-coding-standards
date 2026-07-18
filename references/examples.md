@@ -1,6 +1,8 @@
 # Conversation-Derived Examples
 
-These examples teach the user's preferred code shape. The bad examples are intentionally included so an agent can recognize and avoid the patterns. Every function example includes documentation unless the missing documentation is the behavior being demonstrated.
+The canonical example files are [`good-examples.md`](good-examples.md) and [`bad-examples.md`](bad-examples.md). This file preserves earlier conversation-derived examples as supporting history. Read the canonical files first.
+
+These historical examples teach the user's preferred code shape. The bad examples are intentionally included so an agent can recognize and avoid the patterns. Every function example includes documentation unless the missing documentation is the behavior being demonstrated.
 
 The JavaScript examples assume a target that supports the syntax shown. When writing real project code, verify support for `const`, template literals, arrow functions, and trailing commas in function calls before using them.
 
