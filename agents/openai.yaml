@@ -1,0 +1,7 @@
+interface:
+  display_name: "Personal Coding Standards"
+  short_description: "Apply project and WordPress code standards"
+  default_prompt: "Use $aubreypwd-coding-standards to write or review this code according to the project's rules and my personal WordPress-based preferences."
+
+policy:
+  allow_implicit_invocation: true
