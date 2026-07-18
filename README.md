@@ -100,7 +100,7 @@ Do not use XHTML-style self-closing syntax. It is unnecessary in modern HTML:
 }
 ```
 
-When a parent block contains multiple child blocks, add breathing room after the parent opening brace, between sibling blocks, and before the parent closing brace. This makes each block visibly separate from the syntax that contains it:
+When a parent block contains multiple child blocks, add breathing room after the parent opening brace and between sibling blocks. Do not add a trailing blank line before the parent closing brace. This makes each block visibly separate without leaving an unnecessary gap before the closing syntax:
 
 ```css
 @media (forced-colors: active) {
@@ -122,7 +122,6 @@ When a parent block contains multiple child blocks, add breathing room after the
 
 		color: CanvasText;
 	}
-
 }
 ```
 

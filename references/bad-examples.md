@@ -226,7 +226,27 @@ The DocBlock is crammed against the standalone PHP opening tag. The tag must be 
 }
 ```
 
-The first child block is jammed against the parent at-rule. The last child is also jammed against the parent closing brace. A parent with multiple child blocks needs breathing room at both boundaries.
+The first child block is jammed against the parent at-rule. Add breathing room after the parent opening brace and between sibling blocks, but do not add a blank line before the parent closing brace.
+
+## CSS: trailing blank line before a closing brace
+
+```css
+@media (prefers-color-scheme: dark) {
+
+	.report_card {
+
+		background-color: #111827;
+		color: #f9fafb;
+	}
+
+	.report_card__meta {
+		font-size: 0.875rem;
+	}
+
+}
+```
+
+The blank line before the final `}` is unnecessary. The closing brace should follow the final child block directly.
 
 ## PHP and JavaScript block spacing
 
@@ -249,6 +269,57 @@ function revealDetails( panel ) {
 ```
 
 The logical child block is visually crammed against the surrounding parent syntax. Separate multiple logical sections with blank lines while preserving the required adjacency of a DocBlock and its declaration.
+
+## JavaScript: trailing blank line before a closing brace
+
+```js
+/**
+ * Reveals a drawer.
+ *
+ * @since Unknown
+ *
+ * @param {HTMLElement} drawer Drawer element.
+ * @param {HTMLButtonElement} trigger Drawer trigger.
+ */
+function revealDrawer( drawer, trigger ) {
+
+	if ( drawer.hidden ) {
+		drawer.hidden = false;
+	}
+
+	trigger.focus();
+
+}
+```
+
+The blank line before the function's closing brace adds no useful separation. Keep the opening and sibling spacing, then close the function directly after its final statement.
+
+## PHP: trailing blank line before a closing brace
+
+```php
+<?php
+
+/**
+ * Builds a compact report summary.
+ *
+ * @since Unknown
+ *
+ * @param array{title: string, count: int} $report Report data.
+ * @return array{title: string, count: int} Report summary.
+ */
+function build_report_summary( array $report ): array {
+
+	$summary = [
+		'title' => $report['title'],
+		'count' => $report['count'],
+	];
+
+	return $summary;
+
+}
+```
+
+The blank line before the closing PHP brace is unnecessary. Keep the separation between the computation and return value, then close the function directly after the final statement.
 
 ## XHTML-style HTML
 

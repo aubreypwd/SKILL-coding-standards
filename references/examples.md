@@ -42,7 +42,7 @@ Good: a trivial one-property block stays compact.
 }
 ```
 
-Good: a parent at-rule containing multiple child blocks has breathing room before the first child, between siblings, and before the parent closes.
+Good: a parent at-rule containing multiple child blocks has breathing room before the first child and between siblings, without a trailing blank line before the parent closes.
 
 ```css
 @media (forced-colors: active) {
@@ -64,7 +64,6 @@ Good: a parent at-rule containing multiple child blocks has breathing room befor
 
 		color: CanvasText;
 	}
-
 }
 ```
 

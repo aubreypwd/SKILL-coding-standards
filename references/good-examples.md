@@ -44,7 +44,6 @@ These examples do not use trailing commas in function calls.
 		display: flex;
 		justify-content: flex-end;
 	}
-
 }
 ```
 
@@ -64,7 +63,6 @@ These examples do not use trailing commas in function calls.
 	.carousel_indicator {
 		transition: none;
 	}
-
 }
 ```
 
@@ -313,7 +311,6 @@ function build_sync_payload( int $account_id ): array {
 		'contact' => $account['contact'],
 		'refreshed_at' => time(),
 	];
-
 }
 ```
 
@@ -668,7 +665,6 @@ function toggleCommandPalette( trigger, palette ) {
 	}
 
 	trigger.focus();
-
 }
 ```
 
