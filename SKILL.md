@@ -7,6 +7,18 @@ description: Apply project-established coding standards first, then use WordPres
 
 Use this skill whenever writing, reviewing, refactoring, or formatting code.
 
+## Required workflow
+
+Do not treat these standards as a loose checklist. Complete this workflow before presenting code as standards-compliant:
+
+1. Discover the project rules, enforced tooling, and target language/runtime version.
+2. Read the applicable WordPress Coding Standards and inline documentation reference.
+3. Apply Aubrey's explicit overrides only where they are stated below.
+4. Generate the code.
+5. Run the compliance gate in section 4. Correct every failure before presenting the result.
+
+If a check cannot be completed, state the unresolved compatibility or standards question. Do not claim that the code follows these standards based on a partial review.
+
 ## 1. Discover the project's standard first
 
 Before editing code, inspect the repository for its actual standards:
@@ -23,7 +35,7 @@ When the project does not settle a decision, read the relevant local WordPress r
 
 ## 2. Baseline and personal overrides
 
-Use WordPress Coding Standards as the preferred baseline, especially for accessibility, documentation, PHP, JavaScript, CSS, HTML, spacing, indentation, and visual formatting. Apply these personal overrides when they differ from the baseline:
+Use the applicable WordPress Coding Standards as a strict baseline for accessibility, documentation, PHP, JavaScript, CSS, HTML, spacing, indentation, and visual formatting. These are not suggestions. Apply Aubrey's personal overrides only where they are explicitly listed below:
 
 - Follow WordPress accessibility guidance completely.
 - Use tabs for indentation. Use spaces only when a syntax or data format requires them.
@@ -73,15 +85,19 @@ Use WordPress Coding Standards as the preferred baseline, especially for accessi
   ```
 
 - Keep one- and two-parameter function calls inline when they remain readable. For calls with more than two parameters, put one parameter on each line and add a trailing comma only when the target language and version support trailing commas in function calls.
+- Apply WordPress function-call spacing exactly: no space between a function or method name and its opening parenthesis, and one space inside the opening and closing parentheses. Use `fetch( requestUrl, { ... } );`, not `fetch(requestUrl, { ... });` and not `fetch ( requestUrl, { ... } );`.
+- For multiline calls, put a space between the final argument expression and the closing parenthesis. An object argument therefore closes as `} );`, never `});`.
+- Apply the same spacing to nested calls, constructors, methods, and calls with one or two parameters: `getDisplayName( user )`, `new FormData( form )`, and `replaceCardContent( card.element, data.content )`.
+- Keep comments before the code they describe and precede inline comments with a blank line, as required by the WordPress JavaScript standard.
 
 ## 3. Avoid meaningless variables
 
-Do not create a local variable merely for convenience, to rename a directly available value, or to relay a value into a function. This is the refactoring commonly called **Inline Variable** or **Inline Temp**, and the style rule is to avoid needless indirection.
+Do not create a local variable merely for convenience, to rename a directly available value, or to relay a value into a function. This is the refactoring commonly called **Inline Temp**, and the style rule is **Don't Use Variables Un-necessarily**.
 
 Prefer direct access:
 
 ```js
-replaceCardContent(card.element, data.content);
+replaceCardContent( card.element, data.content );
 ```
 
 Avoid convenience aliases:
@@ -90,7 +106,7 @@ Avoid convenience aliases:
 const cardElement = card.element;
 const content = data.content;
 
-replaceCardContent(cardElement, content);
+replaceCardContent( cardElement, content );
 ```
 
 This applies to literals, properties, function arguments, return values, constructed values, and nested expressions—not only to object properties.
@@ -122,8 +138,14 @@ const locations = {
 Reuse a computed result:
 
 ```js
+/**
+ * Renders a user.
+ *
+ * @param {Object} user User data.
+ * @return {Object} Rendered user data.
+ */
 function renderUser( user ) {
-	const displayName = getDisplayName(user);
+	const displayName = getDisplayName( user );
 
 	return {
 		name: displayName,
@@ -135,13 +157,40 @@ function renderUser( user ) {
 
 If direct code needs explanation, prefer a focused comment above the direct expression over a meaningless alias.
 
-## 4. Compatibility and correctness
+## 4. Compliance gate
+
+Before presenting code as compliant, verify all of the following:
+
+- Project-local instructions and enforced formatter, linter, compiler, type-checker, and runtime rules were inspected.
+- The applicable WordPress language and documentation references were read.
+- The target language/runtime version is known, or the assumption is stated before version-dependent syntax is used; never silently assume support.
+- Every new or modified named function and method has a directly preceding language-appropriate DocBlock or JSDoc block, unless an explicit project standard says otherwise.
+- Function documentation follows the applicable WordPress summary, parameter, return, and version-tag rules. Do not invent version values; use project evidence or the documented unknown convention when required.
+- `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
+- JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
+- One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
+- Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.
+- Tabs, semicolons, whitespace, line wrapping, braces, comments, and blank lines follow the applicable WordPress rules.
+- JavaScript uses template literals by default, does not concatenate strings with `+`, and declares variables separately.
+- Objects and arrays preserve intentional order and are not alphabetized without instruction.
+- No meaningless single-use variables or convenience aliases were introduced.
+- Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.
+- Simple literal repetition has not been turned into a needless alias or abstraction.
+- Ternaries are kept compact when simple and broken at `?` and `:` only when long or complex.
+- Accessibility behavior is complete and accurate before it is described as accessibility-compliant.
+- Every example included in the answer follows all unrelated standards too; an example must not teach one rule while violating another.
+
+Run available project validation tools after this static review. If no tooling is available, perform the review manually and disclose that limitation.
+
+## 5. Compatibility and correctness
 
 Before using syntax whose support varies, determine the target language and version from project configuration or explicit user information. Do not add trailing commas to function calls unless support is confirmed. The same compatibility check applies to template literals, language features, and formatting accepted by the project toolchain.
 
-Do not apply this skill mechanically when a project has stronger local rules. Preserve behavior, intentional ordering, semantic comments, and established framework conventions. Keep changes focused and avoid unrelated cleanup.
+If no target version can be established, ask for it or state a deliberate compatibility assumption before generating code. Do not silently use `export`, `const`, arrow functions, template literals, trailing commas in calls, or other version-dependent syntax.
 
-## 5. References
+Do not apply this skill mechanically when a project has stronger local rules. Preserve behavior, intentional ordering, semantic comments, and established framework conventions. Keep changes focused and avoid unrelated cleanup. Do not call code standards-compliant until the compliance gate passes.
+
+## 6. References
 
 Read only the relevant local reference when needed:
 

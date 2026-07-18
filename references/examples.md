@@ -1,6 +1,8 @@
 # Conversation-Derived Examples
 
-These examples teach the user's preferred code shape. The bad examples are intentionally included so an agent can recognize and avoid the patterns.
+These examples teach the user's preferred code shape. The bad examples are intentionally included so an agent can recognize and avoid the patterns. Every function example includes documentation unless the missing documentation is the behavior being demonstrated.
+
+The JavaScript examples assume a target that supports the syntax shown. When writing real project code, verify support for `const`, template literals, arrow functions, and trailing commas in function calls before using them.
 
 ## CSS grouping and contextual breathing room
 
@@ -136,57 +138,84 @@ Bad: a single-use property alias adds no meaning.
 ```js
 const userName = user.profile.displayName;
 
-renderUserName(userName);
+renderUserName( userName );
 ```
 
 Good: pass the source value directly.
 
 ```js
-renderUserName(user.profile.displayName);
+renderUserName( user.profile.displayName );
 ```
 
 Bad: aliases before a call only make the reader track additional names.
 
 ```js
+/**
+ * Submits a form.
+ *
+ * @param {HTMLFormElement} form Form to submit.
+ * @param {Object} settings Submission settings.
+ * @return {Promise} Form submission request.
+ */
 function submitForm( form, settings ) {
 	const endpoint = settings.api.baseUrl;
-	const formData = new FormData(form);
+	const formData = new FormData( form );
 	const requestUrl = `${endpoint}/forms/${settings.formId}`;
 
-	return fetch(requestUrl, {
+	return fetch( requestUrl, {
 		method: `POST`,
 		body: formData,
-	});
+	} );
 }
 ```
 
 Good: pass direct values and constructed values where they are needed.
 
 ```js
+/**
+ * Submits a form.
+ *
+ * @param {HTMLFormElement} form Form to submit.
+ * @param {Object} settings Submission settings.
+ * @return {Promise} Form submission request.
+ */
 function submitForm( form, settings ) {
-	return fetch(`${settings.api.baseUrl}/forms/${settings.formId}`, {
+	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
 		method: `POST`,
-		body: new FormData(form),
-	});
+		body: new FormData( form ),
+	} );
 }
 ```
 
 Bad: a convenience alias does not improve this call.
 
 ```js
+/**
+ * Updates a card.
+ *
+ * @param {Object} card Card data.
+ * @param {Object} data Updated card data.
+ */
 function updateCard( card, data ) {
 	const cardElement = card.element;
 
-	replaceCardContent(cardElement, data.content);
+	replaceCardContent( cardElement, data.content );
 }
 ```
 
 Good: use direct access. If context needs explanation, add a comment instead of an alias.
 
 ```js
+/**
+ * Updates a card.
+ *
+ * @param {Object} card Card data.
+ * @param {Object} data Updated card data.
+ */
 function updateCard( card, data ) {
+
 	// Replace the existing card content in the card element.
-	replaceCardContent(card.element, data.content);
+	replaceCardContent( card.element, data.content );
 }
 ```
 
@@ -210,11 +239,17 @@ const locations = {
 Bad: a computation is repeated unnecessarily.
 
 ```js
+/**
+ * Renders a user.
+ *
+ * @param {Object} user User data.
+ * @return {Object} Rendered user data.
+ */
 function renderUser( user ) {
 	return {
-		name: getDisplayName(user),
-		label: `User: ${getDisplayName(user)}`,
-		ariaLabel: getDisplayName(user),
+		name: getDisplayName( user ),
+		label: `User: ${getDisplayName( user )}`,
+		ariaLabel: getDisplayName( user ),
 	};
 }
 ```
@@ -222,8 +257,14 @@ function renderUser( user ) {
 Good: store the computed result because it is reused.
 
 ```js
+/**
+ * Renders a user.
+ *
+ * @param {Object} user User data.
+ * @return {Object} Rendered user data.
+ */
 function renderUser( user ) {
-	const displayName = getDisplayName(user);
+	const displayName = getDisplayName( user );
 
 	return {
 		name: displayName,
@@ -236,11 +277,17 @@ function renderUser( user ) {
 Bad: a fetch or other expensive task is repeated while constructing an object.
 
 ```js
+/**
+ * Builds a profile.
+ *
+ * @param {number} userId User ID.
+ * @return {Object} Profile data.
+ */
 function buildProfile( userId ) {
 	return {
-		profile: fetchProfile(userId),
-		permissions: getPermissions(fetchProfile(userId)),
-		summary: createSummary(fetchProfile(userId)),
+		profile: fetchProfile( userId ),
+		permissions: getPermissions( fetchProfile( userId ) ),
+		summary: createSummary( fetchProfile( userId ) ),
 	};
 }
 ```
@@ -248,13 +295,19 @@ function buildProfile( userId ) {
 Good: perform the work once and reuse its result.
 
 ```js
+/**
+ * Builds a profile.
+ *
+ * @param {number} userId User ID.
+ * @return {Object} Profile data.
+ */
 function buildProfile( userId ) {
-	const profile = fetchProfile(userId);
+	const profile = fetchProfile( userId );
 
 	return {
 		profile,
-		permissions: getPermissions(profile),
-		summary: createSummary(profile),
+		permissions: getPermissions( profile ),
+		summary: createSummary( profile ),
 	};
 }
 ```
@@ -264,10 +317,10 @@ function buildProfile( userId ) {
 Good: one or two parameters may remain inline.
 
 ```js
-replaceCardContent(card.element, data.content);
+replaceCardContent( card.element, data.content );
 ```
 
-Good: more than two parameters are split across lines. The trailing comma is used only when the target language and version support it.
+Good: more than two parameters are split across lines. WordPress spacing is preserved inside the parentheses, and the trailing comma is used only when the target language and version support it.
 
 ```js
 createCard(
@@ -279,6 +332,44 @@ createCard(
 ```
 
 If support is not confirmed, omit the trailing comma rather than introducing unsupported syntax.
+
+For an object argument, the closing brace and function parenthesis are separated:
+
+```js
+return fetch( requestUrl, {
+	method: `POST`,
+	body: formData,
+} );
+```
+
+## Documented JavaScript interaction
+
+This example demonstrates the required function-call spacing and documentation shape. Accessibility behavior should still be reviewed against the complete accessibility requirements of the project.
+
+```js
+/**
+ * Initializes accordion controls.
+ *
+ * @param {Document|Element} root Root containing the accordion controls.
+ */
+function initAccordion( root ) {
+	root.querySelectorAll( `[data-accordion-trigger]` ).forEach( ( trigger ) => {
+
+		trigger.addEventListener( `click`, () => {
+			const panel = document.getElementById( trigger.getAttribute( `aria-controls` ) );
+
+			if ( ! panel ) {
+				return;
+			}
+
+			const isExpanded = trigger.getAttribute( `aria-expanded` ) === `true`;
+
+			trigger.setAttribute( `aria-expanded`, `${! isExpanded}` );
+			panel.hidden = isExpanded;
+		} );
+	} );
+}
+```
 
 ## Ternaries
 

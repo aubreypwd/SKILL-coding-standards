@@ -16,6 +16,8 @@ When working in a project, an agent should:
 4. Report genuine conflicts between credible standards and ask before making the disputed choice.
 5. Check language and runtime support before using optional syntax.
 
+If the target version is unknown, the agent must ask or state a deliberate compatibility assumption before using version-dependent syntax. It must not silently assume that `export`, `const`, arrow functions, template literals, or trailing commas in function calls are supported.
+
 These standards are not intended to override a project's explicit conventions. They guide code when the project is silent or when the user explicitly requests these standards.
 
 ## Foundation: WordPress Coding Standards
@@ -115,6 +117,8 @@ The concatenation example is intentionally shown as bad code. It demonstrates th
 - Preserve intentional order; do not alphabetize objects or arrays automatically.
 - Use trailing commas when supported by the language and target version.
 - For function calls, one or two parameters may remain on one line. More than two parameters are written one per line.
+- Follow WordPress spacing exactly: `fetch( requestUrl, { ... } );`, with no space before the opening parenthesis and one space inside the parentheses.
+- Close multiline calls as `} );`, never `});`.
 - Never add a trailing comma to a function call unless support is confirmed.
 
 ```js
@@ -157,9 +161,9 @@ function log_admin_message( $message ) {
 }
 ```
 
-## Named principle: Inline Variable
+## Inline Temp: Don't Use Variables Un-necessarily
 
-The established refactoring name for this rule is **Inline Variable**, formerly **Inline Temp**. Aubrey's plain-language version is **avoid needless indirection**.
+**Inline Temp** is the established refactoring name for replacing a needless temporary variable with its original expression. This standard applies it as **Don't Use Variables Un-necessarily**.
 
 The rule is:
 
@@ -172,38 +176,52 @@ Bad:
 ```js
 const userName = user.profile.displayName;
 
-renderUserName(userName);
+renderUserName( userName );
 ```
 
 Good:
 
 ```js
-renderUserName(user.profile.displayName);
+renderUserName( user.profile.displayName );
 ```
 
 Bad:
 
 ```js
+/**
+ * Submits a form.
+ *
+ * @param {HTMLFormElement} form Form to submit.
+ * @param {Object} settings Submission settings.
+ * @return {Promise} Form submission request.
+ */
 function submitForm( form, settings ) {
 	const endpoint = settings.api.baseUrl;
-	const formData = new FormData(form);
+	const formData = new FormData( form );
 	const requestUrl = `${endpoint}/forms/${settings.formId}`;
 
-	return fetch(requestUrl, {
+	return fetch( requestUrl, {
 		method: `POST`,
 		body: formData,
-	});
+	} );
 }
 ```
 
 Good:
 
 ```js
+/**
+ * Submits a form.
+ *
+ * @param {HTMLFormElement} form Form to submit.
+ * @param {Object} settings Submission settings.
+ * @return {Promise} Form submission request.
+ */
 function submitForm( form, settings ) {
-	return fetch(`${settings.api.baseUrl}/forms/${settings.formId}`, {
+	return fetch( `${settings.api.baseUrl}/forms/${settings.formId}`, {
 		method: `POST`,
-		body: new FormData(form),
-	});
+		body: new FormData( form ),
+	} );
 }
 ```
 
@@ -212,9 +230,16 @@ The bad version creates three convenience variables that are each used only once
 A comment can provide context without creating a meaningless alias:
 
 ```js
+/**
+ * Updates a card.
+ *
+ * @param {Object} card Card data.
+ * @param {Object} data Updated card data.
+ */
 function updateCard( card, data ) {
+
 	// Replace the existing card content in the card element.
-	replaceCardContent(card.element, data.content);
+	replaceCardContent( card.element, data.content );
 }
 ```
 
@@ -223,8 +248,14 @@ function updateCard( card, data ) {
 The rule is not “never create variables.” A variable is appropriate when it stores a computed, fetched, expensive, side-effectful, or repeatedly used result:
 
 ```js
+/**
+ * Renders a user.
+ *
+ * @param {Object} user User data.
+ * @return {Object} Rendered user data.
+ */
 function renderUser( user ) {
-	const displayName = getDisplayName(user);
+	const displayName = getDisplayName( user );
 
 	return {
 		name: displayName,
@@ -243,11 +274,17 @@ DRY means **Don't Repeat Yourself**. It is useful when repetition would repeat w
 Bad: repeat a computation or fetch:
 
 ```js
+/**
+ * Builds a profile.
+ *
+ * @param {number} userId User ID.
+ * @return {Object} Profile data.
+ */
 function buildProfile( userId ) {
 	return {
-		profile: fetchProfile(userId),
-		permissions: getPermissions(fetchProfile(userId)),
-		summary: createSummary(fetchProfile(userId)),
+		profile: fetchProfile( userId ),
+		permissions: getPermissions( fetchProfile( userId ) ),
+		summary: createSummary( fetchProfile( userId ) ),
 	};
 }
 ```
@@ -255,13 +292,19 @@ function buildProfile( userId ) {
 Good: compute it once and reuse the result:
 
 ```js
+/**
+ * Builds a profile.
+ *
+ * @param {number} userId User ID.
+ * @return {Object} Profile data.
+ */
 function buildProfile( userId ) {
-	const profile = fetchProfile(userId);
+	const profile = fetchProfile( userId );
 
 	return {
 		profile,
-		permissions: getPermissions(profile),
-		summary: createSummary(profile),
+		permissions: getPermissions( profile ),
+		summary: createSummary( profile ),
 	};
 }
 ```
@@ -294,5 +337,7 @@ The practical rule is:
 ## For coding agents
 
 This skill exists to make an agent's code look and read the way Aubrey expects. The agent should study the project's own standards first, then use these standards and the local WordPress references as the fallback. [`references/examples.md`](references/examples.md) contains more bad-versus-good examples for ambiguous cases.
+
+The standards must be validated before code is presented as compliant. The agent must check project configuration, the applicable WordPress references, language-version compatibility, function-call spacing, documentation, indentation, comments, variables, strings, object order, ternaries, and accessibility behavior. If a check cannot be completed, the agent must say so instead of claiming that the code follows the standards.
 
 When a project standard and a personal preference disagree, the project standard normally wins unless Aubrey explicitly asks for the personal standard. When two project standards conflict, the agent should explain the conflict and ask rather than guessing.
