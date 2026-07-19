@@ -337,7 +337,6 @@ function get_customer_label( array $customer ) : string {
  */
 function build_sync_payload( int $account_id ) : array {
 
-	// Fetch the account once because its data populates two payload fields.
 	$account = get_account( $account_id );
 
 	return [
@@ -493,7 +492,6 @@ function groupTasksByDay( tasks ) {
 
 	return tasks.reduce( function ( groupedTasks, task ) {
 
-		// Derive the day once so the same key controls lookup and insertion.
 		const day = task.dueDate.slice( 0, 10 );
 
 		groupedTasks[ day ] = undefined === groupedTasks[ day ]

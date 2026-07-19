@@ -26,7 +26,7 @@ These standards are not intended to override a project's explicit conventions. T
 
 ## Comments
 
-Comments are strongly encouraged when they add useful context. They should explain why code was constructed, what constraint it satisfies, what a call means in the current function, how accessibility or state behavior works, or why work is performed once. That context is often more valuable than the maintenance cost of a concise comment. Do not add a comment merely because comments are encouraged.
+Comments are strongly encouraged when they add useful context. They should explain domain behavior, non-obvious intent, a constraint, how accessibility or state behavior works, or how a meaningful structure was constructed. That context is often more valuable than the maintenance cost of a concise comment. Do not add a comment merely because comments are encouraged.
 
 Prefer one-line comments. Do not stack several `//` lines to explain one idea. If an explanation truly needs multiple lines, use a block comment with `/*` and `*` lines:
 
@@ -36,7 +36,7 @@ Prefer one-line comments. Do not stack several `//` lines to explain one idea. I
  */
 ```
 
-Do not use `/**` for an inline code comment. Reserve DocBlocks for declarations such as functions, methods, classes, and properties. Do not add comments that merely restate a function name, DocBlock, selector, property assignment, obvious call, or straightforward control flow. Do not hyper-document ordinary function calls; summarize their purpose in the context of the current function only when that context is not obvious. Keep comments immediately before the code they describe and update them when the code changes.
+Do not use `/**` for an inline code comment. Reserve DocBlocks for declarations such as functions, methods, classes, and properties. Do not add comments that merely restate a function name, DocBlock, selector, property assignment, obvious call, or straightforward control flow. Do not use comments to teach or justify coding principles such as DRY or Inline Temp; the code should demonstrate those principles. Do not hyper-document ordinary function calls; summarize their purpose in the context of the current function only when that context is not obvious. Keep comments immediately before the code they describe and update them when the code changes.
 
 ## Foundation: WordPress Coding Standards
 

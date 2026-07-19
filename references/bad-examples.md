@@ -178,6 +178,15 @@ function register_invoice_status_filter() : void {
 
 The function name, DocBlock, and direct call already explain this code. Do not add a comment that merely paraphrases them. Add a comment only when it contributes non-obvious rationale, a constraint, accessibility or state context, intentional ordering, or another detail the code does not already communicate.
 
+## Comment explaining an obvious assignment or coding principle
+
+```php
+// Fetch the account once because its data populates two payload fields.
+$account = get_account( $account_id );
+```
+
+The assignment already clearly says that the account is being retrieved and stored. The comment explains the DRY principle and adds no reader-facing domain context. Do not comment obvious assignments or use code comments to teach a coding standard.
+
 ## CSS: comment outside the block it describes
 
 ```css
