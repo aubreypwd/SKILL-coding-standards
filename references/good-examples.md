@@ -250,7 +250,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param array{series: string, number: int} $invoice Invoice data.
+ * @param array $invoice Invoice data containing the invoice series and number.
  * @return string Formatted invoice reference.
  */
 function get_invoice_reference( array $invoice ) : string {
@@ -272,8 +272,8 @@ function get_invoice_reference( array $invoice ) : string {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param array<int, array{code: string, enabled: bool}> $regions Region records.
- * @return array<int, array{code: string, enabled: bool}> Enabled region records.
+ * @param array $regions Region records.
+ * @return array Enabled region records.
  */
 function get_enabled_regions( array $regions ) : array {
 
@@ -297,7 +297,7 @@ function get_enabled_regions( array $regions ) : array {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param array{code: string, name: string} $customer Customer data.
+ * @param array $customer Customer data.
  * @return string Customer label.
  */
 function get_customer_label( array $customer ) : string {
@@ -320,11 +320,7 @@ function get_customer_label( array $customer ) : string {
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param int $account_id Account ID.
- * @return array{
- *     account: array{id: int, contact: array{email: string}},
- *     contact: array{email: string},
- *     refreshed_at: int
- * } Synchronization payload.
+ * @return array Synchronization payload containing account, contact, and refresh data.
  */
 function build_sync_payload( int $account_id ) : array {
 
@@ -348,7 +344,7 @@ function build_sync_payload( int $account_id ) : array {
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param string $event Event name.
- * @param array{source: string, request_id: string} $context Event context.
+ * @param array $context Event context.
  * @param int $actor_id Actor ID.
  */
 function write_audit_event( string $event, array $context, int $actor_id ) : void {
@@ -405,7 +401,7 @@ function format_invoice_status_label( string $status ) : string {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param array{email?: string, enabled?: bool, label?: string, status?: string} $subscription Subscription data.
+ * @param array $subscription Subscription data.
  * @return string Subscription label.
  */
 function get_subscription_label( array $subscription ) : string {
@@ -457,8 +453,8 @@ function get_subscription_label( array $subscription ) : string {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param {{ id: string, message: string, severity: `critical`|`info` }} alert Alert data.
- * @return {{ id: string, message: string, severity: `critical`|`info`, ariaLive: `assertive`|`polite` }} Alert item with live-region metadata.
+ * @param {object} alert Alert data.
+ * @return {object} Alert item with live-region metadata.
  */
 function buildAlertItem( alert ) {
 
@@ -476,8 +472,8 @@ function buildAlertItem( alert ) {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param {{ id: string, dueDate: string, title: string }[]} tasks Task records.
- * @return {Record<string, { id: string, dueDate: string, title: string }[]>} Tasks keyed by calendar date.
+ * @param {array} tasks Task records.
+ * @return {array} Tasks keyed by calendar date.
  */
 function groupTasksByDay( tasks ) {
 
@@ -503,8 +499,8 @@ function groupTasksByDay( tasks ) {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param {Array<{ id: string, priority: number }>} entries Queue entries.
- * @return {Array<{ id: string, priority: number }>} Sorted queue entries.
+ * @param {array} entries Queue entries.
+ * @return {array} Sorted queue entries.
  */
 function sortQueueEntries( entries ) {
 
@@ -522,7 +518,7 @@ function sortQueueEntries( entries ) {
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {string} endpoint Dashboard endpoint.
- * @return {Promise<{ title: string, activeUsers: number, pendingJobs: number }>} Dashboard data.
+ * @return {Promise} Dashboard data.
  */
 async function loadDashboardData( endpoint ) {
 
@@ -615,7 +611,7 @@ function bindDismissiblePanel( panel ) {
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
- * @param {{ phrase: string, owner: string, state: string }} filters Search filters.
+ * @param {object} filters Search filters.
  * @return {string} Encoded query string.
  */
 function buildSearchQuery( filters ) {

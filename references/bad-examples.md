@@ -163,8 +163,8 @@ function readLedger( records ) {
  *
  * @since Unknown
  *
- * @param {Array<Object>} records Ledger records.
- * @return {Object} Ledger records.
+ * @param {array} records Ledger records.
+ * @return {object} Ledger records.
  */
 function readLedger( records ) {
 	return records.map( function ( record ) {
@@ -173,7 +173,37 @@ function readLedger( records ) {
 }
 ```
 
-The first function has no DocBlock. The second says the parameter is a generic array of objects and claims the mapped array is an object.
+The first function has no DocBlock. The second uses the correct broad input type but incorrectly claims that the mapped result is an object; `.map()` returns an array.
+
+## Over-specified array and object documentation
+
+```js
+/**
+ * Groups tasks by their calendar date.
+ *
+ * @since Unknown
+ *
+ * @param {{ id: string, dueDate: string, title: string }[]} tasks Task records.
+ * @return {Record<string, { id: string, dueDate: string, title: string }[]>} Tasks keyed by calendar date.
+ */
+function groupTasksByDay( tasks ) {
+
+	return tasks.reduce( function ( groupedTasks, task ) {
+
+		const day = task.dueDate.slice( 0, 10 );
+
+		if ( undefined === groupedTasks[ day ] ) {
+			groupedTasks[ day ] = [];
+		}
+
+		groupedTasks[ day ].push( task );
+
+		return groupedTasks;
+	}, {} );
+}
+```
+
+Do not document every internal property and array element inline when the function only needs a broad runtime type. Use `@param {array}` and `@return {array}`, then explain the expected contents in plain language. Use a project-established named type only when it is required as a shared or public contract.
 
 ```php
 /**

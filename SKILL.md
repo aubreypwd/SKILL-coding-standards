@@ -208,13 +208,12 @@ Reuse a computed result:
 
 ```js
 /**
-/**
  * Renders a user.
  *
  * @since Unknown
  *
- * @param {{ displayName: string }} user User data.
- * @return {{ name: string, label: string, ariaLabel: string }} Rendered user data.
+ * @param {object} user User data.
+ * @return {object} Rendered user data.
  */
 function renderUser( user ) {
 
@@ -230,17 +229,15 @@ function renderUser( user ) {
 
 If direct code needs explanation, prefer a focused comment above the direct expression over a meaningless alias.
 
-### Document exact data shapes
+### Document practical data types
 
-Function documentation must describe the actual input and output shapes. Never use a bare generic type such as `Object`, `Array`, `Array<Object>`, `any`, or `mixed` when the source, schema, type declarations, or request establish the shape. A named `@typedef {Object}` is acceptable when the project already defines it or when a complex, reused shape materially improves the documentation. Do not invent a standalone typedef merely to avoid writing an exact inline shape for a single function or example.
+Function documentation must identify the actual broad runtime type and explain the expected contents in plain language. Use simple types such as `array`, `object`, `string`, `int`, `bool`, `HTMLElement`, or `Promise` when appropriate. Do not encode a complete nested array or object schema in every DocBlock; that creates a needless maintenance burden and falsely presents internal structure as a universal contract.
 
-For arrays, document both the container and its element type. For returned objects, document the concrete properties and types. The implementation and the documentation must agree: a `.map()` result is an array, while each mapped item is an object.
+Inspect the source of the data before writing the DocBlock so the broad type and purpose are accurate. A function that uses `.map()` returns an array, an object literal returns an object, and a fetch chain returns a Promise. The implementation and the broad documentation must agree.
 
-Inspect the source of the data before writing the DocBlock. If the shape cannot be established, inspect more of the project or ask; do not guess and do not broaden the type to make the documentation easier to write.
+Use a project-established named type only when the project already requires it as a public or shared contract. Do not invent inline object-property shapes, array-element shapes, or standalone typedefs merely to enumerate internal fields in a single function or example. Explain those contents in the parameter or return description instead.
 
-Use existing named shapes when the project already defines them. Otherwise, write the exact input and output shapes inline when they are small enough to remain readable.
-
-Use the exact named shapes in function documentation. Do not write `@param {Object} user`, `@param {Array<Object>} signals`, or `@return {Object}` when those shapes are known.
+This is separate from runtime guarding. Documentation may say `@param {array} tasks Task records.` without claiming a complete schema; the implementation may still validate or use the fields it needs.
 
 ## 4. Compliance gate
 
@@ -254,7 +251,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Every new or modified named function and method has a directly preceding language-appropriate DocBlock or JSDoc block, unless an explicit project standard says otherwise.
 - Function documentation follows the applicable WordPress summary, parameter, return, and version-tag rules. Every named function and method has an `@since` tag. For new code, use the current date in `Month D, YYYY` format, such as `@since July 18, 2026`. Never replace an existing `@since`; when modifying existing code, add another `@since` line with the current date and a concise description of the change. Use `@since Unknown` only when the original introduction date cannot be established.
 - Determine human authorship once when first working in a project by inspecting project metadata, available history, or asking the user. Do not add `@author` when the project is clearly authored by one person. When a project clearly has multiple human authors and the function's author is known, add `@author Name <email>` in that exact format. For Aubrey's documented identity, the exact tag is `@author Aubrey Portwood <aubreypwd@icloud.com>`, but never copy that identity into an unrelated project. If authorship is unclear, omit `@author`. Never identify Codex, Claude, an AI agent, or a model as the author.
-- Function documentation names exact parameter and return shapes. Reject bare generic `Object`, `Array`, `Array<Object>`, `any`, and `mixed` types when the shape can be determined. Verify that array-versus-object documentation matches the actual return expression.
+- Function documentation uses a simple accurate runtime type and a plain-language description of its contents. Reject unnecessarily verbose nested array/object schemas and invented typedefs when a broad type is sufficient. Verify that array-versus-object documentation matches the actual return expression.
 - `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
 - A standalone `<?php` tag has a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to its declaration.
 - Parent blocks and HTML elements with multiple logical child blocks have a blank line after their opening syntax and between sibling blocks. Curly-braced languages have no trailing blank line immediately before the closing brace; HTML has no corresponding trailing-curly rule.

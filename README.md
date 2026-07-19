@@ -318,19 +318,28 @@ function log_admin_message( $message ) {
 }
 ```
 
-## Exact documentation shapes
+## Practical documentation types
 
-Every named function and method needs a directly preceding DocBlock or JSDoc block. Its parameter and return types must describe the actual shapes established by the project. Do not use bare `Object`, `Array`, `Array<Object>`, `any`, `mixed`, or an unqualified `Promise` when the source makes the shape knowable.
+Every named function and method needs a directly preceding DocBlock or JSDoc block. Its parameter and return types should identify the broad runtime types established by the project. Use simple types such as `array`, `object`, `string`, `int`, `bool`, `HTMLElement`, or `Promise` when appropriate.
 
 `@since` is required for named functions and methods. New code uses the current date in `Month D, YYYY` format, such as `@since July 18, 2026`. Preserve existing `@since` entries; when modifying code, add another dated `@since` line with a concise description of the change. Use `@since Unknown` only when the original date cannot be determined.
 
 Determine authorship once per project. Omit `@author` when the project is clearly authored by one person. Add `@author Name <email>` only when the project clearly has multiple human authors and the function's author is known. For Aubrey's documented identity, the exact tag is `@author Aubrey Portwood <aubreypwd@icloud.com>`, but do not use it for unrelated projects. If authorship is uncertain, omit it. The agent, model, Codex, and Claude are never authors.
 
-Prefer exact inline shapes for a single function or example. Use a named `@typedef` when the project already defines the shape or when a complex shape is reused enough to justify it. Do not invent standalone typedef blocks merely to avoid writing a small shape inline.
+Do not encode a complete nested array or object schema in every DocBlock. That creates a needless maintenance burden and falsely presents internal structure as a universal contract. Explain the expected contents in the parameter or return description instead:
 
-For an array, document the element type and the array container. For an object, document its concrete properties. If the shape is unknown, inspect the source, schema, or type declarations before documenting it; do not guess a generic type. A function that uses `.map()` returns an array, even though each element is an object.
+```js
+/**
+ * Groups tasks by their calendar date.
+ *
+ * @since Unknown
+ *
+ * @param {array} tasks Task records.
+ * @return {array} Tasks keyed by calendar date.
+ */
+```
 
-The complete signal example in [`references/examples.md`](references/examples.md#pure-one-use-computations-and-exact-jsdoc-shapes) demonstrates this distinction with `BeaconSignal[]` input and `FoldedBeaconSignal[]` output. The canonical positive examples are in [`references/good-examples.md`](references/good-examples.md).
+Inspect the source before documenting the broad type and purpose. A `.map()` result is an array, an object literal is an object, and a fetch chain is a Promise. Use a project-established named type only when it is already required as a public or shared contract. Do not invent inline object-property shapes, array-element shapes, or standalone typedefs for one function or example. The canonical positive examples are in [`references/good-examples.md`](references/good-examples.md).
 
 ## Inline Temp: Don't Use Variables Un-necessarily
 
@@ -378,20 +387,7 @@ Good:
 renderUserName( user.profile.displayName );
 ```
 
-The form examples use these explicit shapes:
-
-```js
-/**
- * @typedef {Object} SubmissionApiSettings
- * @property {string} baseUrl API base URL.
- */
-
-/**
- * @typedef {Object} SubmissionSettings
- * @property {SubmissionApiSettings} api API settings.
- * @property {string} formId Form identifier.
- */
-```
+The form examples use broad runtime types; the descriptions identify what each value is used for.
 
 Bad:
 
@@ -402,8 +398,8 @@ Bad:
  * @since Unknown
  *
  * @param {HTMLFormElement} form Form to submit.
- * @param {SubmissionSettings} settings Submission settings.
- * @return {Promise<Response>} Form submission request.
+ * @param {object} settings Submission settings.
+ * @return {Promise} Form submission request.
  */
 function submitForm( form, settings ) {
 
@@ -427,8 +423,8 @@ Good:
  * @since Unknown
  *
  * @param {HTMLFormElement} form Form to submit.
- * @param {SubmissionSettings} settings Submission settings.
- * @return {Promise<Response>} Form submission request.
+ * @param {object} settings Submission settings.
+ * @return {Promise} Form submission request.
  */
 function submitForm( form, settings ) {
 
@@ -441,19 +437,7 @@ function submitForm( form, settings ) {
 
 The bad version creates three convenience variables that are each used only once. None of them prevents repeated work or adds meaningful information. The good version passes each value directly where it is needed.
 
-A comment can provide context without creating a meaningless alias. The card examples use these explicit shapes:
-
-```js
-/**
- * @typedef {Object} CardData
- * @property {Element} element Card element.
- */
-
-/**
- * @typedef {Object} UpdatedCardData
- * @property {string} content Updated card content.
- */
-```
+A comment can provide context without creating a meaningless alias. The card examples use broad object types and explain their contents in prose.
 
 ```js
 /**
@@ -461,8 +445,8 @@ A comment can provide context without creating a meaningless alias. The card exa
  *
  * @since Unknown
  *
- * @param {CardData} card Card data.
- * @param {UpdatedCardData} data Updated card data.
+ * @param {object} card Card data containing the card element.
+ * @param {object} data Updated card data containing the replacement content.
  */
 function updateCard( card, data ) {
 
@@ -475,21 +459,7 @@ function updateCard( card, data ) {
 
 The rule is not “never create variables.” A variable is appropriate when it prevents repeated expensive or side-effectful work, is used in multiple places, captures a required snapshot, represents required state that cannot be safely or clearly be inlined, or is required by the language or API. A value being computed once is not enough.
 
-The user example below uses explicit input and output shapes:
-
-```js
-/**
- * @typedef {Object} UserData
- * @property {string} displayName User display name.
- */
-
-/**
- * @typedef {Object} RenderedUserData
- * @property {string} name User name.
- * @property {string} label User label.
- * @property {string} ariaLabel Accessible user label.
- */
-```
+The user example below uses broad object types and explains their contents in prose:
 
 ```js
 /**
@@ -497,8 +467,8 @@ The user example below uses explicit input and output shapes:
  *
  * @since Unknown
  *
- * @param {UserData} user User data.
- * @return {RenderedUserData} Rendered user data.
+ * @param {object} user User data.
+ * @return {object} Rendered user data.
  */
 function renderUser( user ) {
 
@@ -520,22 +490,7 @@ DRY means **Don't Repeat Yourself**. It is useful when repetition would repeat w
 
 Bad: repeat a computation or fetch:
 
-These examples use explicit profile shapes:
-
-```js
-/**
- * @typedef {Object} UserProfile
- * @property {number} id User ID.
- * @property {string} name User name.
- */
-
-/**
- * @typedef {Object} ProfileResult
- * @property {UserProfile} profile User profile.
- * @property {string[]} permissions User permissions.
- * @property {string} summary Profile summary.
- */
-```
+These examples use broad object types; their descriptions identify the profile data.
 
 ```js
 /**
@@ -544,7 +499,7 @@ These examples use explicit profile shapes:
  * @since Unknown
  *
  * @param {number} userId User ID.
- * @return {ProfileResult} Profile data.
+ * @return {object} Profile data.
  */
 function buildProfile( userId ) {
 
@@ -565,7 +520,7 @@ Good: compute it once and reuse the result:
  * @since Unknown
  *
  * @param {number} userId User ID.
- * @return {ProfileResult} Profile data.
+ * @return {object} Profile data.
  */
 function buildProfile( userId ) {
 
