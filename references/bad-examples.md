@@ -159,6 +159,19 @@ const requestState = getRequestState();
 
 Do not stack multiple single-line comments to over-explain one idea. If multiple lines are genuinely necessary, use `/* ... */`, not `/** ... */`; reserve DocBlocks for declarations. Prefer one concise comment that explains the construction or context of the code.
 
+## CSS: comment outside the block it describes
+
+```css
+/* Keep layout declarations visibly grouped. */
+.account_panel {
+
+	display: grid;
+	gap: 1rem;
+}
+```
+
+When a CSS comment describes declarations inside a selector, put it inside the selector block after the opening brace and before those declarations. Use the same placement inside an at-rule when the comment describes its child blocks.
+
 ## Vague or incorrect documentation
 
 ```js

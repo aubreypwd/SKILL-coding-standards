@@ -12,8 +12,9 @@ Comments are intentionally included throughout the examples to explain construct
 ## CSS
 
 ```css
-/* Keep layout, typography, surface, and spacing styles visibly grouped. */
 .account_panel {
+
+	/* Keep layout, typography, surface, and spacing styles visibly grouped. */
 
 	display: grid;
 	gap: 1rem;
@@ -32,8 +33,9 @@ Comments are intentionally included throughout the examples to explain construct
 ```
 
 ```css
-/* Move the details and actions into separate columns when space allows. */
 @container account_panel (min-width: 44rem) {
+
+	/* Move the details and actions into separate columns when space allows. */
 
 	.account_panel__details {
 
@@ -52,15 +54,18 @@ Comments are intentionally included throughout the examples to explain construct
 ```
 
 ```css
-/* Remove the browser margin from this compact heading block. */
 .account_panel__heading {
+
+	/* Remove the browser margin from this compact heading block. */
+
 	margin: 0;
 }
 ```
 
 ```css
-/* Respect the user's motion preference for carousel feedback. */
 @media (prefers-reduced-motion: reduce) {
+
+	/* Respect the user's motion preference for carousel feedback. */
 
 	.carousel_track {
 		scroll-behavior: auto;
@@ -73,8 +78,9 @@ Comments are intentionally included throughout the examples to explain construct
 ```
 
 ```css
-/* Keep the card readable while preserving a clear focus state. */
 .inventory_card {
+
+	/* Keep the card readable while preserving a clear focus state. */
 
 	align-items: start;
 	display: flex;
@@ -97,8 +103,9 @@ Comments are intentionally included throughout the examples to explain construct
 ```
 
 ```css
-/* Reserve one shared date column for every schedule entry. */
 .schedule_grid {
+
+	/* Reserve one shared date column for every schedule entry. */
 
 	display: grid;
 	grid-template-areas:
@@ -752,8 +759,9 @@ const workflow = {
 ```
 
 ```css
-/* Keep the palette surface readable against the page behind it. */
 .command_palette {
+
+	/* Keep the palette surface readable against the page behind it. */
 
 	background-color: #111827;
 	color: #f9fafb;

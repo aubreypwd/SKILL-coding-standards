@@ -100,11 +100,14 @@ When that opening tag contains text or nested elements, indent the contents one 
 - Group properties by function first—for example, flex, typography, colors, spacing, and positioning.
 - Alphabetize properties only within each functional group.
 - Put one space inside CSS function parentheses, such as `minmax( 0, 1fr )` and `repeat( 2, 1fr )`.
+- Put CSS comments that describe declarations or child blocks inside the containing selector or at-rule, after its opening brace and immediately before the code they explain.
 - Add breathing room after an opening brace when the block contains meaningful groups.
 - Keep a trivial one-property block compact.
 
 ```css
 #overlay {
+
+	/* Keep layout and spacing declarations visually grouped. */
 
 	background: #fff;
 	color: #777;

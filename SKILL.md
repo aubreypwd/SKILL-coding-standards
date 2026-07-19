@@ -78,6 +78,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
 - In CSS function notation, put one space inside the parentheses, just as with normal function calls: `minmax( 0, 1fr )`, `repeat( 2, 1fr )`, and `rgb( 23 32 51 / 12% )`.
+- For CSS comments that describe a selector's declarations or an at-rule's child blocks, put the comment inside the containing block, after its opening brace and immediately before the code it explains. Keep the surrounding breathing room. Do not put a block comment above the selector when it describes the declarations inside it.
 - Add a blank line after a CSS opening brace when the block has meaningful property groups. Keep a trivial one-property block compact:
 
   ```css
@@ -271,6 +272,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
 - PHP return type declarations have a space before the colon. Do not confuse this with the colon in PHP alternative syntax.
 - CSS function arguments have one space inside their parentheses; reject compact forms such as `minmax(0, 1fr)`.
+- CSS comments describing declarations or child blocks are inside the containing selector or at-rule, not above it.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.
