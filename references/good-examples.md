@@ -186,11 +186,8 @@ Nested component examples keep the component's own declarations and root-level r
 		gap: 0.75rem;
 		justify-content: flex-end;
 		padding: 1rem;
-	}
 
-	@media (min-width: 40rem) {
-
-		.dialog__footer {
+		@media (min-width: 40rem) {
 			padding: 1.5rem;
 		}
 	}
@@ -307,6 +304,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 	<p aria-live="polite" id="import-status-message">
 		The import is ready to begin.
+	</p>
 
 	<progress aria-label="Import progress" max="100" value="0">0%</progress>
 </section>
