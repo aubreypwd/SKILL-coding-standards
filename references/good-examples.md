@@ -390,6 +390,35 @@ function format_invoice_status_label( string $status ) : string {
 ```
 
 ```php
+<?php
+
+/**
+ * Gets a subscription label.
+ *
+ * @since Unknown
+ *
+ * @param array{email?: string, enabled?: bool, label?: string, status?: string} $subscription Subscription data.
+ * @return string Subscription label.
+ */
+function get_subscription_label( array $subscription ) : string {
+
+	if ( false === ( $subscription['enabled'] ?? false ) ) {
+		return 'Disabled';
+	}
+
+	if ( '' === ( $subscription['email'] ?? false ) ) {
+		return 'Email required';
+	}
+
+	if ( 'trial' === ( $subscription['status'] ?? '' ) ) {
+		return 'Trial';
+	}
+
+	return $subscription['label'] ?? '';
+}
+```
+
+```php
 <?php if ( $reservation['confirmed'] ) : ?>
 
 	<section aria-labelledby="reservation-confirmed-title">
@@ -535,6 +564,35 @@ function getConnectionMessage( isOffline, hasError ) {
 	return ( isOffline || hasError )
 		? `The service is temporarily unavailable.`
 		: `The service is ready.`;
+}
+```
+
+```js
+/**
+ * Reveals a panel when its controls are usable.
+ *
+ * @since Unknown
+ *
+ * @param {HTMLButtonElement|null} trigger Panel trigger.
+ * @param {HTMLElement|null} panel Panel element.
+ */
+function revealPanel( trigger, panel ) {
+
+	if ( null === trigger ) {
+		return;
+	}
+
+	if ( null === panel ) {
+		return;
+	}
+
+	if ( `true` === trigger.getAttribute( `aria-expanded` ) ) {
+		return;
+	}
+
+	panel.hidden = false;
+	trigger.setAttribute( `aria-expanded`, `${false}` );
+	trigger.focus();
 }
 ```
 

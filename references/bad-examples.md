@@ -324,6 +324,35 @@ function toggleCommandPalette( trigger, palette ) {
 
 Do not create `isHidden` merely to rename a directly available boolean property. Use `false === palette.hidden` for the toggle and reference `palette.hidden` directly. Use explicit boolean comparisons instead of bang negation.
 
+## PHP: unprotected optional array keys
+
+```php
+<?php
+
+/**
+ * Gets a subscription label.
+ *
+ * @since Unknown
+ *
+ * @param array{enabled?: bool, status?: string} $subscription Subscription data.
+ * @return string Subscription label.
+ */
+function get_subscription_label( array $subscription ) : string {
+
+	if ( false === $subscription['enabled'] ) {
+		return 'Disabled';
+	}
+
+	if ( 'trial' === $subscription['status'] ) {
+		return 'Trial';
+	}
+
+	return 'Active';
+}
+```
+
+Do not directly read an optional array key. Compare the null-coalesced value instead: `( $subscription['enabled'] ?? false )` or `( $subscription['status'] ?? '' )`.
+
 ## Breathing Room: named function body starts immediately
 
 ```js

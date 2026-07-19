@@ -229,6 +229,12 @@ Apply the equivalent native interpolation or formatting mechanism in other langu
 
 When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the actual known value, such as `null === value` or `undefined === value`, so the test does not change meaning.
 
+### Return Early and Often
+
+Return as soon as a function reaches an invalid, missing, already-completed, or otherwise terminal condition that makes the remaining work unnecessary. Keep the normal path flat and visible. A bare `return;` is appropriate when the function has no value to return. Guard clauses are one technique used to implement this principle, but the principle itself is Return Early and Often.
+
+When reading an optional or untrusted PHP array key, use null coalescing before comparing it. Default to `false` for a boolean or empty-value check, and default to `''` when comparing against a specific string. Parenthesize the coalesced expression because PHP gives `??` low precedence: `'' === ( $subscriber['email'] ?? false )`.
+
 ```js
 const point = { x: 10, y: 20 };
 
