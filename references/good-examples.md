@@ -587,10 +587,15 @@ function revealPanel( trigger, panel ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added a concise HTMLElement guard before using the panel.
  *
  * @param {HTMLElement} panel Panel element.
  */
 function bindDismissiblePanel( panel ) {
+
+	if ( false === panel instanceof HTMLElement ) {
+		return;
+	}
 
 	panel.addEventListener( `keydown`, function ( event ) {
 

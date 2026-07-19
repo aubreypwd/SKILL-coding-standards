@@ -230,9 +230,48 @@ Apply the equivalent native interpolation or formatting mechanism in other langu
 
 When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the actual known value, such as `null === value` or `undefined === value`, so the test does not change meaning.
 
+Do not add grouping parentheses around a simple boolean or type test when the language's operator precedence already makes the comparison unambiguous:
+
+```js
+if ( false === panel instanceof HTMLElement ) {
+	return;
+}
+```
+
+Do not write `false === ( panel instanceof HTMLElement )` in this case.
+
 ### Return Early and Often
 
 Return as soon as a function reaches an invalid, missing, already-completed, or otherwise terminal condition that makes the remaining work unnecessary. Keep the normal path flat and visible. A bare `return;` is appropriate when the function has no value to return. Guard clauses are one technique used to implement this principle, but the principle itself is Return Early and Often.
+
+Do not blindly trust runtime parameters in a dynamically typed language. When static typing cannot enforce the expected type, use one practical guard before using the parameter and return early when it fails. Test the expected type—not every property or method—and keep the documented parameter type specific. For example:
+
+```js
+/**
+ * Binds keyboard behavior to a dismissible panel.
+ *
+ * @since Unknown
+ *
+ * @param {HTMLElement} panel Panel element.
+ */
+function bindDismissiblePanel( panel ) {
+
+	if ( false === panel instanceof HTMLElement ) {
+		return;
+	}
+
+	panel.addEventListener( `keydown`, function ( event ) {
+
+		if ( `Escape` !== event.key ) {
+			return;
+		}
+
+		panel.hidden = true;
+	} );
+}
+```
+
+Do not change the parameter to `unknown` or add separate checks for `null`, `undefined`, and every expected method when the single type guard is sufficient.
 
 When reading an optional or untrusted PHP array key, use null coalescing before comparing it. Default to `false` for a boolean or empty-value check, and default to `''` when comparing against a specific string. Parenthesize the coalesced expression because PHP gives `??` low precedence: `'' === ( $subscriber['email'] ?? false )`.
 

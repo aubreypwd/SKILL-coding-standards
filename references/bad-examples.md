@@ -334,6 +334,53 @@ function toggleCommandPalette( trigger, palette ) {
 
 Do not create `isHidden` merely to rename a directly available boolean property. Use `false === palette.hidden` for the toggle and reference `palette.hidden` directly. Use explicit boolean comparisons instead of bang negation.
 
+## JavaScript: unnecessary grouping parentheses in a type test
+
+```js
+function bindDismissiblePanel( panel ) {
+
+	if ( false === ( panel instanceof HTMLElement ) ) {
+		return;
+	}
+
+	panel.addEventListener( `keydown`, function ( event ) {
+
+		if ( `Escape` !== event.key ) {
+			return;
+		}
+
+		panel.hidden = true;
+	} );
+}
+```
+
+When `instanceof` is being compared as a boolean and operator precedence is unambiguous, do not add grouping parentheses around the type test. Use `false === panel instanceof HTMLElement`.
+
+## JavaScript: trusting a runtime parameter
+
+```js
+/**
+ * Binds keyboard behavior to a dismissible panel.
+ *
+ * @since Unknown
+ *
+ * @param {HTMLElement} panel Panel element.
+ */
+function bindDismissiblePanel( panel ) {
+
+	panel.addEventListener( `keydown`, function ( event ) {
+
+		if ( `Escape` !== event.key ) {
+			return;
+		}
+
+		panel.hidden = true;
+	} );
+}
+```
+
+Do not use a dynamically typed parameter without one practical expected-type guard. Test the parameter once, return early when it is not the expected type, and keep the specific `@param` type. Do not replace it with `unknown` or add exhaustive property checks when the type guard is sufficient.
+
 ## PHP: unprotected optional array keys
 
 ```php

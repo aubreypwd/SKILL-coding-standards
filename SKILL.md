@@ -72,6 +72,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - In PHP documentation, add `@return` only when the function actually returns a value.
 - Follow the **Breathing Room Principle** for function-like code: every non-empty named function or method body gets a blank line immediately after its opening brace, even when it contains only one statement. Apply the same spacing to an anonymous function, callback, or closure when its body contains multiple statements or logical sections; a one-statement callback may remain compact.
 - Follow the **Return Early and Often** principle: exit a function as soon as an invalid, missing, already-completed, or otherwise terminal condition means the remaining work is unnecessary. Keep the normal path flat and visible. Use a bare `return;` when no value is returned. Guard clauses are one technique within this principle, not the name of the principle itself.
+- Do not blindly trust runtime parameters in a dynamically typed language. When the expected type cannot be enforced by the language, use one practical guard that tests the parameter's expected type, then return early when it fails. Do not exhaustively test every property or API method when the type test is sufficient. In JavaScript, preserve the expected JSDoc type and use the native type test—for example, `@param {HTMLElement} panel` with `if ( false === panel instanceof HTMLElement ) { return; }`; do not weaken the parameter to `unknown` merely because a guard is present.
 - When reading an optional or untrusted PHP array key, use null coalescing before comparing it: use `( $array['key'] ?? false )` when the missing-value default should be `false`, and `( $array['key'] ?? '' )` when comparing against a specific string. Parenthesize the coalesced expression because `??` has low precedence.
 - CSS underscores are allowed.
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
@@ -129,6 +130,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
   ```
 
 - When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the known value such as `null === value` or `undefined === value`; do not change the data test's meaning merely to avoid `!`.
+- Do not add parentheses around a simple type or boolean test when the language's operator precedence already makes the comparison unambiguous. For example, write `false === panel instanceof HTMLElement`, not `false === ( panel instanceof HTMLElement )`.
 
 - Keep one- and two-parameter function calls inline when they remain readable. For calls with more than two parameters, put one parameter on each line and add a trailing comma only when the target language and version support trailing commas in function calls.
 - Apply WordPress function-call spacing exactly: no space between a function or method name and its opening parenthesis, and one space inside the opening and closing parentheses. Use `fetch( requestUrl, { ... } );`, not `fetch(requestUrl, { ... });` and not `fetch ( requestUrl, { ... } );`.
@@ -272,6 +274,8 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Simple literal repetition has not been turned into a needless alias or abstraction.
 - Ternaries are kept compact when simple and broken at `?` and `:` only when long or complex.
 - Known boolean false checks use explicit comparisons such as `false === value`, not bang negation. Nullable and missing-value checks use their actual known values.
+- Simple boolean and type-test expressions do not have unnecessary grouping parentheses when operator precedence already makes their evaluation order clear.
+- Runtime parameters in dynamically typed code have one practical expected-type guard before use when static typing cannot enforce the contract. Reject exhaustive defensive checks when that guard is sufficient, and keep the documented parameter type specific.
 - Return Early and Often was applied: terminal conditions exit before later work, and the normal path is not unnecessarily nested inside conditionals.
 - Optional PHP array keys are protected with `??` before comparison, with a default matching the intended value type and explicit parentheses around the coalesced expression.
 - Accessibility behavior is complete and accurate before it is described as accessibility-compliant.
