@@ -103,6 +103,8 @@ When that opening tag contains text or nested elements, indent the contents one 
 - Prefer CSS nesting around a cohesive component concept such as `.card`. Keep the component's states, parts, and component-owned media queries together.
 - Do not nest CSS just because selectors are nested in the HTML. Avoid generic ancestor chains such as `body .page .content .card`; the component should remain portable when the markup moves.
 - Prefer one nested level and generally stop at two levels. Go deeper only when each level represents a meaningful concept inside the component, such as a card hero containing its own image and pill.
+- Keep the root component's declarations together at the top. Put responsive overrides that change the root component beside those declarations, before nested child concepts, so the component's complete top-level behavior is easy to find. Organize states, pseudo-selectors, nested parts, and other media rules according to what they modify.
+- Put each media-query override with the selector it changes. A root media query contains only root changes, while a child concept such as `.card__hero` gets its own nested media query. Do not create one component-wide media wrapper that mixes root and child overrides.
 - Confirm that the project target and tooling support CSS nesting before using it. Otherwise use the supported preprocessor or flat-selector equivalent.
 - Put CSS comments that describe declarations or child blocks inside the containing selector or at-rule, after its opening brace and immediately before the code they explain.
 - For a trivial one-property CSS block, keep the block compact and put a concise explanation at the end of the declaration line when needed:
@@ -121,6 +123,11 @@ Use a separate comment inside the block when multiple declarations or child bloc
 	display: grid;
 	gap: 1rem;
 
+	@media (min-width: 48rem) {
+
+		grid-template-columns: 1fr auto;
+	}
+
 	&:focus-within {
 		outline: 0.1875rem solid #2563eb;
 		outline-offset: 0.125rem;
@@ -130,11 +137,6 @@ Use a separate comment inside the block when multiple declarations or child bloc
 		display: flex;
 		gap: 0.5rem;
 		justify-content: flex-end;
-	}
-
-	@media (min-width: 48rem) {
-
-		grid-template-columns: 1fr auto;
 	}
 }
 ```

@@ -8,6 +8,7 @@ Verify the target language and version before using version-sensitive syntax.
 These examples do not use trailing commas in function calls. CSS function notation uses one space inside its parentheses.
 Named function and method bodies have breathing room after their opening brace, even when they contain one statement. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
 Comments are intentionally included throughout the examples to explain construction, context, accessibility, state changes, and the purpose of direct calls. They remain concise and use language-appropriate comment syntax.
+Nested component examples keep the component's own declarations and root-level responsive overrides together before nested child concepts.
 
 ## CSS
 
@@ -132,12 +133,20 @@ Comments are intentionally included throughout the examples to explain construct
 	border-radius: 0.5rem;
 	padding: 1rem;
 
+	@media (min-width: 48rem) {
+		grid-template-columns: minmax( 0, 2fr ) minmax( 12rem, 1fr );
+	}
+
 	.card__hero {
 
 		align-items: center;
 		display: grid;
 		gap: 0.75rem;
 		grid-template-columns: auto 1fr;
+
+		@media (min-width: 48rem) {
+			grid-template-columns: 1fr;
+		}
 
 		.card__hero-image {
 			aspect-ratio: 1;
@@ -156,15 +165,6 @@ Comments are intentionally included throughout the examples to explain construct
 
 		font-size: 1rem;
 		line-height: 1.5;
-	}
-
-	@media (min-width: 48rem) {
-
-		grid-template-columns: minmax( 0, 2fr ) minmax( 12rem, 1fr );
-
-		.card__hero {
-			grid-template-columns: 1fr;
-		}
 	}
 }
 ```

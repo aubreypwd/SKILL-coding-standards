@@ -232,6 +232,50 @@ body {
 
 Do not nest CSS under generic ancestors merely because the HTML is nested that way. Nest around a stable component concept such as `.card`, keep the component portable, and generally stop at two levels. Deeper nesting requires distinct nested concepts and a real need for the additional structure.
 
+## CSS: separating root properties from nested component behavior
+
+```css
+.card {
+
+	display: grid;
+
+	.card__body {
+		padding: 1rem;
+	}
+
+	@media (min-width: 48rem) {
+
+		grid-template-columns: 1fr auto;
+	}
+}
+```
+
+Keep the component's own declarations and root-level responsive overrides together before nested child concepts. Do not make readers search past child blocks to find properties that apply to the root component.
+
+## CSS: one media query mixing component levels
+
+```css
+.card {
+
+	display: grid;
+
+	@media (min-width: 48rem) {
+
+		grid-template-columns: 1fr auto;
+
+		.card__hero {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.card__hero {
+		grid-template-columns: auto 1fr;
+	}
+}
+```
+
+Keep the root media query limited to `.card` changes. Put the `.card__hero` media override inside `.card__hero` so each selector owns its responsive behavior.
+
 ## Vague or incorrect documentation
 
 ```js
