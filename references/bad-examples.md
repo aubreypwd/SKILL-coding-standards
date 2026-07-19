@@ -335,7 +335,7 @@ function groupTasksByDay( tasks ) {
 }
 ```
 
-Do not document every internal property and array element inline when the function only needs a broad runtime type. Use `@param {array}` and `@return {array}`, then explain the expected contents in plain language. Use a project-established named type only when it is required as a shared or public contract.
+Do not document every internal property and array element inline when the function only needs a broad runtime type. Use `@param {array}` and `@return {object}` for this function, then explain the expected contents in plain language. Use a project-established named type only when it is required as a shared or public contract.
 
 ## JavaScript: `if` for a simple assignment choice
 
@@ -582,27 +582,27 @@ function get_subscription_label( array $subscription ) : string {
 
 Do not directly read an optional array key. Compare the null-coalesced value instead: `( $subscription['enabled'] ?? false )` or `( $subscription['status'] ?? '' )`.
 
-## Breathing Room: named function body starts immediately
+## Breathing Room: complex named function body starts immediately
 
 ```js
 /**
- * @typedef {Object} Workspace
- * @property {string} id Workspace identifier.
- */
-
-/**
- * Returns the current workspace.
+ * Returns a workspace when one is available.
  *
  * @since Unknown
  *
- * @return {Workspace} Current workspace.
+ * @param {object|null} workspace Workspace data.
+ * @return {object} Workspace data.
  */
-function getCurrentWorkspace() {
-	return readWorkspace();
+function getCurrentWorkspace( workspace ) {
+	if ( null === workspace ) {
+		return {};
+	}
+
+	return readWorkspace( workspace );
 }
 ```
 
-Named function and method bodies always get a blank line immediately after the opening brace, even when the body contains only one statement.
+This function has multiple logical sections but no breathing room after its opening brace. Trivial one-statement functions may remain compact; functions with multiple sections or complex first statements need the blank line.
 
 ## JavaScript: trailing blank line before a closing brace
 

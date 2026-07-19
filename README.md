@@ -252,7 +252,7 @@ This spacing override applies to return type declarations, not to the colon in P
 
 ## Breathing Room Principle
 
-Every non-empty named function or method gets a blank line immediately after its opening brace, even when its body contains only one statement. Anonymous functions, callbacks, and closures get the same spacing when they contain multiple statements or logical sections; a one-statement callback may remain compact.
+Named functions and methods get a blank line after their opening brace when their body contains multiple logical statements or sections, or when their first statement is complex or multiline. Trivial one-statement bodies remain compact, such as a function that only registers one hook; adding a blank line there would invent a separation that the code does not have. Anonymous functions, callbacks, and closures get the same spacing when they contain multiple statements or logical sections; a one-statement callback may remain compact.
 
 The same principle applies to parent blocks with multiple logical child blocks in CSS, PHP, JavaScript, and HTML: separate the parent from its first child and separate sibling blocks. Keep compact exceptions such as simple one-property CSS blocks and short HTML lists. Never add a trailing blank line immediately before a closing curly brace.
 
@@ -344,7 +344,7 @@ function bindDismissiblePanel( panel ) {
 
 Do not change the parameter to `unknown` or add separate checks for `null`, `undefined`, and every expected method when the single type guard is sufficient.
 
-When reading an optional or untrusted PHP array key, use null coalescing before comparing it. Default to `false` for a boolean or empty-value check, and default to `''` when comparing against a specific string. Parenthesize the coalesced expression because PHP gives `??` low precedence: `'' === ( $subscriber['email'] ?? false )`.
+When reading an optional or untrusted PHP array key, use null coalescing before comparing it. Choose a deliberate missing-value default: `false` is appropriate when missing should behave as false or fail a strict string comparison, while `''` is appropriate when missing should behave as an empty string. Parenthesize the coalesced expression because PHP gives `??` low precedence: `'' === ( $subscriber['email'] ?? false )`.
 
 ```js
 const point = { x: 10, y: 20 };

@@ -6,7 +6,7 @@ snapshots and the conversation history.
 
 Verify the target language and version before using version-sensitive syntax.
 These examples do not use trailing commas in function calls. CSS function notation uses one space inside its parentheses.
-Named function and method bodies have breathing room after their opening brace, even when they contain one statement. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
+Named function and method bodies have breathing room after their opening brace when they contain multiple logical statements or sections, or when their first statement is complex or multiline. Trivial one-statement bodies remain compact. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
 Comments are intentionally included throughout the examples to explain construction, context, accessibility, state changes, and the purpose of direct calls. They remain concise and use language-appropriate comment syntax.
 Nested component examples keep the component's own declarations and root-level responsive overrides together before nested child concepts.
 
@@ -358,6 +358,7 @@ function get_invoice_reference( array $invoice ) : string {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added a safe default for missing enabled keys.
  *
  * @param array $regions Region records.
  * @return array Enabled region records.
@@ -368,7 +369,7 @@ function get_enabled_regions( array $regions ) : array {
 		array_filter(
 			$regions,
 			static function ( array $region ) : bool {
-				return $region['enabled'];
+				return true === ( $region['enabled'] ?? false );
 			}
 		)
 	);
@@ -539,11 +540,16 @@ function get_subscription_label( array $subscription ) : string {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added a practical object guard.
  *
  * @param {object} alert Alert data.
  * @return {object} Alert item with live-region metadata.
  */
 function buildAlertItem( alert ) {
+
+	if ( null === alert || 'object' !== typeof alert ) {
+		return {};
+	}
 
 	return {
 		...alert,
@@ -558,11 +564,16 @@ function buildAlertItem( alert ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added an array guard and corrected the object return documentation.
  *
  * @param {array} tasks Task records.
- * @return {array} Tasks keyed by calendar date.
+ * @return {object} Tasks keyed by calendar date.
  */
 function groupTasksByDay( tasks ) {
+
+	if ( false === Array.isArray( tasks ) ) {
+		return {};
+	}
 
 	return tasks.reduce( function ( groupedTasks, task ) {
 
@@ -585,11 +596,16 @@ function groupTasksByDay( tasks ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added a practical array guard.
  *
  * @param {array} entries Queue entries.
  * @return {array} Sorted queue entries.
  */
 function sortQueueEntries( entries ) {
+
+	if ( false === Array.isArray( entries ) ) {
+		return [];
+	}
 
 	// Copy before sorting so callers keep the original queue order.
 	return entries.slice().sort( function ( firstEntry, secondEntry ) {
@@ -604,11 +620,16 @@ function sortQueueEntries( entries ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added an endpoint type guard.
  *
  * @param {string} endpoint Dashboard endpoint.
  * @return {Promise} Dashboard data.
  */
 async function loadDashboardData( endpoint ) {
+
+	if ( 'string' !== typeof endpoint ) {
+		return;
+	}
 
 	return fetch( endpoint ).then( function ( response ) {
 		return response.json();
@@ -622,12 +643,17 @@ async function loadDashboardData( endpoint ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added boolean parameter guards.
  *
  * @param {boolean} isOffline Whether the connection is offline.
  * @param {boolean} hasError Whether the last request failed.
  * @return {string} Connection status message.
  */
 function getConnectionMessage( isOffline, hasError ) {
+
+	if ( 'boolean' !== typeof isOffline || 'boolean' !== typeof hasError ) {
+		return ``;
+	}
 
 	return ( isOffline || hasError )
 		? `The service is temporarily unavailable.`
@@ -641,17 +667,18 @@ function getConnectionMessage( isOffline, hasError ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added element guards and synchronized expanded state.
  *
- * @param {HTMLButtonElement|null} trigger Panel trigger.
- * @param {HTMLElement|null} panel Panel element.
+ * @param {HTMLButtonElement} trigger Panel trigger.
+ * @param {HTMLElement} panel Panel element.
  */
 function revealPanel( trigger, panel ) {
 
-	if ( null === trigger ) {
+	if ( false === trigger instanceof HTMLButtonElement ) {
 		return;
 	}
 
-	if ( null === panel ) {
+	if ( false === panel instanceof HTMLElement ) {
 		return;
 	}
 
@@ -660,7 +687,7 @@ function revealPanel( trigger, panel ) {
 	}
 
 	panel.hidden = false;
-	trigger.setAttribute( `aria-expanded`, `${false}` );
+	trigger.setAttribute( `aria-expanded`, `${true}` );
 	trigger.focus();
 }
 ```
@@ -699,11 +726,16 @@ function bindDismissiblePanel( panel ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added a filter object guard.
  *
  * @param {object} filters Search filters.
  * @return {string} Encoded query string.
  */
 function buildSearchQuery( filters ) {
+
+	if ( null === filters || 'object' !== typeof filters ) {
+		return ``;
+	}
 
 	return new URLSearchParams( {
 		phrase: filters.phrase,
@@ -719,12 +751,25 @@ function buildSearchQuery( filters ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added practical parameter type guards.
  *
  * @param {HTMLElement} root Summary root.
  * @param {string} label Metric label.
  * @param {number} value Metric value.
  */
 function renderSummaryMetric( root, label, value ) {
+
+	if ( false === root instanceof HTMLElement ) {
+		return;
+	}
+
+	if ( 'string' !== typeof label ) {
+		return;
+	}
+
+	if ( 'number' !== typeof value ) {
+		return;
+	}
 
 	renderMetric(
 		root,
@@ -818,19 +863,27 @@ const workflow = {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Synchronized palette state and focus behavior.
  *
  * @param {HTMLButtonElement} trigger Palette trigger.
  * @param {HTMLElement} palette Palette element.
  */
 function toggleCommandPalette( trigger, palette ) {
 
-	// Keep the button state synchronized with the dialog's hidden state.
+	if ( false === trigger instanceof HTMLButtonElement ) {
+		return;
+	}
+
+	if ( false === palette instanceof HTMLElement ) {
+		return;
+	}
+
 	palette.hidden = false === palette.hidden;
-	trigger.setAttribute( `aria-expanded`, `${palette.hidden}` );
+	trigger.setAttribute( `aria-expanded`, `${false === palette.hidden}` );
 
-	if ( palette.hidden ) {
+	if ( false === palette.hidden ) {
 
-		// Return focus to the search field after the palette opens.
+		// Focus the search field after the palette opens.
 		const searchInput = palette.querySelector( `#command-palette-search` );
 
 		if ( searchInput instanceof HTMLInputElement ) {
@@ -850,12 +903,25 @@ function toggleCommandPalette( trigger, palette ) {
  *
  * @since Unknown
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added control element guards.
  *
  * @param {HTMLButtonElement} trigger Palette trigger.
  * @param {HTMLButtonElement} closeButton Palette close button.
  * @param {HTMLElement} palette Palette element.
  */
 function bindCommandPalette( trigger, closeButton, palette ) {
+
+	if ( false === trigger instanceof HTMLButtonElement ) {
+		return;
+	}
+
+	if ( false === closeButton instanceof HTMLButtonElement ) {
+		return;
+	}
+
+	if ( false === palette instanceof HTMLElement ) {
+		return;
+	}
 
 	// Route both controls through the same state transition.
 	trigger.addEventListener( `click`, function () {
