@@ -248,6 +248,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
  * Formats an invoice reference for display.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param array{series: string, number: int} $invoice Invoice data.
  * @return string Formatted invoice reference.
@@ -269,6 +270,7 @@ function get_invoice_reference( array $invoice ) : string {
  * Returns the enabled regions.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param array<int, array{code: string, enabled: bool}> $regions Region records.
  * @return array<int, array{code: string, enabled: bool}> Enabled region records.
@@ -293,6 +295,7 @@ function get_enabled_regions( array $regions ) : array {
  * Returns a customer label.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param array{code: string, name: string} $customer Customer data.
  * @return string Customer label.
@@ -314,6 +317,7 @@ function get_customer_label( array $customer ) : string {
  * Builds a synchronization payload for an account.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param int $account_id Account ID.
  * @return array{
@@ -341,6 +345,7 @@ function build_sync_payload( int $account_id ) : array {
  * Writes an audit event.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param string $event Event name.
  * @param array{source: string, request_id: string} $context Event context.
@@ -364,6 +369,7 @@ function write_audit_event( string $event, array $context, int $actor_id ) : voi
  * Registers the invoice status filter.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  */
 function register_invoice_status_filter() : void {
 
@@ -374,6 +380,7 @@ function register_invoice_status_filter() : void {
  * Formats an invoice status label.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param string $status Invoice status.
  * @return string Formatted invoice status.
@@ -396,6 +403,7 @@ function format_invoice_status_label( string $status ) : string {
  * Gets a subscription label.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param array{email?: string, enabled?: bool, label?: string, status?: string} $subscription Subscription data.
  * @return string Subscription label.
@@ -447,6 +455,7 @@ function get_subscription_label( array $subscription ) : string {
  * Builds an accessible alert item.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {{ id: string, message: string, severity: `critical`|`info` }} alert Alert data.
  * @return {{ id: string, message: string, severity: `critical`|`info`, ariaLive: `assertive`|`polite` }} Alert item with live-region metadata.
@@ -465,6 +474,7 @@ function buildAlertItem( alert ) {
  * Groups tasks by their calendar date.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {{ id: string, dueDate: string, title: string }[]} tasks Task records.
  * @return {Record<string, { id: string, dueDate: string, title: string }[]>} Tasks keyed by calendar date.
@@ -491,6 +501,7 @@ function groupTasksByDay( tasks ) {
  * Sorts queue entries by priority without changing the source array.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {Array<{ id: string, priority: number }>} entries Queue entries.
  * @return {Array<{ id: string, priority: number }>} Sorted queue entries.
@@ -508,6 +519,7 @@ function sortQueueEntries( entries ) {
  * Loads dashboard data.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {string} endpoint Dashboard endpoint.
  * @return {Promise<{ title: string, activeUsers: number, pendingJobs: number }>} Dashboard data.
@@ -525,6 +537,7 @@ async function loadDashboardData( endpoint ) {
  * Returns a connection status message.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {boolean} isOffline Whether the connection is offline.
  * @param {boolean} hasError Whether the last request failed.
@@ -543,6 +556,7 @@ function getConnectionMessage( isOffline, hasError ) {
  * Reveals a panel when its controls are usable.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {HTMLButtonElement|null} trigger Panel trigger.
  * @param {HTMLElement|null} panel Panel element.
@@ -572,6 +586,7 @@ function revealPanel( trigger, panel ) {
  * Binds keyboard behavior to a dismissible panel.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {HTMLElement} panel Panel element.
  */
@@ -593,6 +608,7 @@ function bindDismissiblePanel( panel ) {
  * Builds a query string for the search endpoint.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {{ phrase: string, owner: string, state: string }} filters Search filters.
  * @return {string} Encoded query string.
@@ -612,6 +628,7 @@ function buildSearchQuery( filters ) {
  * Sends a summary metric to the renderer.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {HTMLElement} root Summary root.
  * @param {string} label Metric label.
@@ -707,6 +724,7 @@ const workflow = {
  * Toggles the command palette and synchronizes its accessible state.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {HTMLButtonElement} trigger Palette trigger.
  * @param {HTMLElement} palette Palette element.
@@ -736,6 +754,7 @@ function toggleCommandPalette( trigger, palette ) {
  * Binds command palette controls.
  *
  * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  *
  * @param {HTMLButtonElement} trigger Palette trigger.
  * @param {HTMLButtonElement} closeButton Palette close button.

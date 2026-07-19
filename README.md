@@ -283,6 +283,10 @@ function log_admin_message( $message ) {
 
 Every named function and method needs a directly preceding DocBlock or JSDoc block. Its parameter and return types must describe the actual shapes established by the project. Do not use bare `Object`, `Array`, `Array<Object>`, `any`, `mixed`, or an unqualified `Promise` when the source makes the shape knowable.
 
+`@since` is required for named functions and methods. New code uses the current date in `Month D, YYYY` format, such as `@since July 18, 2026`. Preserve existing `@since` entries; when modifying code, add another dated `@since` line with a concise description of the change. Use `@since Unknown` only when the original date cannot be determined.
+
+Determine authorship once per project. Omit `@author` when the project is clearly authored by one person. Add `@author Name <email>` only when the project clearly has multiple human authors and the function's author is known. For Aubrey's documented identity, the exact tag is `@author Aubrey Portwood <aubreypwd@icloud.com>`, but do not use it for unrelated projects. If authorship is uncertain, omit it. The agent, model, Codex, and Claude are never authors.
+
 Prefer exact inline shapes for a single function or example. Use a named `@typedef` when the project already defines the shape or when a complex shape is reused enough to justify it. Do not invent standalone typedef blocks merely to avoid writing a small shape inline.
 
 For an array, document the element type and the array container. For an object, document its concrete properties. If the shape is unknown, inspect the source, schema, or type declarations before documenting it; do not guess a generic type. A function that uses `.map()` returns an array, even though each element is an object.
