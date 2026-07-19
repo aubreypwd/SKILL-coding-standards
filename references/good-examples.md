@@ -5,7 +5,7 @@ standards. They are intentionally distinct from the examples in the WordPress
 snapshots and the conversation history.
 
 Verify the target language and version before using version-sensitive syntax.
-These examples do not use trailing commas in function calls.
+These examples do not use trailing commas in function calls. CSS function notation uses one space inside its parentheses.
 Named function and method bodies have breathing room after their opening brace, even when they contain one statement. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
 
 ## CSS
@@ -15,7 +15,7 @@ Named function and method bodies have breathing room after their opening brace, 
 
 	display: grid;
 	gap: 1rem;
-	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-columns: minmax( 0, 1fr ) auto;
 
 	font-size: 1rem;
 	line-height: 1.5;
@@ -35,7 +35,7 @@ Named function and method bodies have breathing room after their opening brace, 
 	.account_panel__details {
 
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 		gap: 1rem;
 	}
 
@@ -80,7 +80,7 @@ Named function and method bodies have breathing room after their opening brace, 
 	background: #ffffff;
 	color: #172033;
 
-	box-shadow: 0 0.25rem 1rem rgb(23 32 51 / 12%);
+	box-shadow: 0 0.25rem 1rem rgb( 23 32 51 / 12% );
 	padding: 1rem;
 }
 
@@ -97,7 +97,7 @@ Named function and method bodies have breathing room after their opening brace, 
 	grid-template-areas:
 		"date title"
 		"date detail";
-	grid-template-columns: 8rem minmax(0, 1fr);
+	grid-template-columns: 8rem minmax( 0, 1fr );
 
 	column-gap: 1.25rem;
 	row-gap: 0.375rem;

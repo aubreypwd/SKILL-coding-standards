@@ -76,6 +76,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - CSS underscores are allowed.
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
+- In CSS function notation, put one space inside the parentheses, just as with normal function calls: `minmax( 0, 1fr )`, `repeat( 2, 1fr )`, and `rgb( 23 32 51 / 12% )`.
 - Add a blank line after a CSS opening brace when the block has meaningful property groups. Keep a trivial one-property block compact:
 
   ```css
@@ -269,6 +270,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Simple HTML lists remain compact: keep short `li` items on one line and adjacent to one another without blank lines inside the list. Do not apply the general parent-spacing rule mechanically to a short list.
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
 - PHP return type declarations have a space before the colon. Do not confuse this with the colon in PHP alternative syntax.
+- CSS function arguments have one space inside their parentheses; reject compact forms such as `minmax(0, 1fr)`.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.

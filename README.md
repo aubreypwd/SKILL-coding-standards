@@ -85,6 +85,7 @@ When that opening tag contains text or nested elements, indent the contents one 
 - Color notation is not important enough to change without a reason.
 - Group properties by function first—for example, flex, typography, colors, spacing, and positioning.
 - Alphabetize properties only within each functional group.
+- Put one space inside CSS function parentheses, such as `minmax( 0, 1fr )` and `repeat( 2, 1fr )`.
 - Add breathing room after an opening brace when the block contains meaningful groups.
 - Keep a trivial one-property block compact.
 

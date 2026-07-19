@@ -248,6 +248,16 @@ Put a space before the colon in PHP return type declarations: `function get_invo
 
 The first child block is jammed against the parent at-rule. Add breathing room after the parent opening brace and between sibling blocks, but do not add a blank line before the parent closing brace.
 
+## CSS: compact function parentheses
+
+```css
+.dashboard_grid {
+	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr));
+}
+```
+
+CSS function notation follows the same visual spacing preference as normal function calls. Use `minmax( 0, 1fr )` and `repeat( 2, minmax( 0, 1fr ) )`.
+
 ## CSS: trailing blank line before a closing brace
 
 ```css
