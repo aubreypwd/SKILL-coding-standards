@@ -7,10 +7,12 @@ snapshots and the conversation history.
 Verify the target language and version before using version-sensitive syntax.
 These examples do not use trailing commas in function calls. CSS function notation uses one space inside its parentheses.
 Named function and method bodies have breathing room after their opening brace, even when they contain one statement. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
+Comments are intentionally included throughout the examples to explain construction, context, accessibility, state changes, and the purpose of direct calls. They remain concise and use language-appropriate comment syntax.
 
 ## CSS
 
 ```css
+/* Keep layout, typography, surface, and spacing styles visibly grouped. */
 .account_panel {
 
 	display: grid;
@@ -30,6 +32,7 @@ Named function and method bodies have breathing room after their opening brace, 
 ```
 
 ```css
+/* Move the details and actions into separate columns when space allows. */
 @container account_panel (min-width: 44rem) {
 
 	.account_panel__details {
@@ -49,12 +52,14 @@ Named function and method bodies have breathing room after their opening brace, 
 ```
 
 ```css
+/* Remove the browser margin from this compact heading block. */
 .account_panel__heading {
 	margin: 0;
 }
 ```
 
 ```css
+/* Respect the user's motion preference for carousel feedback. */
 @media (prefers-reduced-motion: reduce) {
 
 	.carousel_track {
@@ -68,6 +73,7 @@ Named function and method bodies have breathing room after their opening brace, 
 ```
 
 ```css
+/* Keep the card readable while preserving a clear focus state. */
 .inventory_card {
 
 	align-items: start;
@@ -91,6 +97,7 @@ Named function and method bodies have breathing room after their opening brace, 
 ```
 
 ```css
+/* Reserve one shared date column for every schedule entry. */
 .schedule_grid {
 
 	display: grid;
@@ -122,6 +129,8 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <main id="notification-settings" aria-labelledby="notification-settings-title">
+
+	<!-- Keep the heading and help text together as the form's accessible context. -->
 
 	<header>
 
@@ -156,6 +165,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <nav aria-label="Project sections">
+	<!-- Keep short navigation items adjacent so the list is easy to scan. -->
 	<ul>
 		<li><a aria-current="page" href="/overview">Overview</a></li>
 		<li><a href="/activity">Activity</a></li>
@@ -166,6 +176,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <dialog aria-labelledby="archive-dialog-title" id="archive-dialog">
+	<!-- Use the dialog form so native cancel and confirm behavior remains available. -->
 	<form method="dialog">
 
 		<h2 id="archive-dialog-title">Archive this report?</h2>
@@ -182,6 +193,8 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <table>
+
+	<!-- Keep the caption and scope attributes available to assistive technology. -->
 
 	<caption>Upcoming maintenance windows</caption>
 
@@ -213,11 +226,12 @@ Parent elements with multiple logical child blocks have a blank line after the o
 ```html
 <section aria-labelledby="import-status-title">
 
+	<!-- Use a polite live region so status changes do not steal focus. -->
+
 	<h2 id="import-status-title">Import status</h2>
 
 	<p aria-live="polite" id="import-status-message">
 		The import is ready to begin.
-	</p>
 
 	<progress aria-label="Import progress" max="100" value="0">0%</progress>
 </section>
@@ -225,6 +239,8 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <article aria-labelledby="release-note-title">
+
+	<!-- Keep version context immediately before the release title. -->
 
 	<header>
 
@@ -255,6 +271,7 @@ Parent elements with multiple logical child blocks have a blank line after the o
  */
 function get_invoice_reference( array $invoice ) : string {
 
+	// Format the invoice series and number as one stable reference.
 	return sprintf(
 		'%s-%06d',
 		$invoice['series'],
@@ -277,6 +294,7 @@ function get_invoice_reference( array $invoice ) : string {
  */
 function get_enabled_regions( array $regions ) : array {
 
+	// Keep only region records that can be shown as enabled.
 	return array_values(
 		array_filter(
 			$regions,
@@ -302,6 +320,7 @@ function get_enabled_regions( array $regions ) : array {
  */
 function get_customer_label( array $customer ) : string {
 
+	// Keep the customer code visible so labels remain distinguishable.
 	return sprintf(
 		'%s (%s)',
 		$customer['name'],
@@ -324,6 +343,7 @@ function get_customer_label( array $customer ) : string {
  */
 function build_sync_payload( int $account_id ) : array {
 
+	// Fetch the account once because its data populates two payload fields.
 	$account = get_account( $account_id );
 
 	return [
@@ -349,6 +369,7 @@ function build_sync_payload( int $account_id ) : array {
  */
 function write_audit_event( string $event, array $context, int $actor_id ) : void {
 
+	// Pass the original context through so the hook can record the event accurately.
 	do_action(
 		'project_audit_event',
 		$event,
@@ -369,6 +390,7 @@ function write_audit_event( string $event, array $context, int $actor_id ) : voi
  */
 function register_invoice_status_filter() : void {
 
+	// Register the formatter at the point where the status hook is declared.
 	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
 }
 
@@ -383,6 +405,7 @@ function register_invoice_status_filter() : void {
  */
 function format_invoice_status_label( string $status ) : string {
 
+	// Keep the supported statuses and their display labels together.
 	return match ( $status ) {
 		'paid' => 'Paid in full',
 		'pending' => 'Awaiting payment',
@@ -406,6 +429,7 @@ function format_invoice_status_label( string $status ) : string {
  */
 function get_subscription_label( array $subscription ) : string {
 
+	// Check optional values defensively before using them to choose a label.
 	if ( false === ( $subscription['enabled'] ?? false ) ) {
 		return 'Disabled';
 	}
@@ -425,6 +449,8 @@ function get_subscription_label( array $subscription ) : string {
 ```php
 <?php if ( $reservation['confirmed'] ) : ?>
 
+	<!-- Keep both reservation outcomes inside the same accessible region. -->
+
 	<section aria-labelledby="reservation-confirmed-title">
 
 		<h2 id="reservation-confirmed-title">Reservation confirmed</h2>
@@ -433,6 +459,8 @@ function get_subscription_label( array $subscription ) : string {
 	</section>
 
 <?php else : ?>
+
+	<!-- Keep the pending state equally clear when confirmation has not arrived. -->
 
 	<section aria-labelledby="reservation-pending-title">
 
@@ -458,6 +486,7 @@ function get_subscription_label( array $subscription ) : string {
  */
 function buildAlertItem( alert ) {
 
+	// Preserve the alert data while adding the live-region behavior.
 	return {
 		...alert,
 		ariaLive: alert.severity === `critical` ? `assertive` : `polite`,
@@ -477,8 +506,10 @@ function buildAlertItem( alert ) {
  */
 function groupTasksByDay( tasks ) {
 
+	// Keep each task in the bucket for its calendar date.
 	return tasks.reduce( function ( groupedTasks, task ) {
 
+		// Derive the day once so the same key controls lookup and insertion.
 		const day = task.dueDate.slice( 0, 10 );
 
 		groupedTasks[ day ] = undefined === groupedTasks[ day ]
@@ -504,6 +535,7 @@ function groupTasksByDay( tasks ) {
  */
 function sortQueueEntries( entries ) {
 
+	// Copy before sorting so callers keep the original queue order.
 	return entries.slice().sort( function ( firstEntry, secondEntry ) {
 		return firstEntry.priority - secondEntry.priority;
 	} );
@@ -522,6 +554,7 @@ function sortQueueEntries( entries ) {
  */
 async function loadDashboardData( endpoint ) {
 
+	// Return the request chain directly because the caller consumes the Promise.
 	return fetch( endpoint ).then( function ( response ) {
 		return response.json();
 	} );
@@ -541,6 +574,7 @@ async function loadDashboardData( endpoint ) {
  */
 function getConnectionMessage( isOffline, hasError ) {
 
+	// Use one fallback message for either an offline or failed connection.
 	return ( isOffline || hasError )
 		? `The service is temporarily unavailable.`
 		: `The service is ready.`;
@@ -559,6 +593,7 @@ function getConnectionMessage( isOffline, hasError ) {
  */
 function revealPanel( trigger, panel ) {
 
+	// Stop before changing state when the controls are not available or already open.
 	if ( null === trigger ) {
 		return;
 	}
@@ -571,6 +606,7 @@ function revealPanel( trigger, panel ) {
 		return;
 	}
 
+	// Reveal the panel and return focus to the control that opened it.
 	panel.hidden = false;
 	trigger.setAttribute( `aria-expanded`, `${false}` );
 	trigger.focus();
@@ -589,12 +625,14 @@ function revealPanel( trigger, panel ) {
  */
 function bindDismissiblePanel( panel ) {
 
+	// Ignore values that are not DOM elements before registering a listener.
 	if ( false === panel instanceof HTMLElement ) {
 		return;
 	}
 
 	panel.addEventListener( `keydown`, function ( event ) {
 
+		// Hide the panel only when the user explicitly presses Escape.
 		if ( event.key !== `Escape` ) {
 			return;
 		}
@@ -616,6 +654,7 @@ function bindDismissiblePanel( panel ) {
  */
 function buildSearchQuery( filters ) {
 
+	// Preserve the parameter order expected by the search endpoint.
 	return new URLSearchParams( {
 		phrase: filters.phrase,
 		owner: filters.owner,
@@ -637,6 +676,7 @@ function buildSearchQuery( filters ) {
  */
 function renderSummaryMetric( root, label, value ) {
 
+	// Let the renderer own the DOM update while this function supplies its context.
 	renderMetric(
 		root,
 		label,
@@ -646,6 +686,7 @@ function renderSummaryMetric( root, label, value ) {
 ```
 
 ```js
+// Keep the workflow order aligned with its lifecycle.
 const workflow = {
 	queued: queueWorkflow,
 	running: runWorkflow,
@@ -657,6 +698,8 @@ const workflow = {
 
 ```php
 <?php if ( $profile['show_contact'] ) : ?>
+
+	<!-- Keep contact values in a definition list so labels remain associated. -->
 
 	<section aria-labelledby="profile-contact-title">
 
@@ -682,6 +725,7 @@ const workflow = {
 ## Combined HTML, CSS, and JavaScript
 
 ```html
+<!-- Keep the trigger's expanded state synchronized with the dialog. -->
 <button
 	aria-controls="command-palette"
 	aria-expanded="false"
@@ -697,6 +741,8 @@ const workflow = {
 	id="command-palette"
 	role="dialog">
 
+		<!-- Keep dialog content nested beneath the multiline opening tag. -->
+
 		<h2 id="command-palette-title">Command palette</h2>
 
 		<button id="command-palette-close" type="button">Close command palette</button>
@@ -706,6 +752,7 @@ const workflow = {
 ```
 
 ```css
+/* Keep the palette surface readable against the page behind it. */
 .command_palette {
 
 	background-color: #111827;
@@ -732,11 +779,13 @@ const workflow = {
  */
 function toggleCommandPalette( trigger, palette ) {
 
+	// Keep the button state synchronized with the dialog's hidden state.
 	palette.hidden = false === palette.hidden;
 	trigger.setAttribute( `aria-expanded`, `${palette.hidden}` );
 
 	if ( palette.hidden ) {
 
+		// Return focus to the search field after the palette opens.
 		const searchInput = palette.querySelector( `#command-palette-search` );
 
 		if ( searchInput instanceof HTMLInputElement ) {
@@ -763,6 +812,7 @@ function toggleCommandPalette( trigger, palette ) {
  */
 function bindCommandPalette( trigger, closeButton, palette ) {
 
+	// Route both controls through the same state transition.
 	trigger.addEventListener( `click`, function () {
 		toggleCommandPalette( trigger, palette );
 	} );

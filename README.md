@@ -24,6 +24,20 @@ Before producing any meaningful code, the agent must ask internally, “Am I wri
 
 These standards are not intended to override a project's explicit conventions. They guide code when the project is silent or when the user explicitly requests these standards.
 
+## Comments
+
+Comments are strongly encouraged. They add a reading layer that explains why code was constructed, what a call means in the current function, how a value will be used, or how state changes. That context is often more valuable than the maintenance cost of a concise comment. Do not omit a useful comment merely because the code is technically obvious or an IDE can reveal a called function's signature.
+
+Prefer one-line comments. Do not stack several `//` lines to explain one idea. If an explanation truly needs multiple lines, use a block comment with `/*` and `*` lines:
+
+```js
+/*
+ * Keep the request state visible while the response is being processed.
+ */
+```
+
+Do not use `/**` for an inline code comment. Reserve DocBlocks for declarations such as functions, methods, classes, and properties. Do not hyper-document ordinary function calls; summarize their purpose in the context of the current function when that helps the reader. Keep comments immediately before the code they describe and update them when the code changes.
+
 ## Foundation: WordPress Coding Standards
 
 The baseline is the complete WordPress standards family:

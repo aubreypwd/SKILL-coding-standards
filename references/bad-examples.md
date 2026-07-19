@@ -144,6 +144,21 @@ queueJob(
 
 Use this only when the target language and version explicitly support trailing commas in function calls.
 
+## Over-explained and misclassified comments
+
+```js
+// Comment one
+// Continuing comment
+// More information about the comment.
+
+/**
+ * This is an inline explanation of the next statement.
+ */
+const requestState = getRequestState();
+```
+
+Do not stack multiple single-line comments to over-explain one idea. If multiple lines are genuinely necessary, use `/* ... */`, not `/** ... */`; reserve DocBlocks for declarations. Prefer one concise comment that explains the construction or context of the code.
+
 ## Vague or incorrect documentation
 
 ```js
