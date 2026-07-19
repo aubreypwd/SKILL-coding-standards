@@ -147,9 +147,9 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - Apply WordPress function-call spacing exactly: no space between a function or method name and its opening parenthesis, and one space inside the opening and closing parentheses. Use `fetch( requestUrl, { ... } );`, not `fetch(requestUrl, { ... });` and not `fetch ( requestUrl, { ... } );`.
 - For multiline calls, put a space between the final argument expression and the closing parenthesis. An object argument therefore closes as `} );`, never `});`.
 - Apply the same spacing to nested calls, constructors, methods, and calls with one or two parameters: `getDisplayName( user )`, `new FormData( form )`, and `replaceCardContent( card.element, data.content )`.
-- Strongly encourage comments in CSS, HTML, PHP, JavaScript, and other supported languages. Use a concise comment to explain why a value is obtained, how a block was constructed, what context a call serves, or how state changes. Comments are an intentional reading layer, even when the code is technically obvious; do not omit a useful comment merely because an IDE can reveal a called function's signature.
+- Strongly encourage useful comments in CSS, HTML, PHP, JavaScript, and other supported languages. Use a concise comment to explain non-obvious rationale, construction, constraints, accessibility behavior, state changes, intentional ordering, or why work is performed once. Comments are an intentional reading layer, but do not add one merely because comments are encouraged.
 - Prefer one-line comments. Do not stack several `//` lines to explain one idea. If an explanation truly needs multiple lines, use a block comment with `/*` and `*` lines, never a DocBlock opener `/**` for an inline code comment. Reserve `/**` for documentation attached to a declaration.
-- Do not hyper-document ordinary function calls. Summarize the call's purpose in the current function when that context helps, and keep the comment immediately before the code it describes. Keep comments accurate when the code changes.
+- Do not add comments that merely restate a function name, DocBlock, selector, property assignment, obvious call, or straightforward control flow. Do not hyper-document ordinary function calls. Summarize a call's purpose only when its role in the current function is not obvious, and keep the comment immediately before the code it describes. Keep comments accurate when the code changes.
 - Keep comments before the code they describe and precede inline comments with a blank line, as required by the WordPress JavaScript standard.
 
 ## 3. Avoid meaningless variables
@@ -296,6 +296,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Accessibility behavior is complete and accurate before it is described as accessibility-compliant.
 - Every example included in the answer follows all unrelated standards too; an example must not teach one rule while violating another.
 - Helpful comments are present where they explain construction, purpose, context, or state; comments are concise and maintained with the code.
+- Redundant comments that merely restate declarations, DocBlocks, or obvious code were removed.
 - Multi-line code commentary uses `/* ... */`, not a `/** ... */` DocBlock, unless it documents a declaration.
 
 Run available project validation tools after this static review. If no tooling is available, perform the review manually and disclose that limitation.

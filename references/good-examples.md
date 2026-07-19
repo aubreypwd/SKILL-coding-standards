@@ -14,8 +14,6 @@ Comments are intentionally included throughout the examples to explain construct
 ```css
 .account_panel {
 
-	/* Keep layout, typography, surface, and spacing styles visibly grouped. */
-
 	display: grid;
 	gap: 1rem;
 	grid-template-columns: minmax( 0, 1fr ) auto;
@@ -77,8 +75,6 @@ Comments are intentionally included throughout the examples to explain construct
 ```css
 .inventory_card {
 
-	/* Keep the card readable while preserving a clear focus state. */
-
 	align-items: start;
 	display: flex;
 	gap: 0.75rem;
@@ -101,8 +97,6 @@ Comments are intentionally included throughout the examples to explain construct
 
 ```css
 .schedule_grid {
-
-	/* Reserve one shared date column for every schedule entry. */
 
 	display: grid;
 	grid-template-areas:
@@ -169,9 +163,6 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <nav aria-label="Project sections">
-
-	<!-- Keep short navigation items adjacent so the list is easy to scan. -->
-
 	<ul>
 		<li><a aria-current="page" href="/overview">Overview</a></li>
 		<li><a href="/activity">Activity</a></li>
@@ -248,8 +239,6 @@ Parent elements with multiple logical child blocks have a blank line after the o
 ```html
 <article aria-labelledby="release-note-title">
 
-	<!-- Keep version context immediately before the release title. -->
-
 	<header>
 
 		<p>Version 4.2</p>
@@ -279,7 +268,6 @@ Parent elements with multiple logical child blocks have a blank line after the o
  */
 function get_invoice_reference( array $invoice ) : string {
 
-	// Format the invoice series and number as one stable reference.
 	return sprintf(
 		'%s-%06d',
 		$invoice['series'],
@@ -302,7 +290,6 @@ function get_invoice_reference( array $invoice ) : string {
  */
 function get_enabled_regions( array $regions ) : array {
 
-	// Keep only region records that can be shown as enabled.
 	return array_values(
 		array_filter(
 			$regions,
@@ -328,7 +315,6 @@ function get_enabled_regions( array $regions ) : array {
  */
 function get_customer_label( array $customer ) : string {
 
-	// Keep the customer code visible so labels remain distinguishable.
 	return sprintf(
 		'%s (%s)',
 		$customer['name'],
@@ -397,8 +383,6 @@ function write_audit_event( string $event, array $context, int $actor_id ) : voi
  * @since July 18, 2026 Updated canonical example to follow the current coding standards.
  */
 function register_invoice_status_filter() : void {
-
-	// Register the formatter at the point where the status hook is declared.
 	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
 }
 
@@ -413,7 +397,6 @@ function register_invoice_status_filter() : void {
  */
 function format_invoice_status_label( string $status ) : string {
 
-	// Keep the supported statuses and their display labels together.
 	return match ( $status ) {
 		'paid' => 'Paid in full',
 		'pending' => 'Awaiting payment',
@@ -437,7 +420,6 @@ function format_invoice_status_label( string $status ) : string {
  */
 function get_subscription_label( array $subscription ) : string {
 
-	// Check optional values defensively before using them to choose a label.
 	if ( false === ( $subscription['enabled'] ?? false ) ) {
 		return 'Disabled';
 	}
@@ -457,8 +439,6 @@ function get_subscription_label( array $subscription ) : string {
 ```php
 <?php if ( $reservation['confirmed'] ) : ?>
 
-	<!-- Keep both reservation outcomes inside the same accessible region. -->
-
 	<section aria-labelledby="reservation-confirmed-title">
 
 		<h2 id="reservation-confirmed-title">Reservation confirmed</h2>
@@ -467,8 +447,6 @@ function get_subscription_label( array $subscription ) : string {
 	</section>
 
 <?php else : ?>
-
-	<!-- Keep the pending state equally clear when confirmation has not arrived. -->
 
 	<section aria-labelledby="reservation-pending-title">
 
@@ -494,7 +472,6 @@ function get_subscription_label( array $subscription ) : string {
  */
 function buildAlertItem( alert ) {
 
-	// Preserve the alert data while adding the live-region behavior.
 	return {
 		...alert,
 		ariaLive: alert.severity === `critical` ? `assertive` : `polite`,
@@ -514,7 +491,6 @@ function buildAlertItem( alert ) {
  */
 function groupTasksByDay( tasks ) {
 
-	// Keep each task in the bucket for its calendar date.
 	return tasks.reduce( function ( groupedTasks, task ) {
 
 		// Derive the day once so the same key controls lookup and insertion.
@@ -562,7 +538,6 @@ function sortQueueEntries( entries ) {
  */
 async function loadDashboardData( endpoint ) {
 
-	// Return the request chain directly because the caller consumes the Promise.
 	return fetch( endpoint ).then( function ( response ) {
 		return response.json();
 	} );
@@ -582,7 +557,6 @@ async function loadDashboardData( endpoint ) {
  */
 function getConnectionMessage( isOffline, hasError ) {
 
-	// Use one fallback message for either an offline or failed connection.
 	return ( isOffline || hasError )
 		? `The service is temporarily unavailable.`
 		: `The service is ready.`;
@@ -601,7 +575,6 @@ function getConnectionMessage( isOffline, hasError ) {
  */
 function revealPanel( trigger, panel ) {
 
-	// Stop before changing state when the controls are not available or already open.
 	if ( null === trigger ) {
 		return;
 	}
@@ -614,7 +587,6 @@ function revealPanel( trigger, panel ) {
 		return;
 	}
 
-	// Reveal the panel and return focus to the control that opened it.
 	panel.hidden = false;
 	trigger.setAttribute( `aria-expanded`, `${false}` );
 	trigger.focus();
@@ -640,7 +612,6 @@ function bindDismissiblePanel( panel ) {
 
 	panel.addEventListener( `keydown`, function ( event ) {
 
-		// Hide the panel only when the user explicitly presses Escape.
 		if ( event.key !== `Escape` ) {
 			return;
 		}
@@ -662,7 +633,6 @@ function bindDismissiblePanel( panel ) {
  */
 function buildSearchQuery( filters ) {
 
-	// Preserve the parameter order expected by the search endpoint.
 	return new URLSearchParams( {
 		phrase: filters.phrase,
 		owner: filters.owner,
@@ -684,7 +654,6 @@ function buildSearchQuery( filters ) {
  */
 function renderSummaryMetric( root, label, value ) {
 
-	// Let the renderer own the DOM update while this function supplies its context.
 	renderMetric(
 		root,
 		label,
@@ -733,7 +702,6 @@ const workflow = {
 ## Combined HTML, CSS, and JavaScript
 
 ```html
-<!-- Keep the trigger's expanded state synchronized with the dialog. -->
 <button
 	aria-controls="command-palette"
 	aria-expanded="false"
@@ -749,8 +717,6 @@ const workflow = {
 	id="command-palette"
 	role="dialog">
 
-		<!-- Keep dialog content nested beneath the multiline opening tag. -->
-
 		<h2 id="command-palette-title">Command palette</h2>
 
 		<button id="command-palette-close" type="button">Close command palette</button>
@@ -761,8 +727,6 @@ const workflow = {
 
 ```css
 .command_palette {
-
-	/* Keep the palette surface readable against the page behind it. */
 
 	background-color: #111827;
 	color: #f9fafb;

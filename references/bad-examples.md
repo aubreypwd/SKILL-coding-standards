@@ -159,6 +159,25 @@ const requestState = getRequestState();
 
 Do not stack multiple single-line comments to over-explain one idea. If multiple lines are genuinely necessary, use `/* ... */`, not `/** ... */`; reserve DocBlocks for declarations. Prefer one concise comment that explains the construction or context of the code.
 
+## Redundant comment that repeats the declaration
+
+```php
+<?php
+
+/**
+ * Registers the invoice status filter.
+ *
+ * @since Unknown
+ */
+function register_invoice_status_filter() : void {
+
+	// Register the formatter at the point where the status hook is declared.
+	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
+}
+```
+
+The function name, DocBlock, and direct call already explain this code. Do not add a comment that merely paraphrases them. Add a comment only when it contributes non-obvious rationale, a constraint, accessibility or state context, intentional ordering, or another detail the code does not already communicate.
+
 ## CSS: comment outside the block it describes
 
 ```css
