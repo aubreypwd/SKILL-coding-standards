@@ -12,12 +12,6 @@ The baseline references are:
 - [CSS](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/css/), [HTML](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/html/), [PHP](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/), and [JavaScript](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)
 - [PHP inline documentation](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/) and [JavaScript inline documentation](https://developer.wordpress.org/coding-standards/inline-documentation-standards/javascript/)
 
-## Comments
-
-Comments are strongly encouraged when they explain useful context, non-obvious intent, domain behavior, constraints, accessibility behavior, state changes, intentional ordering, or why work is performed once. They should add information rather than restate what the code already makes clear.
-
-Prefer concise comments immediately before the code they explain. Use a block comment for a genuinely multiline explanation, and reserve DocBlocks for declarations. Do not use comments to explain obvious code or to teach a coding principle; the code should demonstrate the principle.
-
 ## Deviations from WordPress Coding Standards
 
 These are Aubrey's intentional differences from the WordPress baseline. The detailed operational rules and examples remain in [`SKILL.md`](SKILL.md).
@@ -59,55 +53,152 @@ These are Aubrey's intentional differences from the WordPress baseline. The deta
 
 ## Personal principles
 
+### Comments
+
+Comments are strongly encouraged when they explain useful context, non-obvious intent, domain behavior, constraints, accessibility behavior, state changes, intentional ordering, or why work is performed once. They should add information rather than restate what the code already makes clear.
+
+Prefer concise comments immediately before the code they explain. Use a block comment for a genuinely multiline explanation, and reserve DocBlocks for declarations. Do not use comments to explain obvious code or to teach a coding principle; the code should demonstrate the principle.
+
+Good:
+
+```js
+// Keep the workflow order aligned with its lifecycle.
+const workflow = {
+	queued: queueWorkflow,
+	running: runWorkflow,
+	complete: finishWorkflow,
+};
+```
+
+Bad:
+
+```js
+// Comment one
+// Continuing comment
+// More information about the comment.
+
+/**
+ * This is an inline explanation of the next statement.
+ */
+const requestState = getRequestState();
+```
+
 ### Breathing Room Principle
 
 Whitespace should make the logical structure of code visible. Add a blank line after a function-like opening brace when the body contains multiple logical statements or sections, or when its first statement is complex or multiline. Apply the same idea to parent blocks with multiple child sections and to callbacks or closures. A one-statement function or callback may remain compact.
 
+Good:
+
 ```css
-.card {
+.account_panel {
 
 	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax( 0, 1fr ) auto;
 
-	padding: 1rem;
+	font-size: 1rem;
+	line-height: 1.5;
+
+	background-color: #f7f7f7;
+	color: #1f2937;
+
+	border: 1px solid #d1d5db;
+	border-radius: 0.5rem;
+	padding: 1.25rem;
+}
+```
+
+Bad:
+
+```css
+@media (prefers-contrast: more) {
+	.billing_panel {
+
+		border-color: CanvasText;
+		color: CanvasText;
+	}
+
+	.billing_panel__total {
+
+		font-weight: 700;
+	}
 }
 ```
 
 ### Strings and interpolation
 
-Prefer native interpolation, templating, formatting, or parameterized strings. In JavaScript, use template literals by default.
+Prefer native interpolation, templating, formatting, or parameterized strings. In JavaScript, use template literals by default. Backticks are JavaScript's template-literal delimiters; they allow a value such as `${name}` to be inserted directly into the string and avoid assembling separate string fragments.
+
+Good:
 
 ```js
 showGreeting( `Hello, ${name}!` );
+```
+
+Bad:
+
+```js
+const greeting = `Hello, ` + name + `!`;
 ```
 
 ### Avoid Concatenation at All Costs
 
 Do not assemble strings with concatenation when a native alternative exists. Use concatenation only when the language or target version provides no viable alternative.
 
+Good:
+
+```js
+const notice = `Hello, ${userName}!`;
+```
+
+Bad:
+
+```js
+const notice = `Hello, ` + userName + `!`;
+```
+
 ### Guard Runtime Data and Return Early and Often
 
 Do not blindly trust data entering a function when the language cannot enforce its type. Use one practical guard for the expected type, then return as soon as invalid, missing, already-completed, or otherwise terminal conditions make the remaining work unnecessary. Keep the normal path flat and visible. Guard clauses are a technique within this principle, not its name.
 
+Good:
+
 ```js
 /**
- * Updates a panel with a message unless the panel is already complete.
+ * Loads dashboard data.
  *
- * @since July 18, 2026
+ * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ * @since July 18, 2026 Added an endpoint type guard.
  *
- * @param {HTMLElement} panel Panel element to update.
- * @param {string} message Message to display.
+ * @param {string} endpoint Dashboard endpoint.
+ * @return {Promise} Dashboard data.
  */
-function updatePanel( panel, message ) {
+async function loadDashboardData( endpoint ) {
 
-	if ( false === panel instanceof HTMLElement ) {
+	if ( 'string' !== typeof endpoint ) {
 		return;
 	}
 
-	if ( `complete` === panel.dataset.status ) {
-		return;
-	}
+	return fetch( endpoint ).then( function ( response ) {
+		return response.json();
+	} );
+}
+```
 
-	panel.textContent = message;
+Bad:
+
+```js
+function bindDismissiblePanel( panel ) {
+
+	panel.addEventListener( `keydown`, function ( event ) {
+
+		if ( `Escape` !== event.key ) {
+			return;
+		}
+
+		panel.hidden = true;
+	} );
 }
 ```
 
@@ -115,8 +206,20 @@ function updatePanel( panel, message ) {
 
 When a simple conditional only chooses a value to assign, use a ternary and assign the result once. Use `if` for multiple branches, multiple statements, side effects, or early returns. Long ternaries put the question mark and colon on continuation lines.
 
+Good:
+
 ```js
-state.label = value ? `Yes` : `No`;
+groupedTasks[ day ] = undefined === groupedTasks[ day ]
+	? []
+	: groupedTasks[ day ];
+```
+
+Bad:
+
+```js
+if ( undefined === groupedTasks[ day ] ) {
+	groupedTasks[ day ] = [];
+}
 ```
 
 ### Practical documentation
@@ -125,27 +228,122 @@ Every named function and method gets a directly preceding DocBlock or JSDoc bloc
 
 Use project-established named types only when they are already required as a public or shared contract. Do not invent one-off typedefs or nested inline schemas. Every named function and method has an `@since` tag; preserve existing tags and add a dated entry when modifying code. Add `@return` only for functions that return a value. Do not identify an agent or model as an author.
 
-### Don't Use Variables Un-necessarily (Inline Temp)
+Good:
 
-Do not create a variable merely to rename, relocate, or relay a value that is already available and only needed once. This applies to properties, literals, arguments, return values, constructed values, and pure computations. A variable is justified when it is reused, captures required state, prevents repeated work, or represents something that cannot be safely or clearly inlined.
+```php
+<?php
+
+/**
+ * Returns a customer label.
+ *
+ * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ *
+ * @param array $customer Customer data.
+ * @return string Customer label.
+ */
+function get_customer_label( array $customer ) : string {
+
+	return sprintf(
+		'%s (%s)',
+		$customer['name'],
+		$customer['code']
+	);
+}
+```
 
 Bad:
 
 ```js
-const title = card.heading;
+/**
+ * Reads ledger records.
+ *
+ * @since Unknown
+ *
+ * @param {array} records Ledger records.
+ * @return {object} Ledger records.
+ */
+function readLedger( records ) {
 
-renderCardTitle( title );
+	return records.map( function ( record ) {
+		return record;
+	} );
+}
 ```
+
+### Don't Use Variables Un-necessarily (Inline Temp)
+
+Do not create a variable merely to rename, relocate, or relay a value that is already available and only needed once. This applies to properties, literals, arguments, return values, constructed values, and pure computations. A variable is justified when it is reused, captures required state, prevents repeated work, or represents something that cannot be safely or clearly inlined.
 
 Good:
 
+```php
+<?php
+
+/**
+ * Builds a synchronization payload for an account.
+ *
+ * @since Unknown
+ * @since July 18, 2026 Updated canonical example to follow the current coding standards.
+ *
+ * @param int $account_id Account ID.
+ * @return array Synchronization payload containing account, contact, and refresh data.
+ */
+function build_sync_payload( int $account_id ) : array {
+
+	$account = get_account( $account_id );
+
+	return [
+		'account' => $account,
+		'contact' => $account['contact'],
+		'refreshed_at' => time(),
+	];
+}
+```
+
+Bad:
+
 ```js
-renderCardTitle( card.heading );
+function submitPreferences( form, settings ) {
+
+	const endpoint = settings.api.baseUrl;
+	const formData = new FormData( form );
+	const requestUrl = `${endpoint}/preferences/${settings.userId}`;
+
+	return fetch( requestUrl, {
+		method: `POST`,
+		body: formData,
+	} );
+}
 ```
 
 ### DRY, with practical exceptions
 
 Do not repeat expensive work, side effects, transformations, or behavior. Reuse a computed result when it is needed more than once. DRY does not mean every repeated character needs a variable or abstraction, and superficial similarity does not require an abstraction.
+
+Good:
+
+```js
+const profile = loadProfile( userId );
+
+return {
+	profile,
+	permissions: getPermissions( profile ),
+	lastSeen: formatLastSeen( profile ),
+};
+```
+
+Bad:
+
+```js
+return {
+	profile: loadProfile( userId ),
+	permissions: getPermissions( loadProfile( userId ) ),
+	lastSeen: formatLastSeen( loadProfile( userId ) ),
+};
+```
+
+Repeating a simple literal can still be clearer than introducing a shared alias:
 
 ```js
 const locations = {
@@ -157,8 +355,6 @@ const locations = {
 	},
 };
 ```
-
-Repeating a simple literal can be clearer than introducing a shared alias.
 
 ## How the skill guides an agent
 
