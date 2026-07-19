@@ -551,6 +551,19 @@ The blank line before the function's closing brace adds no useful separation. Ke
 
 The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening parent tag before the first child block. This applies to every HTML parent with multiple logical child blocks, not only `main`. HTML does not need a trailing blank line before the closing tag.
 
+## HTML: comment jammed against its parent or child
+
+```html
+<nav aria-label="Project sections">
+	<!-- Explain the navigation structure. -->
+	<ul>
+		<li><a href="/overview">Overview</a></li>
+	</ul>
+</nav>
+```
+
+An HTML comment is its own logical child block. Add a blank line after the opening parent tag before the comment and another blank line between the comment and the child it explains.
+
 ## HTML: over-formatting a simple list
 
 ```html

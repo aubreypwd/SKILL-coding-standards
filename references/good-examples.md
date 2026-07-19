@@ -169,7 +169,9 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <nav aria-label="Project sections">
+
 	<!-- Keep short navigation items adjacent so the list is easy to scan. -->
+
 	<ul>
 		<li><a aria-current="page" href="/overview">Overview</a></li>
 		<li><a href="/activity">Activity</a></li>
@@ -180,7 +182,9 @@ Parent elements with multiple logical child blocks have a blank line after the o
 
 ```html
 <dialog aria-labelledby="archive-dialog-title" id="archive-dialog">
+
 	<!-- Use the dialog form so native cancel and confirm behavior remains available. -->
+
 	<form method="dialog">
 
 		<h2 id="archive-dialog-title">Archive this report?</h2>

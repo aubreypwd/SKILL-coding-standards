@@ -99,6 +99,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
   ```
 
 - Give a parent block breathing room when it contains multiple logical child blocks: leave a blank line after the opening brace or opening HTML tag before the first child and between sibling blocks. Do not add a trailing blank line immediately before the closing curly brace; close the block directly after its final child or statement. Apply this to CSS at-rules, PHP blocks, JavaScript blocks, and HTML elements when they contain multiple sections. HTML follows the opening and sibling-spacing rule, but has no curly-brace closing rule. Compact simple HTML lists are an exception: when each `li` contains short, simple content, keep each item on one line, keep sibling items adjacent, and do not add blank lines inside the `ul` or `ol`. Expand a list item only when its contents are complex or contain multiple meaningful child elements.
+- Treat an HTML comment as its own logical child block. When a comment is inside an HTML parent or a PHP-controlled HTML region, leave a blank line after the parent opening tag before the comment and another blank line between the comment and the child it explains. Do not attach the comment directly to either boundary. A comment at the document or fragment root has no containing parent and does not need invented surrounding markup.
 
   ```css
   @media (forced-colors: active) {
@@ -268,6 +269,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - `@return` appears only when the function actually returns a value. Do not add `@return void` unless the applicable project standard explicitly requires it.
 - A standalone `<?php` tag has a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to its declaration.
 - Parent blocks and HTML elements with multiple logical child blocks have a blank line after their opening syntax and between sibling blocks. Curly-braced languages have no trailing blank line immediately before the closing brace; HTML has no corresponding trailing-curly rule.
+- HTML comments count as logical child blocks and have breathing room from both the parent opening tag and the child they explain.
 - The Breathing Room Principle was applied to every non-empty named function or method, including one-statement bodies. Nested callbacks and closures with multiple statements or logical sections also have breathing room after their opening brace.
 - Simple HTML lists remain compact: keep short `li` items on one line and adjacent to one another without blank lines inside the list. Do not apply the general parent-spacing rule mechanically to a short list.
 - CSS, PHP, and JavaScript blocks have no trailing blank line immediately before a closing curly brace. HTML is not subject to this curly-brace rule.
