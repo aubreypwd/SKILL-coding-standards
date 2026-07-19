@@ -127,6 +127,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 
 - Small JavaScript objects and arrays may stay compact. Once they are large enough to benefit from reordering or scanning, put each item on its own line and use a trailing comma when the syntax and target version support it.
 - Preserve intentional object and array order. Do not alphabetize them automatically.
+- Do not vertically align associative-array arrows or similar key/value separators. Use one space on each side of `=>`; alignment creates a maintenance burden when a key changes length.
 - Declare variables separately. Do not use comma-separated variable declarations.
 - Avoid string concatenation in every supported language. Prefer the language's native interpolation, templating, formatting, or parameterized-string mechanism instead of assembling a string with `+`, `.`, or an equivalent concatenation operator. In JavaScript, use template literals; in PHP, use interpolation or the applicable formatting mechanism. Use concatenation only when the language or target version provides no viable alternative, and state that constraint.
 - Prefer JavaScript template literals for strings by default. This avoids deciding between quote types and avoids unnecessary escaping.
@@ -291,6 +292,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Tabs, semicolons, whitespace, line wrapping, braces, comments, and blank lines follow the applicable WordPress rules.
 - Strings in every supported language use native interpolation, templating, formatting, or parameterization instead of concatenation whenever an alternative exists. JavaScript uses template literals by default, and variables are declared separately.
 - Objects and arrays preserve intentional order and are not alphabetized without instruction.
+- Associative-array arrows are not vertically aligned; use one space on each side of `=>` so changing one key does not require reformatting sibling entries.
 - No meaningless single-use variables or convenience aliases were introduced. A pure one-use computation is rejected even when it has a descriptive name or is assigned to a variable for readability.
 - Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.
 - Simple literal repetition has not been turned into a needless alias or abstraction.

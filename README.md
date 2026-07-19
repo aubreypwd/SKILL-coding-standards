@@ -293,6 +293,7 @@ Apply the equivalent native interpolation or formatting mechanism in other langu
 - Very small objects and arrays may remain compact.
 - Larger objects and arrays put each item on its own line.
 - Preserve intentional order; do not alphabetize objects or arrays automatically.
+- Do not vertically align associative-array arrows or similar key/value separators. Use one space on each side of `=>`; alignment creates a maintenance burden when a key changes length.
 - Use trailing commas when supported by the language and target version.
 - For function calls, one or two parameters may remain on one line. More than two parameters are written one per line.
 - Follow WordPress spacing exactly: `fetch( requestUrl, { ... } );`, with no space before the opening parenthesis and one space inside the parentheses.

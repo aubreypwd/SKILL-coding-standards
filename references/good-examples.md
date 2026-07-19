@@ -6,6 +6,7 @@ snapshots and the conversation history.
 
 Verify the target language and version before using version-sensitive syntax.
 These examples do not use trailing commas in function calls. CSS function notation uses one space inside its parentheses.
+Associative-array arrows use one space on each side and are not vertically aligned.
 Named function and method bodies have breathing room after their opening brace when they contain multiple logical statements or sections, or when their first statement is complex or multiline. Trivial one-statement bodies remain compact. Nested callbacks and closures have the same spacing when they contain multiple statements or logical sections.
 Comments are intentionally included throughout the examples to explain construction, context, accessibility, state changes, and the purpose of direct calls. They remain concise and use language-appropriate comment syntax.
 Nested component examples keep the component's own declarations and root-level responsive overrides together before nested child concepts.

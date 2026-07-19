@@ -82,6 +82,18 @@ const office = {
 };
 ```
 
+## Vertically aligned associative-array arrows
+
+```php
+return [
+	'account'      => $account,
+	'contact'      => $account['contact'],
+	'refreshed_at' => time(),
+];
+```
+
+Do not add padding to align `=>`. Keep one space on each side so changing one key does not require realigning the other entries.
+
 ## Comma-separated declarations
 
 ```js
