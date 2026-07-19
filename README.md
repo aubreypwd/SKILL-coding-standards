@@ -100,6 +100,10 @@ When that opening tag contains text or nested elements, indent the contents one 
 - Group properties by function first—for example, flex, typography, colors, spacing, and positioning.
 - Alphabetize properties only within each functional group.
 - Put one space inside CSS function parentheses, such as `minmax( 0, 1fr )` and `repeat( 2, 1fr )`.
+- Prefer CSS nesting around a cohesive component concept such as `.card`. Keep the component's states, parts, and component-owned media queries together.
+- Do not nest CSS just because selectors are nested in the HTML. Avoid generic ancestor chains such as `body .page .content .card`; the component should remain portable when the markup moves.
+- Prefer one nested level and generally stop at two levels. Go deeper only when each level represents a meaningful concept inside the component, such as a card hero containing its own image and pill.
+- Confirm that the project target and tooling support CSS nesting before using it. Otherwise use the supported preprocessor or flat-selector equivalent.
 - Put CSS comments that describe declarations or child blocks inside the containing selector or at-rule, after its opening brace and immediately before the code they explain.
 - For a trivial one-property CSS block, keep the block compact and put a concise explanation at the end of the declaration line when needed:
 
@@ -110,6 +114,32 @@ When that opening tag contains text or nested elements, indent the contents one 
 ```
 
 Use a separate comment inside the block when multiple declarations or child blocks need explanation.
+
+```css
+.card {
+
+	display: grid;
+	gap: 1rem;
+
+	&:focus-within {
+		outline: 0.1875rem solid #2563eb;
+		outline-offset: 0.125rem;
+	}
+
+	.card__actions {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+	}
+
+	@media (min-width: 48rem) {
+
+		grid-template-columns: 1fr auto;
+	}
+}
+```
+
+This nests the card's state, actions, and responsive adaptation around the card concept. It does not reproduce a page or HTML ancestor chain.
 - Add breathing room after an opening brace when the block contains meaningful groups.
 - Keep a trivial one-property block compact.
 

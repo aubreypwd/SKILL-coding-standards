@@ -78,6 +78,10 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
 - In CSS function notation, put one space inside the parentheses, just as with normal function calls: `minmax( 0, 1fr )`, `repeat( 2, 1fr )`, and `rgb( 23 32 51 / 12% )`.
+- Prefer CSS nesting for cohesive component concepts such as `.card`, `.dialog`, or `.account_panel`. Nest the styles that belong to the component together, including its states and component-owned media-query adaptations, instead of scattering the component across unrelated selectors.
+- Do not use CSS nesting merely to mirror the HTML tree. Do not nest a component under generic ancestors such as `body`, `main`, `.page`, or `.content`; nest around a stable conceptual thing that can move through the markup without taking its styles apart.
+- Prefer a root component plus one nested level, and generally stop at two nesting levels. Nest deeper only when every deeper level is another meaningful concept inside the component—for example, a card hero with its own image and pill—not merely another wrapper from the markup.
+- Verify that the project target and tooling support the CSS nesting syntax before using it. If they do not, use the project's supported preprocessor nesting or the equivalent flat selectors rather than silently introducing unsupported CSS.
 - For CSS comments that describe a selector's declarations or an at-rule's child blocks, put the comment inside the containing block, after its opening brace and immediately before the code it explains. Keep the surrounding breathing room. Do not put a block comment above the selector when it describes the declarations inside it.
 - For a trivial CSS block with one declaration, keep the block compact and put a concise explanation at the end of that declaration line when a comment is useful: `margin: 0; /* Remove the browser margin. */`. Do not spend extra vertical space on a standalone comment for a one-property block.
 - Add a blank line after a CSS opening brace when the block has meaningful property groups. Keep a trivial one-property block compact:
@@ -277,6 +281,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - CSS function arguments have one space inside their parentheses; reject compact forms such as `minmax(0, 1fr)`.
 - CSS comments describing declarations or child blocks are inside the containing selector or at-rule, not above it.
 - One-property CSS blocks use an end-of-line comment when a comment is useful; multi-property groups use a separate comment inside the block.
+- CSS nesting groups cohesive component concepts, does not mechanically mirror markup, and normally stays within two nesting levels; deeper nesting requires distinct nested concepts and confirmed syntax/tooling support.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.

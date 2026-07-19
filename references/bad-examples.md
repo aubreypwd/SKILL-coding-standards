@@ -213,6 +213,25 @@ When a CSS comment describes declarations inside a selector, put it inside the s
 
 Keep a trivial one-property CSS block compact. Put a concise explanation at the end of the declaration line: `margin: 0; /* Remove the browser margin. */`.
 
+## CSS: nesting the markup tree instead of a component concept
+
+```css
+body {
+
+	.page {
+
+		.content {
+
+			.card {
+				padding: 1rem;
+			}
+		}
+	}
+}
+```
+
+Do not nest CSS under generic ancestors merely because the HTML is nested that way. Nest around a stable component concept such as `.card`, keep the component portable, and generally stop at two levels. Deeper nesting requires distinct nested concepts and a real need for the additional structure.
+
 ## Vague or incorrect documentation
 
 ```js

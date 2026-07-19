@@ -121,6 +121,82 @@ Comments are intentionally included throughout the examples to explain construct
 }
 ```
 
+```css
+.card {
+
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+
+	background-color: #ffffff;
+	border: 1px solid #d1d5db;
+	border-radius: 0.5rem;
+	padding: 1rem;
+
+	.card__hero {
+
+		align-items: center;
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: auto 1fr;
+
+		.card__hero-image {
+			aspect-ratio: 1;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+
+		.card__hero-pill {
+			background-color: #dbeafe;
+			color: #1e3a8a;
+			padding: 0.25rem 0.5rem;
+		}
+	}
+
+	.card__body {
+
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
+	@media (min-width: 48rem) {
+
+		grid-template-columns: minmax( 0, 2fr ) minmax( 12rem, 1fr );
+
+		.card__hero {
+			grid-template-columns: 1fr;
+		}
+	}
+}
+```
+
+```css
+.dialog {
+
+	border: 0;
+	max-width: 32rem;
+	padding: 0;
+
+	&[open] {
+		display: grid;
+	}
+
+	.dialog__footer {
+
+		display: flex;
+		gap: 0.75rem;
+		justify-content: flex-end;
+		padding: 1rem;
+	}
+
+	@media (min-width: 40rem) {
+
+		.dialog__footer {
+			padding: 1.5rem;
+		}
+	}
+}
+```
+
 ## HTML
 
 Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Short lists with simple items are a compact exception: keep each `li` on one line and keep the items adjacent. For multiline opening tags, the contents are indented one additional tab beyond the attributes. Do not add a trailing blank line before an HTML closing tag.
