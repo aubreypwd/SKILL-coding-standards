@@ -124,9 +124,17 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - Format a simple ternary without unnecessary parentheses. Use parentheses when combining multiple tests. For long ternaries, put the question mark and colon on continuation lines:
 
   ```js
-  const result = condition
+	const result = condition
 	? valueWhenTrue
 	: valueWhenFalse;
+  ```
+
+- In languages with ternary expressions, when a simple conditional only chooses a value to assign—especially when it initializes a missing value—use a ternary instead of an `if` block. Assign the ternary result once. Use `if` for multiple branches, multiple statements, side effects, or early returns:
+
+  ```js
+	groupedTasks[ day ] = undefined === groupedTasks[ day ]
+		? []
+		: groupedTasks[ day ];
   ```
 
 - When testing a known boolean, compare explicitly with `false === value` instead of using bang negation such as `! value`. For nullable or missing values, use the known value such as `null === value` or `undefined === value`; do not change the data test's meaning merely to avoid `!`.
@@ -270,6 +278,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - Repeated computation, fetching, side effects, and transformations are not repeated unnecessarily.
 - Simple literal repetition has not been turned into a needless alias or abstraction.
 - Ternaries are kept compact when simple and broken at `?` and `:` only when long or complex.
+- A simple conditional assignment uses a ternary and assigns the result once; `if` is reserved for multiple branches, multiple statements, side effects, or early returns.
 - Known boolean false checks use explicit comparisons such as `false === value`, not bang negation. Nullable and missing-value checks use their actual known values.
 - Simple boolean and type-test expressions do not have unnecessary grouping parentheses when operator precedence already makes their evaluation order clear.
 - Runtime parameters in dynamically typed code have one practical expected-type guard before use when static typing cannot enforce the contract. Reject exhaustive defensive checks when that guard is sufficient, and keep the documented parameter type specific.

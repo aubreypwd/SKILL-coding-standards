@@ -481,9 +481,9 @@ function groupTasksByDay( tasks ) {
 
 		const day = task.dueDate.slice( 0, 10 );
 
-		if ( undefined === groupedTasks[ day ] ) {
-			groupedTasks[ day ] = [];
-		}
+		groupedTasks[ day ] = undefined === groupedTasks[ day ]
+			? []
+			: groupedTasks[ day ];
 
 		groupedTasks[ day ].push( task );
 

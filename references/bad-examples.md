@@ -205,6 +205,16 @@ function groupTasksByDay( tasks ) {
 
 Do not document every internal property and array element inline when the function only needs a broad runtime type. Use `@param {array}` and `@return {array}`, then explain the expected contents in plain language. Use a project-established named type only when it is required as a shared or public contract.
 
+## JavaScript: `if` for a simple assignment choice
+
+```js
+if ( undefined === groupedTasks[ day ] ) {
+	groupedTasks[ day ] = [];
+}
+```
+
+When a simple conditional only chooses the value to assign, use a ternary and assign the result once. Keep `if` for multiple branches, multiple statements, side effects, or early returns.
+
 ```php
 /**
  * Stores a diagnostic message.

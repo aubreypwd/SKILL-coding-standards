@@ -300,6 +300,16 @@ const result = condition
 	: valueWhenFalse;
 ```
 
+In languages with ternary expressions, when a simple conditional only chooses a value to assign, use a ternary and assign the result once:
+
+```js
+groupedTasks[ day ] = undefined === groupedTasks[ day ]
+	? []
+	: groupedTasks[ day ];
+```
+
+Use `if` when the branches contain multiple statements, side effects, multiple conditions, or early returns.
+
 ### PHP documentation
 
 Add `@return` only when a function actually returns a value:
