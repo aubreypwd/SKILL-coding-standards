@@ -206,24 +206,13 @@ Reuse a computed result:
 
 ```js
 /**
- * @typedef {Object} UserData
- * @property {string} displayName User display name.
- */
-
-/**
- * @typedef {Object} RenderedUserData
- * @property {string} name User name.
- * @property {string} label User label.
- * @property {string} ariaLabel Accessible user label.
- */
-
 /**
  * Renders a user.
  *
  * @since Unknown
  *
- * @param {UserData} user User data.
- * @return {RenderedUserData} Rendered user data.
+ * @param {{ displayName: string }} user User data.
+ * @return {{ name: string, label: string, ariaLabel: string }} Rendered user data.
  */
 function renderUser( user ) {
 
@@ -241,13 +230,13 @@ If direct code needs explanation, prefer a focused comment above the direct expr
 
 ### Document exact data shapes
 
-Function documentation must describe the actual input and output shapes. Never use a bare generic type such as `Object`, `Array`, `Array<Object>`, `any`, or `mixed` when the source, schema, type declarations, or request establish the shape. A named `@typedef {Object}` is acceptable only when its properties are fully declared immediately below it.
+Function documentation must describe the actual input and output shapes. Never use a bare generic type such as `Object`, `Array`, `Array<Object>`, `any`, or `mixed` when the source, schema, type declarations, or request establish the shape. A named `@typedef {Object}` is acceptable when the project already defines it or when a complex, reused shape materially improves the documentation. Do not invent a standalone typedef merely to avoid writing an exact inline shape for a single function or example.
 
 For arrays, document both the container and its element type. For returned objects, document the concrete properties and types. The implementation and the documentation must agree: a `.map()` result is an array, while each mapped item is an object.
 
 Inspect the source of the data before writing the DocBlock. If the shape cannot be established, inspect more of the project or ask; do not guess and do not broaden the type to make the documentation easier to write.
 
-Define named shapes before using them, as shown in the `UserData` and `RenderedUserData` definitions above.
+Use existing named shapes when the project already defines them. Otherwise, write the exact input and output shapes inline when they are small enough to remain readable.
 
 Use the exact named shapes in function documentation. Do not write `@param {Object} user`, `@param {Array<Object>} signals`, or `@return {Object}` when those shapes are known.
 

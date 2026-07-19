@@ -444,27 +444,12 @@ function get_subscription_label( array $subscription ) : string {
 
 ```js
 /**
- * @typedef {Object} AlertRecord
- * @property {string} id Alert identifier.
- * @property {string} message Alert message.
- * @property {`critical`|`info`} severity Alert severity.
- */
-
-/**
- * @typedef {Object} AlertItem
- * @property {string} id Alert identifier.
- * @property {string} message Alert message.
- * @property {`critical`|`info`} severity Alert severity.
- * @property {`assertive`|`polite`} ariaLive Live-region politeness.
- */
-
-/**
  * Builds an accessible alert item.
  *
  * @since Unknown
  *
- * @param {AlertRecord} alert Alert data.
- * @return {AlertItem} Alert item with live-region metadata.
+ * @param {{ id: string, message: string, severity: `critical`|`info` }} alert Alert data.
+ * @return {{ id: string, message: string, severity: `critical`|`info`, ariaLive: `assertive`|`polite` }} Alert item with live-region metadata.
  */
 function buildAlertItem( alert ) {
 
@@ -477,19 +462,12 @@ function buildAlertItem( alert ) {
 
 ```js
 /**
- * @typedef {Object} TaskRecord
- * @property {string} id Task identifier.
- * @property {string} dueDate Due date in ISO format.
- * @property {string} title Task title.
- */
-
-/**
  * Groups tasks by their calendar date.
  *
  * @since Unknown
  *
- * @param {TaskRecord[]} tasks Task records.
- * @return {Record<string, TaskRecord[]>} Tasks keyed by calendar date.
+ * @param {{ id: string, dueDate: string, title: string }[]} tasks Task records.
+ * @return {Record<string, { id: string, dueDate: string, title: string }[]>} Tasks keyed by calendar date.
  */
 function groupTasksByDay( tasks ) {
 
@@ -527,19 +505,12 @@ function sortQueueEntries( entries ) {
 
 ```js
 /**
- * @typedef {Object} DashboardData
- * @property {string} title Dashboard title.
- * @property {number} activeUsers Active user count.
- * @property {number} pendingJobs Pending job count.
- */
-
-/**
  * Loads dashboard data.
  *
  * @since Unknown
  *
  * @param {string} endpoint Dashboard endpoint.
- * @return {Promise<DashboardData>} Dashboard data.
+ * @return {Promise<{ title: string, activeUsers: number, pendingJobs: number }>} Dashboard data.
  */
 async function loadDashboardData( endpoint ) {
 
@@ -619,18 +590,11 @@ function bindDismissiblePanel( panel ) {
 
 ```js
 /**
- * @typedef {Object} SearchFilters
- * @property {string} phrase Search phrase.
- * @property {string} owner Owner identifier.
- * @property {string} state Search state.
- */
-
-/**
  * Builds a query string for the search endpoint.
  *
  * @since Unknown
  *
- * @param {SearchFilters} filters Search filters.
+ * @param {{ phrase: string, owner: string, state: string }} filters Search filters.
  * @return {string} Encoded query string.
  */
 function buildSearchQuery( filters ) {

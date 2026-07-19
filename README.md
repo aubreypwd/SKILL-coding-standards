@@ -283,6 +283,8 @@ function log_admin_message( $message ) {
 
 Every named function and method needs a directly preceding DocBlock or JSDoc block. Its parameter and return types must describe the actual shapes established by the project. Do not use bare `Object`, `Array`, `Array<Object>`, `any`, `mixed`, or an unqualified `Promise` when the source makes the shape knowable.
 
+Prefer exact inline shapes for a single function or example. Use a named `@typedef` when the project already defines the shape or when a complex shape is reused enough to justify it. Do not invent standalone typedef blocks merely to avoid writing a small shape inline.
+
 For an array, document the element type and the array container. For an object, document its concrete properties. If the shape is unknown, inspect the source, schema, or type declarations before documenting it; do not guess a generic type. A function that uses `.map()` returns an array, even though each element is an object.
 
 The complete signal example in [`references/examples.md`](references/examples.md#pure-one-use-computations-and-exact-jsdoc-shapes) demonstrates this distinction with `BeaconSignal[]` input and `FoldedBeaconSignal[]` output. The canonical positive examples are in [`references/good-examples.md`](references/good-examples.md).
