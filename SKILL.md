@@ -79,6 +79,7 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
 - In CSS function notation, put one space inside the parentheses, just as with normal function calls: `minmax( 0, 1fr )`, `repeat( 2, 1fr )`, and `rgb( 23 32 51 / 12% )`.
 - For CSS comments that describe a selector's declarations or an at-rule's child blocks, put the comment inside the containing block, after its opening brace and immediately before the code it explains. Keep the surrounding breathing room. Do not put a block comment above the selector when it describes the declarations inside it.
+- For a trivial CSS block with one declaration, keep the block compact and put a concise explanation at the end of that declaration line when a comment is useful: `margin: 0; /* Remove the browser margin. */`. Do not spend extra vertical space on a standalone comment for a one-property block.
 - Add a blank line after a CSS opening brace when the block has meaningful property groups. Keep a trivial one-property block compact:
 
   ```css
@@ -273,6 +274,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - PHP return type declarations have a space before the colon. Do not confuse this with the colon in PHP alternative syntax.
 - CSS function arguments have one space inside their parentheses; reject compact forms such as `minmax(0, 1fr)`.
 - CSS comments describing declarations or child blocks are inside the containing selector or at-rule, not above it.
+- One-property CSS blocks use an end-of-line comment when a comment is useful; multi-property groups use a separate comment inside the block.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.

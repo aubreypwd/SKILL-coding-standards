@@ -172,6 +172,19 @@ Do not stack multiple single-line comments to over-explain one idea. If multiple
 
 When a CSS comment describes declarations inside a selector, put it inside the selector block after the opening brace and before those declarations. Use the same placement inside an at-rule when the comment describes its child blocks.
 
+## CSS: unnecessary vertical comment for one declaration
+
+```css
+.account_panel__heading {
+
+	/* Remove the browser margin from this compact heading block. */
+
+	margin: 0;
+}
+```
+
+Keep a trivial one-property CSS block compact. Put a concise explanation at the end of the declaration line: `margin: 0; /* Remove the browser margin. */`.
+
 ## Vague or incorrect documentation
 
 ```js

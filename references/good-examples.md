@@ -55,10 +55,7 @@ Comments are intentionally included throughout the examples to explain construct
 
 ```css
 .account_panel__heading {
-
-	/* Remove the browser margin from this compact heading block. */
-
-	margin: 0;
+	margin: 0; /* Remove the browser margin from this compact heading block. */
 }
 ```
 

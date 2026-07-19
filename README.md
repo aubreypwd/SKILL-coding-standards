@@ -101,6 +101,15 @@ When that opening tag contains text or nested elements, indent the contents one 
 - Alphabetize properties only within each functional group.
 - Put one space inside CSS function parentheses, such as `minmax( 0, 1fr )` and `repeat( 2, 1fr )`.
 - Put CSS comments that describe declarations or child blocks inside the containing selector or at-rule, after its opening brace and immediately before the code they explain.
+- For a trivial one-property CSS block, keep the block compact and put a concise explanation at the end of the declaration line when needed:
+
+```css
+#compact-heading {
+	margin: 0; /* Remove the browser margin. */
+}
+```
+
+Use a separate comment inside the block when multiple declarations or child blocks need explanation.
 - Add breathing room after an opening brace when the block contains meaningful groups.
 - Keep a trivial one-property block compact.
 
