@@ -195,6 +195,84 @@ Nested component examples keep the component's own declarations and root-level r
 }
 ```
 
+### BEM class naming and native nesting
+
+Use the JavaScript class's casing when the CSS block maps directly to that class. Native CSS nesting requires explicit selectors for BEM modifiers and elements.
+
+```css
+.BookingButton {
+
+	display: inline-flex;
+
+	&.BookingButton--gold {
+
+		background-color: #c08b12;
+	}
+
+	.BookingButton__icon {
+
+		height: 1rem;
+		width: 1rem;
+	}
+}
+```
+
+Use classes for component-specific styling, even when the element is semantic. Document intentional global tag-selector exceptions in the declaration they explain.
+
+```css
+.profileCard {
+
+	.profileCard__heading {
+		margin: 0;
+	}
+}
+
+:root {
+
+	p {
+		margin: 0; /* Establish the global paragraph reset; component styles use classes. */
+	}
+}
+```
+
+Use lower camelCase for CSS-only blocks in JavaScript-primary projects.
+
+```css
+.bookingButton {
+
+	display: inline-flex;
+
+	&.bookingButton--gold {
+
+		background-color: #c08b12;
+	}
+
+	.bookingButton__icon {
+
+		height: 1rem;
+	}
+}
+```
+
+Use conventional lowercase kebab-case BEM in non-JavaScript-primary projects.
+
+```css
+.booking-button {
+
+	display: inline-flex;
+
+	&.booking-button--gold {
+
+		background-color: #c08b12;
+	}
+
+	.booking-button__icon {
+
+		height: 1rem;
+	}
+}
+```
+
 ## HTML
 
 Parent elements with multiple logical child blocks have a blank line after the opening tag and between sibling blocks. Short lists with simple items are a compact exception: keep each `li` on one line and keep the items adjacent. For multiline opening tags, the contents are indented one additional tab beyond the attributes. Do not add a trailing blank line before an HTML closing tag.
