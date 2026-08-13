@@ -205,7 +205,6 @@ Use the JavaScript class's casing when the CSS block maps directly to that class
 	display: inline-flex;
 
 	&.BookingButton--gold {
-
 		background-color: #c08b12;
 	}
 
@@ -226,13 +225,6 @@ Use classes for component-specific styling, even when the element is semantic. D
 		margin: 0;
 	}
 }
-
-:root {
-
-	p {
-		margin: 0; /* Establish the global paragraph reset; component styles use classes. */
-	}
-}
 ```
 
 Use lower camelCase for CSS-only blocks in JavaScript-primary projects.
@@ -243,12 +235,10 @@ Use lower camelCase for CSS-only blocks in JavaScript-primary projects.
 	display: inline-flex;
 
 	&.bookingButton--gold {
-
 		background-color: #c08b12;
 	}
 
 	.bookingButton__icon {
-
 		height: 1rem;
 	}
 }
@@ -262,12 +252,10 @@ Use conventional lowercase kebab-case BEM in non-JavaScript-primary projects.
 	display: inline-flex;
 
 	&.booking-button--gold {
-
 		background-color: #c08b12;
 	}
 
 	.booking-button__icon {
-
 		height: 1rem;
 	}
 }

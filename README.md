@@ -210,7 +210,73 @@ Aubrey does not use nesting merely to reproduce generic HTML ancestors. Root dec
 }
 ```
 
-CSS nesting must be supported by the project's target and tooling. Otherwise, use the supported preprocessor or equivalent flat selectors.
+CSS nesting must be supported by the project's target and tooling. Otherwise, use equivalent flat selectors.
+
+### CSS BEM naming and selector ownership
+
+Aubrey uses BEM for CSS component classes: blocks stand alone, elements use `__`, and modifiers use `--`. See the official [BEM overview](https://getbem.com/) and [BEM naming guidance](https://getbem.com/naming/).
+
+The class casing depends on the project's primary language and component ownership:
+
+- In JavaScript-primary projects, use lower camelCase for CSS-only blocks, such as `.bookingButton`.
+- When a CSS block maps directly to a JavaScript class, preserve that class's casing, such as `.BookingButton`, `.BookingButton__icon`, and `.BookingButton--gold`.
+- In non-JavaScript-primary projects, use conventional lowercase kebab-case BEM, such as `.booking-button`, `.booking-button__icon`, and `.booking-button--gold`.
+
+Keep modifiers as additional classes alongside the block or element they modify. Keep CSS custom properties under the existing token convention, such as `--color-gold` and `--space-s`.
+
+Use classes for component and element styling instead of styling HTML tags directly. Add a class to semantic markup when it needs project-specific styles. Direct tag selectors are reserved for intentional global defaults, resets, browser normalization, or unavoidable third-party markup, and each exception gets a concise rationale comment inside the CSS block.
+
+```css
+.BookingButton {
+
+	display: inline-flex;
+
+	&.BookingButton--gold {
+		background-color: #c08b12;
+	}
+
+	.BookingButton__icon {
+
+		height: 1rem;
+		width: 1rem;
+	}
+}
+
+.bookingButton {
+
+	display: inline-flex;
+
+	&.bookingButton--gold {
+		background-color: #c08b12;
+	}
+
+	.bookingButton__icon {
+		height: 1rem;
+	}
+}
+
+.booking-button {
+
+	display: inline-flex;
+
+	&.booking-button--gold {
+		background-color: #c08b12;
+	}
+
+	.booking-button__icon {
+		height: 1rem;
+	}
+}
+
+.profileCard {
+
+	.profileCard__heading {
+		margin: 0;
+	}
+}
+```
+
+Use explicit native nested selectors such as `&.Button--gold` and `.Button__icon`. Do not rely on selector-name concatenation for modifiers or elements.
 
 ### CSS comment placement
 
