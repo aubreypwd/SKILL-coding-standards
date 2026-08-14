@@ -1,99 +1,146 @@
 # Aubrey Portwood's Personal Coding Standards
 
-This is Aubrey Portwood's personal coding standards skill for Codex. It tells an agent how to write, review, refactor, format, and explain code in the way Aubrey expects.
+This is a Codex skill for writing, reviewing, refactoring, formatting, and explaining code in the way Aubrey expects.
 
-The skill applies to every code fragment an agent produces, including project files, examples, explanations, pseudocode, plans, diffs, patches, commands, configuration, and UI output. The agent begins with the project's own rules and tooling, uses WordPress Coding Standards as the baseline, and then applies Aubrey's explicit preferences and personal principles.
+The skill is an agent behavior contract, not a formatter or a replacement for a project's linter, tests, compiler, or accessibility review. When the skill is active, the agent applies it to code in project files and to code shown in chat, examples, plans, diffs, patches, commands, configuration, and other output.
+
+## In one minute
+
+The agent:
+
+1. Reads the project's instructions, tooling, runtime, and nearby code first.
+2. Follows explicit project rules and enforced tooling.
+3. Uses WordPress Coding Standards (WPCS) as the baseline when the project does not settle a decision.
+4. Applies Aubrey's explicit overrides and other principles.
+5. Reviews the exact final code before calling it compliant.
+
+If a compatibility, accessibility, standards, or project question cannot be resolved, the agent reports it instead of silently guessing.
+
+## Rule precedence
+
+The rules are applied in this order:
+
+1. Project instructions and enforced configuration.
+2. Explicit rules in this skill.
+3. The applicable WordPress Coding Standards reference.
+4. Nearby code patterns, only when the higher-priority sources are silent.
+
+This means the skill does not overwrite a stronger project convention. It reports conflicting credible project sources and asks for a decision when the conflict cannot be resolved from the repository.
 
 ## Foundation: WordPress Coding Standards (WPCS)
 
-WPCS is the foundation. The [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/) are treated as a strict baseline for accessibility, documentation, PHP, JavaScript, CSS, HTML, spacing, indentation, and visual formatting.
+WPCS is the foundation for accessibility, documentation, PHP, JavaScript, CSS, HTML, indentation, spacing, and visual formatting. Aubrey follows WPCS unless this skill states a specific override or personal principle.
 
-Aubrey follows WPCS completely wherever this skill does not state an explicit override. Project-specific standards remain authoritative when they conflict with a personal preference.
+The local reference snapshots are available in [`references/`](references/). They are source material for the agent, not a second set of Aubrey examples. The authored examples in [`references/good-examples.md`](references/good-examples.md) and [`references/bad-examples.md`](references/bad-examples.md) show how this skill applies the rules.
 
-The baseline references are:
+## What this skill changes from WPCS
 
-- [General WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/)
-- [CSS](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/css/), [HTML](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/html/), [PHP](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/), and [JavaScript](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)
-- [PHP inline documentation](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/) and [JavaScript inline documentation](https://developer.wordpress.org/coding-standards/inline-documentation-standards/javascript/)
-
-## Deviations from WordPress Coding Standards
-
-These are the places where Aubrey intentionally chooses a different result from the documented WordPress baseline. Each comparison shows the WordPress form first and Aubrey's form second. When WPCS does not prescribe a contrary form, that distinction is stated instead of presenting a false disagreement.
+The examples below show the distinction directly. A baseline example is not automatically an acceptable Aubrey result.
 
 ### HTML void elements
 
-The WPCS HTML reference uses XHTML-style self-closing syntax for void elements. Aubrey uses modern HTML syntax without the closing slash.
+WPCS's HTML reference uses XHTML-style void-element syntax. Aubrey uses modern HTML syntax without the closing slash.
+
+WordPress baseline:
 
 ```html
-<!-- WPCS reference style. -->
-<img src="image.jpg" />
+<img alt="Account badge" src="badge.png" />
+```
 
-<!-- Aubrey style. -->
-<img src="image.jpg">
+Aubrey result:
+
+```html
+<img alt="Account badge" src="badge.png">
 ```
 
 ### Multiline HTML opening tags
 
-WPCS requires readable, logically indented HTML but does not prescribe Aubrey's exact multiline-tag layout. Aubrey puts the closing `>` immediately after the final attribute and indents the contents one additional tab beyond the attributes.
+Put the closing angle bracket directly after the final attribute. Contents are indented one additional tab beyond the attributes.
+
+WordPress baseline form:
 
 ```html
-<!-- Baseline-style layout. -->
 <button
-	aria-controls="command-palette"
+	aria-controls="account-menu"
 	aria-expanded="false"
-	id="command-palette-trigger"
+	id="account-menu-toggle"
 	type="button"
 >
-	Open command palette
+	Open account menu
 </button>
+```
 
-<!-- Aubrey style. -->
+Aubrey result:
+
+```html
 <button
-	aria-controls="command-palette"
+	aria-controls="account-menu"
 	aria-expanded="false"
-	id="command-palette-trigger"
+	id="account-menu-toggle"
 	type="button">
-		Open command palette
+		Open account menu
 </button>
 ```
 
 ### PHP return-type spacing
 
-WPCS requires no space between the closing parameter parenthesis and the return-type colon. Aubrey puts a space before that colon. This does not apply to the colon in PHP alternative syntax.
+WPCS puts no space before the return-type colon. Aubrey puts one space before it. This does not change the colon used by PHP alternative syntax.
+
+WordPress baseline:
 
 ```php
-// WPCS.
+<?php
+
+/**
+ * Returns the supplied label.
+ *
+ * @since August 13, 2026
+ *
+ * @param string $value Label.
+ * @return string Label.
+ */
 function get_label( string $value ): string {
 	return $value;
 }
+```
 
-// Aubrey.
+Aubrey result:
+
+```php
+<?php
+
+/**
+ * Returns the supplied label.
+ *
+ * @since August 13, 2026
+ *
+ * @param string $value Label.
+ * @return string Label.
+ */
 function get_label( string $value ) : string {
 	return $value;
 }
 ```
 
-### PHP and data-format details
+### PHP templates and optional-key guards
 
-When PHP controls HTML, Aubrey prefers PHP alternative syntax and indents the controlled HTML according to the surrounding template. A standalone `<?php` tag gets a blank line before a following DocBlock or statement, while the DocBlock remains directly adjacent to the declaration it documents.
+Protect optional or untrusted array keys with null coalescing before comparing them. Choose the missing-value default from the intended meaning: use `false` for a false-like flag and `''` when missing should behave like an empty string.
 
-WPCS does not prescribe this missing-key guard. Aubrey protects optional PHP array keys with a deliberately parenthesized null-coalescing expression before comparison.
+When PHP controls HTML, prefer PHP alternative syntax and indent the controlled HTML in context. A standalone `<?php` opening tag gets a blank line before a following DocBlock or statement; the DocBlock remains directly adjacent to the declaration it documents.
 
 ```php
-// Without Aubrey's guard.
-if ( false === $subscription['enabled'] ) {
-	return 'Disabled';
-}
-
-// Aubrey style.
 if ( false === ( $subscription['enabled'] ?? false ) ) {
 	return 'Disabled';
 }
+
+if ( '' === ( $subscription['status'] ?? '' ) ) {
+	return 'Status required';
+}
 ```
 
-JSON is formatted with spaces rather than tabs and must remain valid JSON; JavaScript-only syntax such as trailing commas is not added.
+### JSON formatting
 
-Good:
+JSON uses spaces for indentation and must remain valid JSON. JavaScript-only trailing commas are not added.
 
 ```json
 {
@@ -104,249 +151,133 @@ Good:
 }
 ```
 
-Bad:
+### CSS naming: canonical BEM examples
 
-```json
-{
-  "items": [
-    "one",
-    "two",
-  ],
-}
+Generic examples in this README use lowercase kebab-case BEM:
+
+- A block stands alone: `.booking-button`.
+- An element belongs to its block: `.booking-button__icon`.
+- A modifier is an additional class: `.booking-button booking-button--gold`.
+
+The canonical markup and CSS describe the same component:
+
+```html
+<button class="booking-button booking-button--gold" type="button">
+
+	<span aria-hidden="true" class="booking-button__icon"></span>
+
+	Book appointment
+</button>
 ```
 
-### CSS selector underscores
-
-WPCS recommends lowercase, hyphenated selectors and advises against underscores. Aubrey allows underscores in CSS names.
-
 ```css
-/* WPCS preference. */
-.account-panel {
-	margin: 0;
-}
-
-/* Aubrey allows. */
-.account_panel {
-	margin: 0;
-}
-```
-
-### CSS function-parenthesis spacing
-
-The WPCS CSS reference uses compact function parentheses. Aubrey applies the same interior spacing used for normal function calls to CSS functions.
-
-```css
-/* WPCS reference style. */
-grid-template-columns: minmax(0, 1fr);
-
-/* Aubrey style. */
-grid-template-columns: minmax( 0, 1fr );
-```
-
-### CSS property ordering
-
-WPCS recommends meaningful logical grouping and also documents alphabetization as an accepted approach. Aubrey chooses functional grouping first and alphabetical ordering within each group.
-
-```css
-/* A general WPCS-style logical ordering. */
-.card {
-	position: relative;
-	display: grid;
-	background: #fff;
-	padding: 1rem;
-}
-
-/* Aubrey's functional-group ordering. */
-.card {
-
-	display: grid;
-	position: relative;
-
-	background: #fff;
-
-	padding: 1rem;
-}
-```
-
-### CSS color notation
-
-WPCS recommends particular color forms, while Aubrey does not require changing clear, supported color notation without a reason.
-
-```css
-/* WPCS preference. */
-color: rgba(23, 32, 51, 0.12);
-
-/* Aubrey permits a clear supported form. */
-color: rgb( 23 32 51 / 12% );
-```
-
-### CSS nesting
-
-The WPCS reference uses flat selectors. Aubrey encourages nesting around a cohesive component concept when the target tooling supports it.
-
-Aubrey does not use nesting merely to reproduce generic HTML ancestors. Root declarations and root responsive overrides stay together before nested child concepts, media-query rules remain with the selector they modify, and nesting normally stops at one or two meaningful levels.
-
-```css
-/* WPCS-style flat selectors. */
-.card {
-	display: grid;
-}
-
-.card__actions {
-	display: flex;
-	gap: 1rem;
-}
-
-/* Aubrey's component-centered nesting. */
-.card {
-
-	display: grid;
-
-	.card__actions {
-
-		display: flex;
-		gap: 1rem;
-	}
-}
-```
-
-CSS nesting must be supported by the project's target and tooling. Otherwise, use equivalent flat selectors.
-
-### CSS BEM naming and selector ownership
-
-Aubrey uses BEM for CSS component classes: blocks stand alone, elements use `__`, and modifiers use `--`. See the official [BEM overview](https://getbem.com/) and [BEM naming guidance](https://getbem.com/naming/).
-
-The class casing depends on the project's primary language and component ownership:
-
-- In JavaScript-primary projects, use lower camelCase for CSS-only blocks, such as `.bookingButton`.
-- When a CSS block maps directly to a JavaScript class, preserve that class's casing, such as `.BookingButton`, `.BookingButton__icon`, and `.BookingButton--gold`.
-- In non-JavaScript-primary projects, use conventional lowercase kebab-case BEM, such as `.booking-button`, `.booking-button__icon`, and `.booking-button--gold`.
-
-Keep modifiers as additional classes alongside the block or element they modify. Keep CSS custom properties under the existing token convention, such as `--color-gold` and `--space-s`.
-
-Use classes for component and element styling instead of styling HTML tags directly. Add a class to semantic markup when it needs project-specific styles. Direct tag selectors are reserved for intentional global defaults, resets, browser normalization, or unavoidable third-party markup, and each exception gets a concise rationale comment inside the CSS block.
-
-```css
-.BookingButton {
+.booking-button {
 
 	display: inline-flex;
+	gap: 0.5rem;
 
-	&.BookingButton--gold {
+	background-color: #1f2937;
+	color: #ffffff;
+
+	border: 0;
+	padding: 0.75rem 1rem;
+
+	&.booking-button--gold {
+
+		/* Keep the gold action readable against its surrounding surface. */
+
 		background-color: #c08b12;
 	}
 
-	.BookingButton__icon {
+	.booking-button__icon {
 
 		height: 1rem;
 		width: 1rem;
 	}
 }
-
-.bookingButton {
-
-	display: inline-flex;
-
-	&.bookingButton--gold {
-		background-color: #c08b12;
-	}
-
-	.bookingButton__icon {
-		height: 1rem;
-	}
-}
-
-.booking-button {
-
-	display: inline-flex;
-
-	&.booking-button--gold {
-		background-color: #c08b12;
-	}
-
-	.booking-button__icon {
-		height: 1rem;
-	}
-}
-
-.profileCard {
-
-	.profileCard__heading {
-		margin: 0;
-	}
-}
 ```
 
-Use explicit native nested selectors such as `&.Button--gold` and `.Button__icon`. Do not rely on selector-name concatenation for modifiers or elements.
+The operational rule remains project-aware when a project already maps a CSS block to a JavaScript class. Preserve that class's casing in the mapped selectors, but do not mix multiple casing systems into one example or present an exception as the canonical style.
 
-### CSS comment placement
+CSS underscores are allowed when an existing project convention uses them, but they are not a reason to introduce a second naming style into a generic example. Clear, supported color notation may remain unchanged; do not perform notation-only cleanup without a reason.
 
-The WPCS CSS reference commonly places comments above the selector. Aubrey places comments inside the selector or at-rule they describe, immediately before the declarations or child blocks they explain.
+Use class selectors for component styling. Reserve direct tag selectors for intentional global defaults, resets, browser normalization, or unavoidable third-party markup, and explain each exception inside the CSS block.
+
+### CSS property order and nesting
+
+Group CSS properties by function, then alphabetize within each group. Keep a component's declarations and its root responsive changes together before nested child concepts. Place each child or state's media-query changes with that child or state.
+
+Native CSS nesting is appropriate only when the project's target and tooling support it. Do not nest generic ancestors merely because the HTML is nested that way.
+
+### CSS function spacing
+
+Use one space inside CSS function parentheses, matching the function-call spacing used elsewhere in the skill:
 
 ```css
-/* WPCS reference style. */
-/* Explain the layout. */
-.card {
-	display: grid;
-}
-
-/* Aubrey style. */
-.card {
-
-	/* Explain the layout. */
-
-	display: grid;
+.booking-button {
+	grid-template-columns: minmax( 0, 1fr ) repeat( 2, minmax( 0, 1fr ) );
 }
 ```
 
-A trivial one-property CSS block remains compact. When a comment is useful, put it at the end of the declaration line rather than creating a full comment block around a single property.
+### CSS comments
 
-### JavaScript string style
+When a comment describes declarations or child blocks, place it inside the selector or at-rule it describes. A comment above the selector is not the Aubrey result for that case.
 
-WPCS documents single-quoted JavaScript strings. Aubrey prefers template literals by default.
+Bad under this skill:
 
-```js
-// WPCS preference.
-const message = 'Hello, world!';
-
-// Aubrey preference.
-const message = `Hello, world!`;
+```css
+/* Keep the action readable against its surrounding surface. */
+.booking-button {
+	background-color: #c08b12;
+}
 ```
 
-For known booleans, Aubrey uses explicit comparisons instead of bang negation. For simple type tests, Aubrey does not add grouping parentheses when operator precedence is already unambiguous. Variables are declared separately, intentional object and array order is preserved, associative-array arrows are not vertically aligned, and trailing commas in function calls are used only when the target supports them. Function calls retain WordPress spacing.
+Good:
+
+```css
+.booking-button {
+
+	/* Keep the action readable against its surrounding surface. */
+
+	background-color: #c08b12;
+}
+```
+
+Keep a one-property block compact. Put a useful explanation at the end of the declaration instead of creating a separate vertical comment block.
+
+```css
+.booking-button__icon {
+	margin: 0; /* Remove the browser margin from this compact icon block. */
+}
+```
+
+### JavaScript strings and checks
+
+JavaScript uses template literals by default. Known boolean values use explicit comparisons instead of bang negation, and simple type tests do not receive unnecessary grouping parentheses.
 
 ```js
-// Common baseline form.
-if ( ! panel.hidden ) {
-	openPanel( panel );
-}
+const message = `Hello, ${name}!`;
 
-// Aubrey form.
 if ( false === panel.hidden ) {
 	openPanel( panel );
 }
 
-// Common over-grouped form.
-if ( false === ( panel instanceof HTMLElement ) ) {
-	return;
-}
-
-// Aubrey form.
 if ( false === panel instanceof HTMLElement ) {
 	return;
 }
 ```
 
-The following rules remain WPCS-aligned rather than being deviations: accessibility, tabs for indentation, semicolons, general readability, and logical formatting. Aubrey's independent comment and code-structure principles are described next.
+Declare variables separately, preserve intentional object and array order, and reuse computed work without introducing meaningless aliases.
+
+Function calls use WordPress spacing: no space before the opening parenthesis, one space inside the parentheses, and `} );` for a multiline object argument. Split larger calls only when readability requires it, and use trailing commas in function calls only when the target supports them.
 
 ## Other principles
 
-These are Aubrey's own coding principles. They are not presented as deviations from WPCS. Each section explains the intent and shows the same scenario written in an acceptable and unacceptable way.
+These are Aubrey's own principles. They are not presented as WPCS deviations. Each example pair keeps the scenario the same and changes only the relevant choice.
 
 ### Comments
 
-Comments are strongly encouraged when they explain useful context, non-obvious intent, domain behavior, constraints, accessibility behavior, state changes, intentional ordering, or why work is performed once. They should add information rather than restate what the code already makes clear.
-
-Prefer concise comments immediately before the code they explain. Use a block comment for a genuinely multiline explanation, and reserve DocBlocks for declarations. Do not use comments to explain obvious code or to teach a coding principle; the code should demonstrate the principle.
+Comments should explain context, intent, constraints, accessibility behavior, state changes, or meaningful ordering. They should not restate the declaration or teach a coding principle.
 
 Good:
 
@@ -359,7 +290,7 @@ const workflow = {
 };
 ```
 
-Bad:
+Bad under this skill:
 
 ```js
 // Create the workflow object.
@@ -370,57 +301,42 @@ const workflow = {
 };
 ```
 
-The code is identical. Only the comment changes: one explains information the object does not reveal, while the other restates the declaration.
+### Breathing Room
 
-### Breathing Room Principle
-
-Whitespace should make the logical structure of code visible. Add a blank line after a function-like opening brace when the body contains multiple logical statements or sections, or when its first statement is complex or multiline. Apply the same idea to parent blocks with multiple child sections in CSS, PHP, JavaScript, and HTML, and to callbacks or closures. HTML comments count as child blocks and need breathing room from both the parent and the child they explain. Short lists with simple `li` content remain compact. A one-statement function or callback may remain compact.
+Blank lines should make logical groups visible. Add them after an opening brace and between meaningful groups, but keep trivial one-statement functions and simple HTML lists compact. Do not add a trailing blank line before a closing curly brace.
 
 Good:
 
 ```css
-.account_panel {
+.account-panel {
 
 	display: grid;
 	gap: 1rem;
-	grid-template-columns: minmax( 0, 1fr ) auto;
-
-	font-size: 1rem;
-	line-height: 1.5;
 
 	background-color: #f7f7f7;
 	color: #1f2937;
 
 	border: 1px solid #d1d5db;
-	border-radius: 0.5rem;
 	padding: 1.25rem;
 }
 ```
 
-Bad:
+Bad under this skill:
 
 ```css
-.account_panel {
+.account-panel {
 	display: grid;
 	gap: 1rem;
-	grid-template-columns: minmax( 0, 1fr ) auto;
-	font-size: 1rem;
-	line-height: 1.5;
 	background-color: #f7f7f7;
 	color: #1f2937;
 	border: 1px solid #d1d5db;
-	border-radius: 0.5rem;
 	padding: 1.25rem;
 }
 ```
-
-Both blocks have the same declarations. The good version makes the layout, typography, color, and box-model groups visible.
 
 ### Strings and interpolation
 
-Prefer native interpolation, templating, formatting, or parameterized strings. In JavaScript, use template literals by default.
-
-Backticks are JavaScript's template-literal delimiters. They allow a value such as `${name}` to be inserted directly into the string, avoid manually joining separate fragments, and avoid unnecessary escaping when text contains apostrophes or quotation marks.
+Prefer native interpolation, templating, formatting, or parameterized strings.
 
 Good:
 
@@ -428,35 +344,15 @@ Good:
 showGreeting( `Hello, ${name}!` );
 ```
 
-Bad:
+Bad under this skill:
 
 ```js
 showGreeting( 'Hello, ' + name + '!' );
 ```
 
-Both calls produce the same greeting. The good version expresses the value inside the string instead of assembling it from separate pieces.
+### Guard runtime data and return early
 
-### Avoid Concatenation at All Costs
-
-Do not assemble strings with concatenation when a native alternative exists. Use interpolation, formatting, templating, or parameterized strings instead. Use concatenation only when the language or target version provides no viable alternative.
-
-Good:
-
-```js
-const notice = `Hello, ${userName}!`;
-```
-
-Bad:
-
-```js
-const notice = `Hello, ` + userName + `!`;
-```
-
-Both assignments produce the same notice. The good version keeps the complete string expression in one interpolated template literal.
-
-### Guard Runtime Data and Return Early and Often
-
-Do not blindly trust data entering a function when the language cannot enforce its type. Use one practical guard for the expected type, then return as soon as invalid, missing, already-completed, or otherwise terminal conditions make the remaining work unnecessary. Keep the normal path flat and visible. Guard clauses are a technique within this principle, not its name.
+When a dynamically typed parameter cannot be enforced by the language, use one practical expected-type guard. Return as soon as invalid or terminal state makes the remaining work unnecessary.
 
 Good:
 
@@ -464,7 +360,7 @@ Good:
 /**
  * Binds keyboard behavior to a dismissible panel.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
  * @param {HTMLElement} panel Panel element.
  */
@@ -485,13 +381,13 @@ function bindDismissiblePanel( panel ) {
 }
 ```
 
-Bad:
+Bad under this skill:
 
 ```js
 /**
  * Binds keyboard behavior to a dismissible panel.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
  * @param {HTMLElement} panel Panel element.
  */
@@ -508,11 +404,9 @@ function bindDismissiblePanel( panel ) {
 }
 ```
 
-The event behavior is the same. The good version refuses an unexpected runtime value before calling a method on it.
-
 ### Ternaries
 
-When a simple conditional only chooses a value to assign, use a ternary and assign the result once. Use `if` for multiple branches, multiple statements, side effects, or early returns. Long ternaries put the question mark and colon on continuation lines.
+Use a ternary when a simple conditional only chooses the value assigned. Use `if` for multiple statements, side effects, multiple branches, or early returns.
 
 Good:
 
@@ -522,7 +416,7 @@ groupedTasks[ day ] = undefined === groupedTasks[ day ]
 	: groupedTasks[ day ];
 ```
 
-Bad:
+Bad under this skill:
 
 ```js
 if ( undefined === groupedTasks[ day ] ) {
@@ -530,13 +424,9 @@ if ( undefined === groupedTasks[ day ] ) {
 }
 ```
 
-Both forms initialize the same missing group. The ternary is the appropriate form because the condition only selects the value assigned.
-
 ### Practical documentation
 
-Every named function and method gets a directly preceding DocBlock or JSDoc block. Document accurate broad runtime types and explain the expected contents in plain language. Do not encode an exhaustive internal object or array schema when a simple type is enough. The implementation and documentation must agree: a `.map()` result is an array, an object literal is an object, and a fetch chain is a Promise.
-
-Use project-established named types only when they are already required as a public or shared contract. Do not invent one-off typedefs or nested inline schemas. Every named function and method has an `@since` tag; preserve existing tags and add a dated entry when modifying code. Add `@return` only for functions that return a value. Do not identify an agent or model as an author.
+Every named function and method gets a directly preceding DocBlock or JSDoc block. Use accurate broad runtime types and plain-language descriptions. Add `@return` only when a value is returned, and use a current `@since` entry for new code.
 
 Good:
 
@@ -546,9 +436,9 @@ Good:
 /**
  * Returns a customer label.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
- * @param array $customer Customer data.
+ * @param array $customer Customer data containing a name and code.
  * @return string Customer label.
  */
 function get_customer_label( array $customer ) : string {
@@ -561,7 +451,7 @@ function get_customer_label( array $customer ) : string {
 }
 ```
 
-Bad:
+Bad under this skill:
 
 ```php
 <?php
@@ -569,7 +459,7 @@ Bad:
 /**
  * Returns a customer label.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
  * @param array{ name: string, code: string } $customer Customer data.
  * @return array Customer label.
@@ -584,13 +474,11 @@ function get_customer_label( array $customer ) : string {
 }
 ```
 
-The implementation is identical. The bad documentation incorrectly claims that the function returns an array and over-specifies an internal object shape.
+The bad example over-specifies an internal shape and incorrectly documents the string return value as an array.
 
-### Don't Use Variables Un-necessarily (Inline Temp)
+### Don't use variables unnecessarily
 
-Do not create a variable merely to rename, relocate, or relay a value that is already available and only needed once. This applies to properties, literals, arguments, return values, constructed values, and pure computations.
-
-A variable is justified when it is reused, prevents repeated expensive or side-effectful work, captures a required snapshot, represents necessary state, or is required by the language or API.
+Do not create a variable merely to rename or relay a value used once. Keep a variable when it is reused, captures a required snapshot, represents state, or prevents repeated expensive or side-effectful work.
 
 Good:
 
@@ -604,7 +492,7 @@ return [
 ];
 ```
 
-Bad:
+Bad under this skill:
 
 ```php
 $account = get_account( $account_id );
@@ -617,11 +505,9 @@ return [
 ];
 ```
 
-Both payloads are identical. The bad version creates `$contact` only to relay a value into one array entry. The good version uses the canonical `build_sync_payload()` pattern from the reference examples.
+### DRY with practical exceptions
 
-### DRY, with practical exceptions
-
-Do not repeat expensive work, side effects, transformations, or behavior. Reuse a computed result when it is needed more than once. DRY does not mean every repeated character needs a variable or abstraction, and superficial similarity does not require an abstraction.
+Do not repeat expensive work, side effects, transformations, or behavior. Repeating a simple literal can be clearer than introducing an alias.
 
 Good:
 
@@ -635,7 +521,7 @@ return {
 };
 ```
 
-Bad:
+Bad under this skill:
 
 ```js
 return {
@@ -645,35 +531,34 @@ return {
 };
 ```
 
-Both forms build the same profile summary. The bad version repeats the profile-loading operation three times.
+## How the agent applies the skill
 
-Repeating a simple literal can still be clearer than introducing a shared alias:
+Before generating or reviewing code, the agent inspects:
 
-```js
-const locations = {
-	primary: {
-		city: `Albuquerque`,
-	},
-	secondary: {
-		city: `Albuquerque`,
-	},
-};
-```
+- Repository instructions and contribution guidance.
+- Formatter, linter, compiler, type-checker, test, and build configuration.
+- Supported language and runtime versions.
+- Representative nearby source.
+- The applicable WPCS and inline-documentation references.
 
-## How the skill guides an agent
+The agent then applies the project rules, this skill's explicit overrides, and the relevant positive and reject examples. Before presenting code as compliant, it reviews the exact output for documentation, accessibility, compatibility, comments, whitespace, function-call spacing, strings, variables, object order, ternaries, runtime guards, early returns, and semantic correctness.
 
-Before writing code, the agent inspects the project's instructions, documentation, configuration, tooling, nearby code, and supported runtime. Explicit project standards take priority.
+The skill does not silently claim success when a required check was unavailable. It reports the limitation or asks for the missing project decision.
 
-When the project is silent, the agent reads the relevant WPCS and inline-documentation references, compares the intended code with the canonical good and bad example sets, and applies Aubrey's overrides only where this skill explicitly states them.
+## Reference map
 
-The agent checks the exact final code for project compatibility, documentation, accessibility, whitespace, comments, function-call spacing, strings, variables, object order, ternaries, runtime guards, early returns, and the other rules above. If a required check cannot be completed, it must disclose that instead of claiming compliance. If two credible standards conflict, it reports the conflict and asks before choosing silently.
+- [`SKILL.md`](SKILL.md) — the complete agent-facing contract and compliance gate.
+- [`references/good-examples.md`](references/good-examples.md) — canonical acceptable examples.
+- [`references/bad-examples.md`](references/bad-examples.md) — canonical reject examples.
+- [`references/examples.md`](references/examples.md) — supporting history and example index.
+- [`references/source-index.md`](references/source-index.md) — WordPress snapshot sources and retrieval dates.
 
 ## Install
 
-Clone this repository into Codex's local skills directory:
+Place this repository at:
 
-```bash
-git clone <repository-url> ~/.codex/skills/aubreypwd-coding-standards
+```text
+~/.codex/skills/aubreypwd-coding-standards
 ```
 
-The skill is then available as `$aubreypwd-coding-standards`.
+The skill is then available to the Codex environment as `$aubreypwd-coding-standards`. The surrounding environment determines when it is invoked; once invoked, the workflow and rules above apply.
