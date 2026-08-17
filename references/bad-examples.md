@@ -1,221 +1,25 @@
 # Bad Examples
 
-These examples are the reject list for Aubrey Portwood's coding standards. They are intentionally incorrect. Never copy them into code presented as compliant.
+These examples are recognition fixtures. Each one intentionally breaks the named rule while keeping the surrounding scenario and other standards as consistent as possible. Never copy them into code presented as compliant.
 
-## Meaningless variables
+## CSS
 
-```js
-const accountName = account.profile.displayName;
-
-showAccountName( accountName );
-```
-
-```js
-const cutoff = currentTime + 30 * 60 * 1000;
-
-return reminders.filter( function ( reminder ) {
-	return reminder.startsAt <= cutoff;
-} );
-```
-
-```js
-const filteredEntries = entries
-	.filter( function ( entry ) {
-		return entry.visible;
-	} );
-
-return filteredEntries.map( function ( entry ) {
-	return formatEntry( entry );
-} );
-```
-
-```js
-function submitPreferences( form, settings ) {
-	const endpoint = settings.api.baseUrl;
-	const formData = new FormData( form );
-	const requestUrl = `${endpoint}/preferences/${settings.userId}`;
-
-	return fetch( requestUrl, {
-		method: `POST`,
-		body: formData,
-	} );
-}
-```
-
-```js
-const title = card.heading;
-const status = card.status;
-
-renderCard( title, status );
-```
-
-## Repeating work instead of applying DRY
-
-```js
-return {
-	profile: loadProfile( userId ),
-	permissions: getPermissions( loadProfile( userId ) ),
-	lastSeen: formatLastSeen( loadProfile( userId ) ),
-};
-```
-
-```php
-return [
-	'customer' => get_customer( $customer_id ),
-	'email' => get_customer( $customer_id )['email'],
-	'label' => get_customer_label( get_customer( $customer_id ) ),
-];
-```
-
-## Repeating simple literals unnecessarily through a variable
-
-```js
-const region = `Southwest`;
-
-const office = {
-	primary: {
-		region,
-	},
-	backup: {
-		region,
-	},
-};
-```
-
-## Vertically aligned associative-array arrows
-
-```php
-return [
-	'account'      => $account,
-	'contact'      => $account['contact'],
-	'refreshed_at' => time(),
-];
-```
-
-Do not add padding to align `=>`. Keep one space on each side so changing one key does not require realigning the other entries.
-
-## Comma-separated declarations
-
-```js
-const firstLabel = `Primary`, secondLabel = `Secondary`, count = 2;
-```
-
-## Obsolete variable declarations
-
-```js
-var pendingCount = 0;
-```
-
-## String concatenation and avoidable escaping
-
-```js
-const notice = `Hello, ` + userName + `!`;
-```
-
-```js
-const notice = 'The user can\'t continue.';
-```
-
-```php
-$message = 'The export for ' . $email . ' is ready.';
-```
-
-## Incorrect function-call spacing
-
-```js
-return fetch(requestUrl, {
-	method: `POST`,
-	body: formData,
-});
-```
-
-```js
-return fetch ( requestUrl, {
-	method: `POST`,
-	body: formData,
-} );
-```
-
-```js
-return fetch( requestUrl, {
-	method: `POST`,
-	body: formData,
-});
-```
-
-The final object argument must close as `} );`, not `});`.
-
-## Unsupported trailing commas in function calls
-
-```js
-queueJob(
-	jobId,
-	payload,
-);
-```
-
-Use this only when the target language and version explicitly support trailing commas in function calls.
-
-## Over-explained and misclassified comments
-
-```js
-// Comment one
-// Continuing comment
-// More information about the comment.
-
-/**
- * This is an inline explanation of the next statement.
- */
-const requestState = getRequestState();
-```
-
-Do not stack multiple single-line comments to over-explain one idea. If multiple lines are genuinely necessary, use `/* ... */`, not `/** ... */`; reserve DocBlocks for declarations. Prefer one concise comment that explains the construction or context of the code.
-
-## Redundant comment that repeats the declaration
-
-```php
-<?php
-
-/**
- * Registers the invoice status filter.
- *
- * @since Unknown
- */
-function register_invoice_status_filter() : void {
-
-	// Register the formatter at the point where the status hook is declared.
-	add_filter( 'invoice_status_label', 'format_invoice_status_label' );
-}
-```
-
-The function name, DocBlock, and direct call already explain this code. Do not add a comment that merely paraphrases them. Add a comment only when it contributes non-obvious rationale, a constraint, accessibility or state context, intentional ordering, or another detail the code does not already communicate.
-
-## Comment explaining an obvious assignment or coding principle
-
-```php
-// Fetch the account once because its data populates two payload fields.
-$account = get_account( $account_id );
-```
-
-The assignment already clearly says that the account is being retrieved and stored. The comment explains the DRY principle and adds no reader-facing domain context. Do not comment obvious assignments or use code comments to teach a coding standard.
-
-## CSS: comment outside the block it describes
+### Comment outside the block it describes
 
 ```css
-/* Keep layout declarations visibly grouped. */
-.account_panel {
-
+/* Keep the panel readable when its contents become dense. */
+.account-panel {
 	display: grid;
 	gap: 1rem;
 }
 ```
 
-When a CSS comment describes declarations inside a selector, put it inside the selector block after the opening brace and before those declarations. Use the same placement inside an at-rule when the comment describes its child blocks.
+The comment describes declarations inside the selector, so it belongs inside the selector block immediately before those declarations.
 
-## CSS: unnecessary vertical comment for one declaration
+### Vertical comment for a one-property block
 
 ```css
-.account_panel__heading {
+.account-panel__heading {
 
 	/* Remove the browser margin from this compact heading block. */
 
@@ -223,9 +27,33 @@ When a CSS comment describes declarations inside a selector, put it inside the s
 }
 ```
 
-Keep a trivial one-property CSS block compact. Put a concise explanation at the end of the declaration line: `margin: 0; /* Remove the browser margin. */`.
+Keep a trivial one-property block compact and put a useful explanation at the end of the declaration line.
 
-## CSS: nesting the markup tree instead of a component concept
+### Properties without functional grouping
+
+```css
+.account-panel {
+	background-color: #f7f7f7;
+	padding: 1.25rem;
+	position: relative;
+	display: grid;
+	color: #1f2937;
+}
+```
+
+Group properties by function and alphabetize within each group.
+
+### Compact CSS function notation
+
+```css
+.schedule-grid {
+	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr));
+}
+```
+
+Use one space inside CSS function parentheses: `minmax( 0, 1fr )`.
+
+### Generic-ancestor nesting
 
 ```css
 body {
@@ -234,7 +62,7 @@ body {
 
 		.content {
 
-			.card {
+			.booking-card {
 				padding: 1rem;
 			}
 		}
@@ -242,158 +70,131 @@ body {
 }
 ```
 
-Do not nest CSS under generic ancestors merely because the HTML is nested that way. Nest around a stable component concept such as `.card`, keep the component portable, and generally stop at two levels. Deeper nesting requires distinct nested concepts and a real need for the additional structure.
+Do not mirror the HTML tree with generic ancestors. Nest around a portable component concept.
 
-## CSS: separating root properties from nested component behavior
-
-```css
-.card {
-
-	display: grid;
-
-	.card__body {
-		padding: 1rem;
-	}
-
-	@media (min-width: 48rem) {
-
-		grid-template-columns: 1fr auto;
-	}
-}
-```
-
-Keep the component's own declarations and root-level responsive overrides together before nested child concepts. Do not make readers search past child blocks to find properties that apply to the root component.
-
-## CSS: one media query mixing component levels
+### Mixed component levels in one media query
 
 ```css
-.card {
+.booking-card {
 
 	display: grid;
 
 	@media (min-width: 48rem) {
 
-		grid-template-columns: 1fr auto;
+		grid-template-columns: 2fr 1fr;
 
-		.card__hero {
+		.booking-card__hero {
 			grid-template-columns: 1fr;
 		}
 	}
 
-	.card__hero {
+	.booking-card__hero {
+
+		display: grid;
 		grid-template-columns: auto 1fr;
 	}
 }
 ```
 
-Keep the root media query limited to `.card` changes. Put the `.card__hero` media override inside `.card__hero` so each selector owns its responsive behavior.
+Keep root responsive changes with the root and child responsive changes with the child.
 
-## Vague or incorrect documentation
+### Trailing blank line before a closing brace
 
-```js
-function readLedger( records ) {
-	return records.map( function ( record ) {
-		return {
-			id: record.id,
-			label: record.label,
-		};
-	} );
+```css
+.account-panel {
+
+	display: grid;
+
+	background-color: #f7f7f7;
+
 }
 ```
 
-```js
-/**
- * Reads ledger records.
- *
- * @since Unknown
- *
- * @param {array} records Ledger records.
- * @return {object} Ledger records.
- */
-function readLedger( records ) {
-	return records.map( function ( record ) {
-		return record;
-	} );
+Close the block directly after its final declaration or child.
+
+### Undocumented direct tag selector
+
+```css
+button {
+	font: inherit;
 }
 ```
 
-The first function has no DocBlock. The second uses the correct broad input type but incorrectly claims that the mapped result is an object; `.map()` returns an array.
+Use a component class for project-specific styling. A direct tag selector requires an intentional exception and an explanation inside the CSS block.
 
-## Over-specified array and object documentation
+## HTML
 
-```js
-/**
- * Groups tasks by their calendar date.
- *
- * @since Unknown
- *
- * @param {{ id: string, dueDate: string, title: string }[]} tasks Task records.
- * @return {Record<string, { id: string, dueDate: string, title: string }[]>} Tasks keyed by calendar date.
- */
-function groupTasksByDay( tasks ) {
+### XHTML-style void elements
 
-	return tasks.reduce( function ( groupedTasks, task ) {
-
-		const day = task.dueDate.slice( 0, 10 );
-
-		if ( undefined === groupedTasks[ day ] ) {
-			groupedTasks[ day ] = [];
-		}
-
-		groupedTasks[ day ].push( task );
-
-		return groupedTasks;
-	}, {} );
-}
+```html
+<input name="email" type="email" />
+<img alt="Account badge" src="badge.png" />
 ```
 
-Do not document every internal property and array element inline when the function only needs a broad runtime type. Use `@param {array}` and `@return {object}` for this function, then explain the expected contents in plain language. Use a project-established named type only when it is required as a shared or public contract.
+Use modern HTML void elements without the closing slash.
 
-## JavaScript: `if` for a simple assignment choice
+### Standalone closing angle bracket
 
-```js
-if ( undefined === groupedTasks[ day ] ) {
-	groupedTasks[ day ] = [];
-}
+```html
+<button
+	aria-controls="account-menu"
+	aria-expanded="false"
+	id="account-menu-toggle"
+	type="button"
+>
+		Open account menu
+</button>
 ```
 
-When a simple conditional only chooses the value to assign, use a ternary and assign the result once. Keep `if` for multiple branches, multiple statements, side effects, or early returns.
+Put the closing angle bracket directly after the final attribute.
 
-```php
-/**
- * Stores a diagnostic message.
- *
- * @since Unknown
- *
- * @param string $message Diagnostic message.
- * @return void
- */
-function store_diagnostic_message( string $message ) : void {
-	error_log( $message );
-}
+### Contents aligned with attributes
+
+```html
+<button
+	aria-controls="account-menu"
+	aria-expanded="false"
+	id="account-menu-toggle"
+	type="button">
+	Open account menu
+</button>
 ```
 
-Do not add `@return` when the function does not return a value.
+Indent the contents one additional tab beyond the attributes by default.
 
-## PHP opening-tag spacing
+### Comment attached to parent and child
 
-```php
-<?php
-/**
- * Gets the active workspace.
- *
- * @since Unknown
- *
- * @return array Active workspace.
- */
-function get_active_workspace() : array {
-	return get_workspace();
-}
+```html
+<nav aria-label="Project sections">
+	<!-- Explain the navigation structure. -->
+	<ul>
+		<li><a href="/overview">Overview</a></li>
+	</ul>
+</nav>
 ```
 
-The DocBlock is crammed against the standalone PHP opening tag. The tag must be separated from the DocBlock by a blank line.
+Treat an HTML comment as its own child block. Give it breathing room from the parent opening tag and the child it explains.
 
-## PHP: missing space before a return type colon
+### Over-formatted simple list
+
+```html
+<ul>
+
+	<li>
+		<a href="/overview">Overview</a>
+	</li>
+
+	<li>
+		<a href="/activity">Activity</a>
+	</li>
+</ul>
+```
+
+Short list items with one simple link should remain compact and adjacent.
+
+## PHP
+
+### Missing space before a return-type colon
 
 ```php
 <?php
@@ -401,7 +202,7 @@ The DocBlock is crammed against the standalone PHP opening tag. The tag must be 
 /**
  * Returns an invoice label.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
  * @param string $status Invoice status.
  * @return string Invoice status.
@@ -411,142 +212,164 @@ function get_invoice_label( string $status ): string {
 }
 ```
 
-Put a space before the colon in PHP return type declarations: `function get_invoice_label( string $status ) : string`.
+Put one space before the return-type colon.
 
-## CSS block breathing room
-
-```css
-@media (prefers-contrast: more) {
-	.billing_panel {
-
-		border-color: CanvasText;
-		color: CanvasText;
-	}
-
-	.billing_panel__total {
-
-		font-weight: 700;
-	}
-}
-```
-
-The first child block is jammed against the parent at-rule. Add breathing room after the parent opening brace and between sibling blocks, but do not add a blank line before the parent closing brace.
-
-## CSS: compact function parentheses
-
-```css
-.dashboard_grid {
-	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr));
-}
-```
-
-CSS function notation follows the same visual spacing preference as normal function calls. Use `minmax( 0, 1fr )` and `repeat( 2, minmax( 0, 1fr ) )`.
-
-## CSS: trailing blank line before a closing brace
-
-```css
-@media (prefers-color-scheme: dark) {
-
-	.report_card {
-
-		background-color: #111827;
-		color: #f9fafb;
-	}
-
-	.report_card__meta {
-		font-size: 0.875rem;
-	}
-
-}
-```
-
-The blank line before the final `}` is unnecessary. The closing brace should follow the final child block directly.
-
-## PHP and JavaScript block spacing
-
-```js
-function revealDetails( panel ) {
-	if ( panel.hidden ) {
-		panel.hidden = false;
-	}
-	panel.focus();
-}
-```
+### Unprotected optional array key
 
 ```php
-<?php if ( $show_details ) : ?>
-	<section>
-		<h2>Details</h2>
-		<p><?php echo esc_html( $details ); ?></p>
-	</section>
-<?php endif; ?>
+if ( false === $subscription['enabled'] ) {
+	return 'Disabled';
+}
 ```
 
-The logical child block is visually crammed against the surrounding parent syntax. Separate multiple logical sections with blank lines while preserving the required adjacency of a DocBlock and its declaration.
+Use a parenthesized null-coalescing expression before comparing an optional key.
 
-## JavaScript: unnecessary boolean alias and bang negation
+### Over-specified or inaccurate documentation
 
-```js
+```php
+<?php
+
 /**
- * Toggles the command palette.
+ * Returns a customer label.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
- * @param {HTMLButtonElement} trigger Palette trigger.
- * @param {HTMLElement} palette Palette element.
+ * @param array{ name: string, code: string } $customer Customer data.
+ * @return array Customer label.
  */
-function toggleCommandPalette( trigger, palette ) {
+function get_customer_label( array $customer ) : string {
 
-	const isHidden = palette.hidden;
-
-	palette.hidden = ! isHidden;
-	trigger.setAttribute( `aria-expanded`, `${isHidden}` );
-
-	if ( isHidden ) {
-		const searchInput = palette.querySelector( `#command-palette-search` );
-
-		if ( searchInput instanceof HTMLInputElement ) {
-			searchInput.focus();
-		}
-
-		return;
-	}
-
-	trigger.focus();
+	return sprintf(
+		'%s (%s)',
+		$customer['name'],
+		$customer['code']
+	);
 }
 ```
 
-Do not create `isHidden` merely to rename a directly available boolean property. Use `false === palette.hidden` for the toggle and reference `palette.hidden` directly. Use explicit boolean comparisons instead of bang negation.
+Use an accurate broad runtime type unless a named shape is an established shared contract. Document the actual return type.
 
-## JavaScript: unnecessary grouping parentheses in a type test
+### `@return` on a function with no return value
+
+```php
+<?php
+
+/**
+ * Registers the customer label filter.
+ *
+ * @since August 13, 2026
+ *
+ * @return void
+ */
+function register_customer_label_filter() : void {
+	add_filter( 'customer_label', 'get_customer_label' );
+}
+```
+
+Do not add `@return` when the function does not return a value.
+
+### Vertically aligned associative-array arrows
+
+```php
+return [
+	'account'      => $account,
+	'contact'      => $account['contact'],
+	'refreshed_at' => time(),
+];
+```
+
+Use one space on each side of `=>`. Alignment creates a maintenance burden when a key changes length.
+
+### Trailing blank line before a closing brace
+
+```php
+<?php
+
+/**
+ * Returns an account label.
+ *
+ * @since August 13, 2026
+ *
+ * @param string $label Account label.
+ * @return string Account label.
+ */
+function get_account_label( string $label ) : string {
+	return $label;
+
+}
+```
+
+Close the function directly after its final statement.
+
+## JavaScript
+
+### String concatenation
 
 ```js
-function bindDismissiblePanel( panel ) {
+const message = 'Hello, ' + name + '!';
+```
 
-	if ( false === ( panel instanceof HTMLElement ) ) {
-		return;
-	}
+Use a template literal when the target supports it.
 
-	panel.addEventListener( `keydown`, function ( event ) {
+### Bang negation for a known boolean
 
-		if ( `Escape` !== event.key ) {
-			return;
-		}
-
-		panel.hidden = true;
-	} );
+```js
+if ( ! panel.hidden ) {
+	openPanel( panel );
 }
 ```
 
-When `instanceof` is being compared as a boolean and operator precedence is unambiguous, do not add grouping parentheses around the type test. Use `false === panel instanceof HTMLElement`.
+Use an explicit comparison for a known boolean: `false === panel.hidden`.
 
-## JavaScript: trusting a runtime parameter
+### Unnecessary grouping in a type test
+
+```js
+if ( false === ( panel instanceof HTMLElement ) ) {
+	return;
+}
+```
+
+Do not add grouping parentheses when operator precedence already makes the comparison unambiguous.
+
+### Meaningless single-use alias
+
+```js
+const accountName = account.profile.displayName;
+
+showAccountName( accountName );
+```
+
+Pass the directly available value when the alias is not reused or needed for state.
+
+### Repeating computed work
+
+```js
+return {
+	profile: loadProfile( userId ),
+	permissions: getPermissions( loadProfile( userId ) ),
+	lastSeen: formatLastSeen( loadProfile( userId ) ),
+};
+```
+
+Compute the profile once and reuse the result.
+
+### `if` for a simple assignment choice
+
+```js
+if ( undefined === groupedTasks[ day ] ) {
+	groupedTasks[ day ] = [];
+}
+```
+
+Use a ternary when the condition only chooses the value assigned.
+
+### Missing runtime guard
 
 ```js
 /**
  * Binds keyboard behavior to a dismissible panel.
  *
- * @since Unknown
+ * @since August 13, 2026
  *
  * @param {HTMLElement} panel Panel element.
  */
@@ -563,213 +386,26 @@ function bindDismissiblePanel( panel ) {
 }
 ```
 
-Do not use a dynamically typed parameter without one practical expected-type guard. Test the parameter once, return early when it is not the expected type, and keep the specific `@param` type. Do not replace it with `unknown` or add exhaustive property checks when the type guard is sufficient.
+Guard the expected runtime type before calling its methods.
 
-## PHP: unprotected optional array keys
-
-```php
-<?php
-
-/**
- * Gets a subscription label.
- *
- * @since Unknown
- *
- * @param array{enabled?: bool, status?: string} $subscription Subscription data.
- * @return string Subscription label.
- */
-function get_subscription_label( array $subscription ) : string {
-
-	if ( false === $subscription['enabled'] ) {
-		return 'Disabled';
-	}
-
-	if ( 'trial' === $subscription['status'] ) {
-		return 'Trial';
-	}
-
-	return 'Active';
-}
-```
-
-Do not directly read an optional array key. Compare the null-coalesced value instead: `( $subscription['enabled'] ?? false )` or `( $subscription['status'] ?? '' )`.
-
-## Breathing Room: complex named function body starts immediately
+### Incorrect function-call spacing
 
 ```js
-/**
- * Returns a workspace when one is available.
- *
- * @since Unknown
- *
- * @param {object|null} workspace Workspace data.
- * @return {object} Workspace data.
- */
-function getCurrentWorkspace( workspace ) {
-	if ( null === workspace ) {
-		return {};
-	}
-
-	return readWorkspace( workspace );
-}
+return fetch(requestUrl, {
+	method: `POST`,
+	body: formData,
+});
 ```
 
-This function has multiple logical sections but no breathing room after its opening brace. Trivial one-statement functions may remain compact; functions with multiple sections or complex first statements need the blank line.
+Use WordPress spacing and close a multiline object argument as `} );`.
 
-## JavaScript: trailing blank line before a closing brace
+### Unsupported trailing comma in a function call
 
 ```js
-/**
- * Reveals a drawer.
- *
- * @since Unknown
- *
- * @param {HTMLElement} drawer Drawer element.
- * @param {HTMLButtonElement} trigger Drawer trigger.
- */
-function revealDrawer( drawer, trigger ) {
-
-	if ( drawer.hidden ) {
-		drawer.hidden = false;
-	}
-
-	trigger.focus();
-
-}
+queueJob(
+	jobId,
+	payload,
+);
 ```
 
-The blank line before the function's closing brace adds no useful separation. Keep the opening and sibling spacing, then close the function directly after its final statement.
-
-## HTML: no breathing room after an opening element
-
-```html
-<main id="billing-summary" aria-labelledby="billing-summary-title">
-	<header>
-		<h1 id="billing-summary-title">Billing summary</h1>
-	</header>
-
-	<p>Your current balance is shown below.</p>
-</main>
-```
-
-The header is a separate child block and is jammed against the containing `main` element. Add a blank line after the opening parent tag before the first child block. This applies to every HTML parent with multiple logical child blocks, not only `main`. HTML does not need a trailing blank line before the closing tag.
-
-## HTML: comment jammed against its parent or child
-
-```html
-<nav aria-label="Project sections">
-	<!-- Explain the navigation structure. -->
-	<ul>
-		<li><a href="/overview">Overview</a></li>
-	</ul>
-</nav>
-```
-
-An HTML comment is its own logical child block. Add a blank line after the opening parent tag before the comment and another blank line between the comment and the child it explains.
-
-## HTML: over-formatting a simple list
-
-```html
-<nav aria-label="Project sections">
-	<ul>
-
-		<li>
-			<a href="/overview">Overview</a>
-		</li>
-
-		<li>
-			<a href="/activity">Activity</a>
-		</li>
-	</ul>
-</nav>
-```
-
-Short list items with one simple link do not need individual multiline blocks or blank lines between siblings. Keep each `li` compact and keep the list items adjacent.
-
-## HTML: standalone closing angle bracket on a multiline opening tag
-
-```html
-<button
-	aria-controls="command-palette"
-	aria-expanded="false"
-	id="command-palette-trigger"
-type="button"
->
-		Open command palette
-</button>
-```
-
-When a multiline HTML opening tag is used, put the closing `>` immediately after the final attribute: `type="button">`.
-
-## HTML: multiline-tag contents aligned with attributes
-
-```html
-<button
-	aria-controls="command-palette"
-	aria-expanded="false"
-	id="command-palette-trigger"
-	type="button">
-	Open command palette
-</button>
-```
-
-Indent the contents of a multiline opening tag one additional tab beyond its attributes by default. The text above is aligned with the attributes instead of being nested beneath them.
-
-## PHP: trailing blank line before a closing brace
-
-```php
-<?php
-
-/**
- * Builds a compact report summary.
- *
- * @since Unknown
- *
- * @param array{title: string, count: int} $report Report data.
- * @return array{title: string, count: int} Report summary.
- */
-function build_report_summary( array $report ) : array {
-
-	$summary = [
-		'title' => $report['title'],
-		'count' => $report['count'],
-	];
-
-	return $summary;
-
-}
-```
-
-The blank line before the closing PHP brace is unnecessary. Keep the separation between the computation and return value, then close the function directly after the final statement.
-
-## XHTML-style HTML
-
-```html
-<input type="email" name="email" />
-<img src="badge.png" alt="Verified account" />
-<br />
-```
-
-Use modern HTML void elements without closing forward slashes.
-
-## Inaccessible HTML
-
-```html
-<div onclick="openMenu()">Open menu</div>
-<input placeholder="Search here">
-<span class="error">Invalid value</span>
-```
-
-Use the appropriate interactive element, an accessible label, and an announced error relationship.
-
-## Alphabetizing intentional object order
-
-```js
-const lifecycle = {
-	complete: finishProcess,
-	initialize: initializeProcess,
-	running: runProcess,
-};
-```
-
-The object has been alphabetized instead of preserving the intentional lifecycle order.
+Use a trailing comma in a function call only when the target language and version support it.
