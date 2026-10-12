@@ -2,6 +2,8 @@
 
 These examples are recognition fixtures. Each one intentionally breaks the named rule while keeping the surrounding scenario and other standards as consistent as possible. Never copy them into code presented as compliant.
 
+Documentation examples apply when maintaining existing blocks or writing new blocks explicitly requested by the user. Missing DocBlocks or JSDoc on new declarations are acceptable by default. Existing blocks must be preserved and kept accurate; their presence does not authorize new blocks elsewhere.
+
 ## CSS
 
 ### Comment outside the block it describes
@@ -42,16 +44,6 @@ Keep a trivial one-property block compact and put a useful explanation at the en
 ```
 
 Group properties by function and alphabetize within each group.
-
-### Compact CSS function notation
-
-```css
-.schedule-grid {
-	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr));
-}
-```
-
-Use one space inside CSS function parentheses: `minmax( 0, 1fr )`.
 
 ### Generic-ancestor nesting
 

@@ -17,6 +17,7 @@ When adding a new example:
 
 1. Keep the scenario small enough to understand immediately.
 2. Change only the rule being demonstrated in a good/bad pair.
-3. Keep unrelated documentation, accessibility, syntax, spacing, and compatibility rules correct.
+3. Keep unrelated documentation, accessibility, syntax, spacing, and compatibility rules correct. Include new DocBlocks or JSDoc only when explicitly requested; documented fixtures must be labeled as existing documentation being maintained or explicitly requested documentation. Do not treat undocumented declarations as reject patterns solely for lacking blocks.
 4. Use lowercase kebab-case BEM in generic CSS examples and make corresponding HTML, CSS, and JavaScript names agree.
 5. Label a reject example clearly so it cannot be mistaken for code to copy.
+6. Do not label CSS as a reject example solely for optional horizontal whitespace in functions, property declarations or values, or media-query and other at-rule conditions. Both compact and spaced forms are acceptable; required syntax and meaningful whitespace still matter.

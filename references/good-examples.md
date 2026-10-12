@@ -4,7 +4,11 @@ These are the canonical positive examples for Aubrey Portwood's coding standards
 
 Every example still follows the other applicable standards. Generic CSS examples use lowercase kebab-case BEM. Native CSS nesting assumes that the project target and tooling support it. Function calls do not use trailing commas unless the target has been confirmed to support them.
 
+DocBlocks and JSDoc in these examples illustrate existing documentation being maintained or new documentation explicitly requested by the user. Do not copy those blocks into new code by default, ask whether to add them, or reject an undocumented declaration solely because these examples include documentation. Preserve and update existing blocks.
+
 ## CSS
+
+Optional horizontal whitespace in CSS functions, property declarations and values, and media-query or other at-rule conditions is flexible. Compact and spaced forms are both acceptable; the spacing shown in these examples is not mandatory. Preserve required syntax and meaningful whitespace, plus the existing indentation, breathing room, grouping, nesting, and comment rules. Do not apply this CSS exception to PHP or JavaScript.
 
 ### BEM markup and native nesting
 
@@ -149,7 +153,7 @@ The closing angle bracket follows the final attribute. Void elements do not use 
 
 ### Documentation and return types
 
-Named functions have directly preceding DocBlocks, accurate broad types, and Aubrey's return-type spacing. A function without a return value does not receive an `@return` tag.
+When a named function already has a DocBlock or the user explicitly requests one, keep it directly preceding the declaration and use accurate broad types. Aubrey's return-type spacing applies with or without documentation. A function without a return value does not receive an `@return` tag.
 
 ```php
 <?php

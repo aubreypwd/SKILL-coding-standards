@@ -209,9 +209,11 @@ Group CSS properties by function, then alphabetize within each group. Keep a com
 
 Native CSS nesting is appropriate only when the project's target and tooling support it. Do not nest generic ancestors merely because the HTML is nested that way.
 
-### CSS function spacing
+### Flexible CSS spacing
 
-Use one space inside CSS function parentheses, matching the function-call spacing used elsewhere in the skill:
+CSS accepts both compact and spaced parentheses in functions, including custom-property references, and in media-query or other at-rule conditions. Optional whitespace between a media at-rule keyword and its opening parenthesis and within property declarations and values is flexible too. Preserve the existing style rather than normalizing spacing unless requested or required by project tooling. The spaced example below is one acceptable form, not a requirement.
+
+Keep whitespace required by CSS syntax or meaning. Indentation, breathing room, property grouping, nesting, and comment placement retain their existing rules. This exception applies only to CSS; PHP, JavaScript, and other languages retain strict function-call spacing.
 
 ```css
 .booking-button {
@@ -303,7 +305,7 @@ const workflow = {
 
 ### Breathing Room
 
-Blank lines should make logical groups visible. Add them after an opening brace and between meaningful groups, but keep trivial one-statement functions and simple HTML lists compact. Do not add a trailing blank line before a closing curly brace.
+Blank lines should make logical groups visible. Add them after an opening brace and between meaningful groups, but keep a trivial one-statement function, method, callback, or closure compact when its statement fits on one source line: put it immediately after the opening brace with no blank line. Retain the blank line for bodies with multiple logical groups or complex or multiline statements. Keep simple HTML lists compact, and do not add a trailing blank line before a closing curly brace.
 
 Good:
 
@@ -426,7 +428,13 @@ if ( undefined === groupedTasks[ day ] ) {
 
 ### Practical documentation
 
-Every named function and method gets a directly preceding DocBlock or JSDoc block. Use accurate broad runtime types and plain-language descriptions. Add `@return` only when a value is returned, and use a current `@since` entry for new code.
+Do not ask whether to write DocBlocks or JSDoc. Create new blocks only when the user explicitly requests them for the task. Otherwise, new declarations remain undocumented, even when surrounding code has documentation. This applies to all declaration documentation, including functions, methods, classes, properties, constants, files, and hooks.
+
+Preserve existing blocks and update them when their code changes. Apply the full documentation standards when maintaining those blocks or creating explicitly requested ones: use accurate broad runtime types and plain-language descriptions, add `@return` only when a value is returned, and follow the existing `@since` and authorship rules. Ordinary explanatory comments retain their existing rules.
+
+Explicit project requirements retain precedence. Report and resolve any requirement for new blocks with the user before creating them; project tooling and existing blocks do not silently authorize new documentation.
+
+The documented examples below illustrate maintaining existing blocks or writing explicitly requested ones. They do not establish a requirement to document new declarations by default.
 
 Good:
 
@@ -539,7 +547,7 @@ Before generating or reviewing code, the agent inspects:
 - Formatter, linter, compiler, type-checker, test, and build configuration.
 - Supported language and runtime versions.
 - Representative nearby source.
-- The applicable WPCS and inline-documentation references.
+- The applicable WPCS references, plus inline-documentation references when maintaining existing blocks or creating explicitly requested ones.
 
 The agent then applies the project rules, this skill's explicit overrides, and the relevant positive and reject examples. Before presenting code as compliant, it reviews the exact output for documentation, accessibility, compatibility, comments, whitespace, function-call spacing, strings, variables, object order, ternaries, runtime guards, early returns, and semantic correctness.
 
