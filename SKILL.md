@@ -60,6 +60,7 @@ When the project does not settle a decision, read the relevant local WordPress r
 
 Use the applicable WordPress Coding Standards as a strict baseline for accessibility, documentation, PHP, JavaScript, CSS, HTML, spacing, indentation, and visual formatting. These are not suggestions. Apply Aubrey's personal overrides only where they are explicitly listed below:
 
+- Do not wrap code, comments, or DocBlock text solely to meet an 80-column limit. Treat line width as a readability guideline, not a target or a hard maximum; keep a line intact when that reads more clearly, and wrap where syntax, structure, or readability calls for it. This overrides WordPress guidance and formatter `printWidth` preferences such as Prettier's unless project instructions explicitly require the formatter's output as an enforced step.
 - Follow WordPress accessibility guidance completely.
 - Use tabs for indentation. Use spaces only when a syntax or data format requires them.
 - For JSON, use spaces for indentation and remember that JSON does not support JavaScript trailing commas.
@@ -306,7 +307,7 @@ Review the exact final code that will be shown, not the intended design or an ea
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.
-- Tabs, semicolons, whitespace, line wrapping, braces, comments, and blank lines follow the applicable WordPress rules, subject to the CSS optional-horizontal-whitespace override above.
+- Tabs, semicolons, whitespace, braces, comments, and blank lines follow the applicable WordPress rules, subject to the CSS optional-horizontal-whitespace override above. For discretionary line wrapping, follow the readability-based override above instead of an 80-column target.
 - Strings in every supported language use native interpolation, templating, formatting, or parameterization instead of concatenation whenever an alternative exists. JavaScript uses template literals by default, and variables are declared separately.
 - Objects and arrays preserve intentional order and are not alphabetized without instruction.
 - Associative-array arrows are not vertically aligned; use one space on each side of `=>` so changing one key does not require reformatting sibling entries.

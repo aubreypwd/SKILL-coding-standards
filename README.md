@@ -37,6 +37,10 @@ The local reference snapshots are available in [`references/`](references/). The
 
 The examples below show the distinction directly. A baseline example is not automatically an acceptable Aubrey result.
 
+### Line wrapping
+
+Do not wrap code, comments, or DocBlock text solely to meet an 80-column limit. Line width is a readability guideline, not a target or hard maximum. Keep a line intact when that reads more clearly, and wrap where syntax, structure, or readability calls for it. This overrides WordPress guidance and formatter `printWidth` preferences such as Prettier's unless project instructions explicitly require the formatter's output as an enforced step.
+
 ### HTML void elements
 
 WPCS's HTML reference uses XHTML-style void-element syntax. Aubrey uses modern HTML syntax without the closing slash.
