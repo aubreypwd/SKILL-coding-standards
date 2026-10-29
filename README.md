@@ -213,15 +213,24 @@ Group CSS properties by function, then alphabetize within each group. Keep a com
 
 Native CSS nesting is appropriate only when the project's target and tooling support it. Do not nest generic ancestors merely because the HTML is nested that way.
 
-### Flexible CSS spacing
+### Compact CSS parentheses
 
-CSS accepts both compact and spaced parentheses in functions, including custom-property references, and in media-query or other at-rule conditions. Optional whitespace between a media at-rule keyword and its opening parenthesis and within property declarations and values is flexible too. Preserve the existing style rather than normalizing spacing unless requested or required by project tooling. The spaced example below is one acceptable form, not a requirement.
+Write CSS functions and media-query or other at-rule conditions without optional padding inside their parentheses. Put the opening condition parenthesis directly after the at-rule keyword. Use compact forms such as `var(--color-olive)`, `max(45%, 600px)`, and `@media(max-width: 619px)`.
 
-Keep whitespace required by CSS syntax or meaning. Indentation, breathing room, property grouping, nesting, and comment placement retain their existing rules. This exception applies only to CSS; PHP, JavaScript, and other languages retain strict function-call spacing.
+Keep spaces required for syntax or meaning, including after property colons, between comma-separated values, around arithmetic operators such as the `-` in `calc(100% - 2rem)`, and between media-query components. Indentation, breathing room, property grouping, nesting, and comment placement retain their existing rules. This rule applies only to CSS; PHP, JavaScript, and other languages retain strict function-call spacing.
 
 ```css
 .booking-button {
-	grid-template-columns: minmax( 0, 1fr ) repeat( 2, minmax( 0, 1fr ) );
+
+	--foreground-color: var(--color-olive);
+
+	color: var(--foreground-color);
+
+	width: max(45%, 600px);
+
+	@media(max-width: 619px) {
+		width: 100%;
+	}
 }
 ```
 

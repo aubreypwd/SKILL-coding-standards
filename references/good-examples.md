@@ -8,7 +8,26 @@ DocBlocks and JSDoc in these examples illustrate existing documentation being ma
 
 ## CSS
 
-Optional horizontal whitespace in CSS functions, property declarations and values, and media-query or other at-rule conditions is flexible. Compact and spaced forms are both acceptable; the spacing shown in these examples is not mandatory. Preserve required syntax and meaningful whitespace, plus the existing indentation, breathing room, grouping, nesting, and comment rules. Do not apply this CSS exception to PHP or JavaScript.
+Use compact parentheses in CSS functions and media-query or other at-rule conditions. Do not put optional whitespace immediately inside the parentheses or between an at-rule keyword and its opening condition parenthesis. Preserve whitespace required for syntax or meaning, including the space after property colons, spaces between comma-separated values, arithmetic operators, and media-query separators. Preserve the existing indentation, breathing room, grouping, nesting, and comment rules. This rule applies only to CSS; PHP and JavaScript retain their strict spacing rules.
+
+### Compact CSS parentheses
+
+Keep function and condition parentheses compact while retaining meaningful spaces between arguments and in conditions.
+
+```css
+.account-panel {
+
+	--foreground-color: var(--color-olive);
+
+	color: var(--foreground-color);
+
+	width: max(45%, 600px);
+
+	@media(max-width: 619px) {
+		width: 100%;
+	}
+}
+```
 
 ### BEM markup and native nesting
 
@@ -57,7 +76,7 @@ Group properties by function and alphabetize within each group.
 
 	display: grid;
 	gap: 1rem;
-	grid-template-columns: minmax( 0, 1fr ) auto;
+	grid-template-columns: minmax(0, 1fr) auto;
 
 	background-color: #f7f7f7;
 	color: #1f2937;
@@ -95,7 +114,7 @@ Keep a root component's responsive changes with the root and a child concept's c
 	display: grid;
 	grid-template-columns: 1fr;
 
-	@media (min-width: 48rem) {
+	@media(min-width: 48rem) {
 		grid-template-columns: 2fr 1fr;
 	}
 
@@ -104,7 +123,7 @@ Keep a root component's responsive changes with the root and a child concept's c
 		display: grid;
 		gap: 0.75rem;
 
-		@media (min-width: 48rem) {
+		@media(min-width: 48rem) {
 			grid-template-columns: 1fr;
 		}
 	}

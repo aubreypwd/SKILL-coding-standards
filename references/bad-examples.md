@@ -6,6 +6,25 @@ Documentation examples apply when maintaining existing blocks or writing new blo
 
 ## CSS
 
+### Padded function and condition parentheses
+
+```css
+.account-panel {
+
+	--foreground-color: var( --color-olive );
+
+	color: var( --foreground-color );
+
+	width: max( 45%, 600px );
+
+	@media ( max-width: 619px ) {
+		width: 100%;
+	}
+}
+```
+
+Do not pad function or condition parentheses with optional spaces, and do not separate an at-rule keyword from its opening condition parenthesis. Keep meaningful spaces such as the space after a property colon and between comma-separated arguments: `max(45%, 600px)`.
+
 ### Comment outside the block it describes
 
 ```css
@@ -71,7 +90,7 @@ Do not mirror the HTML tree with generic ancestors. Nest around a portable compo
 
 	display: grid;
 
-	@media (min-width: 48rem) {
+	@media(min-width: 48rem) {
 
 		grid-template-columns: 2fr 1fr;
 
