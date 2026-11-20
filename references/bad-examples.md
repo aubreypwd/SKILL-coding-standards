@@ -190,7 +190,27 @@ Do not move an ordinary base element into a variation merely because the variati
 }
 ```
 
-Indentation must reflect CSS structure, not the current HTML wrapper depth. Keep ordinary component selectors at the same nesting level so moving markup does not require reformatting unrelated CSS.
+Indentation must reflect actual CSS structure, not merely the current HTML wrapper depth. Without an explicit user or project nesting preference, keep independently named component selectors at the same nesting level so moving markup does not require reformatting unrelated CSS.
+
+### Independent classes nested only to mirror markup
+
+```css
+.booking-card {
+
+	.booking-card__content {
+
+		.booking-card__title {
+			font-weight: 700;
+		}
+
+		.booking-card__action {
+			justify-self: start;
+		}
+	}
+}
+```
+
+Absent an explicit user or project preference, do not nest independently identified BEM classes merely because the elements are nested in HTML. Each class already supplies its own identity, so keep the title and action flat beneath the component root. This is a default cleanup decision, not permission to override a user's chosen nesting style.
 
 ### Reversed desktop-first conditions
 
@@ -249,7 +269,7 @@ button {
 }
 ```
 
-Use a component class for project-specific styling. A direct tag selector requires an intentional exception and an explanation inside the CSS block.
+Use a component class when the element has an independent identity and the markup can receive one. A non-global tag selector for generated, supplied, third-party, or otherwise unclassed content requires a meaningful class scope and an explanation inside that scope.
 
 ## HTML
 

@@ -110,9 +110,90 @@ Comments describing declarations or child blocks live inside the selector or at-
 
 ### Easy To Manage CSS Organization
 
-Keep ordinary component selectors flat under one root. Group same-element variation descendants inside their `&.` block. Put responsive conditions at the bottom and show the whole component's changes for each condition together.
+Keep independently named component selectors flat under one root by default. Use Identity-Based Nesting for parent-dependent selectors, group same-element variation descendants inside their `&.` block, and put responsive conditions at the bottom so the whole component's changes for each condition remain together. Explicit user and project nesting preferences override this default.
 
 The examples below deliberately show the pattern in several forms. The organization is the invariant; breakpoint syntax, responsive direction, class spelling, and nesting support come from the project.
+
+#### Identity-Based Nesting for rendered content
+
+The user controls the final nesting style. Without an explicit user or project preference, keep independently named classes flat and nest selectors that require a meaningful parent for identity or safe scope.
+
+The content class below independently identifies its element, so it remains flat beneath the component root. Its rendered Markdown tags cannot reliably receive BEM classes. Their component meaning depends on `.article-body__content`, so they nest beneath that scope instead of repeating the class prefix on every selector.
+
+```css
+.article-body {
+
+	.article-body__content {
+
+		/* Rendered Markdown elements cannot receive component-specific classes. */
+
+		font-size: 1rem;
+		line-height: 1.6;
+
+		a {
+			text-decoration-thickness: 0.125rem;
+		}
+
+		h2,
+		h3 {
+			font-weight: 700;
+		}
+
+		> h2:not(:first-child),
+		> h3:not(:first-child) {
+			margin-top: 2rem;
+		}
+
+		blockquote {
+			border-left: 0.25rem solid currentColor;
+			padding-left: 1rem;
+		}
+	}
+
+	.article-body__aside {
+		font-size: 0.875rem;
+	}
+}
+```
+
+`.article-body__aside` is not nested beneath `.article-body__content`, even if the current markup places it there, because the aside class already supplies an independent identity.
+
+#### Identity-Based Nesting for CMS navigation
+
+The same rule applies outside prose. The independently named list and toggle stay flat. The CMS-generated `li` and `a` elements nest beneath the list because they require that parent class to become safe component selectors.
+
+```css
+.generated-navigation {
+
+	.generated-navigation__list {
+
+		/* The CMS does not provide classes for generated items or links. */
+
+		display: flex;
+		gap: 1rem;
+
+		list-style: none;
+
+		margin: 0;
+		padding: 0;
+
+		> li {
+			display: flex;
+		}
+
+		> li > a {
+			font-weight: 600;
+			text-decoration: none;
+		}
+	}
+
+	.generated-navigation__toggle {
+		display: none;
+	}
+}
+```
+
+Nesting does not imply a direct-child relationship. Use `>` only when the component contract requires direct children; use an ordinary nested tag selector when any descendant in the meaningful scope should match.
 
 #### Complete desktop-first component
 

@@ -217,14 +217,14 @@ The operational rule remains project-aware when a project already maps a CSS blo
 
 CSS underscores are allowed when an existing project convention uses them, but they are not a reason to introduce a second naming style into a generic example. Clear, supported color notation may remain unchanged; do not perform notation-only cleanup without a reason.
 
-Use class selectors for component styling. Reserve direct tag selectors for intentional global defaults, resets, browser normalization, or unavoidable third-party markup, and explain each exception inside the CSS block.
+Use class selectors for independently identifiable component styling. Tags in generated, supplied, or third-party content may be nested beneath the meaningful class that gives them their component scope; explain that scope inside the CSS block.
 
 ### Easy To Manage CSS Organization
 
 Organize component CSS so its normal behavior, variations, and responsive behavior can be understood by reading the file from top to bottom:
 
 1. Start with the component root and its declarations.
-2. Keep ordinary component elements and descendants flat beneath the root, even when the HTML has more nesting levels.
+2. Honor explicit user and project nesting preferences. Otherwise, keep independently named component classes flat beneath the root and use Identity-Based Nesting for selectors that depend on a meaningful parent scope.
 3. Nest a variation when the component root receives an additional class, expressed structurally as `&.booking-card--featured`. Recognize existing variations by this same-element structure rather than by a naming keyword, but use BEM modifiers in newly authored canonical code.
 4. Keep declarations and descendant overrides owned by that variation inside its `&.` block.
 5. Put the component's media queries together at the bottom of the root. Inside each query, include only selectors that change in that range.
@@ -285,7 +285,43 @@ Organize component CSS so its normal behavior, variations, and responsive behavi
 }
 ```
 
-The visual indentation of ordinary selectors must not imitate the markup hierarchy. For example, `.booking-card__action` remains aligned with `.booking-card__details` even if the action is nested inside the details element in HTML. This keeps future markup movement from forcing cosmetic CSS reindentation.
+#### Identity-Based Nesting
+
+Nesting is ultimately the user's organizational choice. An explicit user preference or project convention overrides the default described here.
+
+When no preference exists, keep a selector flat when its class independently identifies its purpose. Nest it when the selector requires a meaningful parent class to establish its identity, intent, or safe scope. Unclassed tags in generated content are the clearest case because they cannot receive independent BEM classes reliably:
+
+```css
+.generated-navigation {
+
+	.generated-navigation__list {
+
+		/* The CMS does not provide classes for generated items or links. */
+
+		display: flex;
+		gap: 1rem;
+
+		list-style: none;
+
+		> li {
+			display: flex;
+		}
+
+		> li > a {
+			font-weight: 600;
+			text-decoration: none;
+		}
+	}
+
+	.generated-navigation__toggle {
+		display: none;
+	}
+}
+```
+
+`.generated-navigation__list` and `.generated-navigation__toggle` remain siblings because each class has its own identity. The `li` and `a` rules are nested because their component meaning exists only within the generated list scope. Use `>` only when the direct-child relationship is required.
+
+Do not nest independent classes merely to reproduce markup depth. The default keeps `.booking-card__action` aligned with `.booking-card__details` even if the action currently appears inside the details element. A user may choose another readable nesting arrangement; the skill must not override that choice merely to enforce its default.
 
 Native CSS nesting is required for the preferred `&.` variation form. When a project's supported browsers or tooling cannot compile native nesting, preserve the same conceptual order with explicit selectors instead of introducing unsupported syntax.
 
