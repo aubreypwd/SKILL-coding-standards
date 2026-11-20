@@ -54,15 +54,19 @@ The HTML and CSS use the same block, element, and modifier names. The modifier i
 	border: 0;
 	padding: 0.75rem 1rem;
 
-	&.booking-button--gold {
-
-		background-color: #c08b12;
-	}
-
 	.booking-button__icon {
 
 		height: 1rem;
 		width: 1rem;
+	}
+
+	&.booking-button--gold {
+
+		background-color: #c08b12;
+
+		.booking-button__icon {
+			color: #1f2937;
+		}
 	}
 }
 ```
@@ -97,38 +101,383 @@ Comments describing declarations or child blocks live inside the selector or at-
 
 	display: grid;
 	gap: 1rem;
-}
 
-.account-panel__heading {
-	margin: 0; /* Remove the browser margin from this compact heading block. */
+	.account-panel__heading {
+		margin: 0; /* Remove the browser margin from this compact heading block. */
+	}
 }
 ```
 
-### Component-owned responsive rules
+### Easy To Manage CSS Organization
 
-Keep a root component's responsive changes with the root and a child concept's changes with that child.
+Keep ordinary component selectors flat under one root. Group same-element variation descendants inside their `&.` block. Put responsive conditions at the bottom and show the whole component's changes for each condition together.
+
+The examples below deliberately show the pattern in several forms. The organization is the invariant; breakpoint syntax, responsive direction, class spelling, and nesting support come from the project.
+
+#### Complete desktop-first component
+
+This component starts with its widest/base layout and orders `max-width` conditions from widest to narrowest. Ordinary elements are flat. The featured variation owns only the descendants it extends.
 
 ```css
 .schedule-card {
 
 	display: grid;
-	grid-template-columns: 1fr;
-
-	@media(min-width: 48rem) {
-		grid-template-columns: 2fr 1fr;
-	}
+	gap: 1rem;
+	grid-template-columns: 2fr 1fr;
 
 	.schedule-card__hero {
 
 		display: grid;
 		gap: 0.75rem;
+		grid-template-columns: auto 1fr;
+	}
 
-		@media(min-width: 48rem) {
+	.schedule-card__title {
+		font-weight: 700;
+	}
+
+	&.schedule-card--featured {
+
+		border-color: #c08b12;
+
+		.schedule-card__title {
+			color: #7a5600;
+		}
+	}
+
+	@media(max-width: 64rem) {
+
+		grid-template-columns: 1fr;
+
+		.schedule-card__hero {
 			grid-template-columns: 1fr;
+		}
+
+		&.schedule-card--featured {
+
+			.schedule-card__title {
+				font-size: 1.25rem;
+			}
+		}
+	}
+
+	@media(max-width: 40rem) {
+
+		gap: 0.75rem;
+
+		.schedule-card__title {
+			font-size: 1rem;
 		}
 	}
 }
 ```
+
+#### Variation recognition is structural while authored names use BEM
+
+An additional class on the same element creates a variation when it is expressed with `&.`. Recognize that structure even in an existing project with another naming convention, but use the skill's canonical BEM modifier syntax when authoring generic or new code.
+
+```css
+.alert-banner {
+
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 1fr auto;
+
+	background-color: #f5f5f5;
+	color: #1f2937;
+
+	border: 1px solid #d1d5db;
+	padding: 1rem;
+
+	.alert-banner__message {
+		font-weight: 600;
+	}
+
+	.alert-banner__actions {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	&.alert-banner--critical {
+
+		background-color: #fff1f1;
+		border-color: #b91c1c;
+
+		.alert-banner__message {
+			color: #991b1b;
+		}
+	}
+
+	&.alert-banner--with-actions {
+
+		padding-block: 1.25rem;
+
+		.alert-banner__actions {
+			justify-content: flex-end;
+		}
+	}
+}
+```
+
+Both `&.alert-banner--critical` and `&.alert-banner--with-actions` are variations because each additional class applies to `.alert-banner` itself. Their BEM spelling follows the skill's naming standard; the `&.` same-element structure is what determines their organizational role. `.alert-banner__actions` is an ordinary element and therefore remains flat outside the variations until a variation extends it.
+
+#### Multiple variation descendants stay together
+
+When a variation changes several descendants, keep the complete extension inside one variation block. Do not repeat the compound variation selector for every descendant.
+
+```css
+.pricing-card {
+
+	display: grid;
+	gap: 1rem;
+
+	background-color: #ffffff;
+
+	border: 1px solid #d1d5db;
+	padding: 1.5rem;
+
+	.pricing-card__name {
+		font-size: 1.25rem;
+		font-weight: 700;
+	}
+
+	.pricing-card__price {
+		font-size: 2rem;
+	}
+
+	.pricing-card__features {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	&.pricing-card--recommended {
+
+		background-color: #fffaf0;
+		border-color: #c08b12;
+
+		.pricing-card__name {
+			color: #7a5600;
+		}
+
+		.pricing-card__price {
+			font-weight: 700;
+		}
+
+		.pricing-card__features {
+			gap: 0.75rem;
+		}
+	}
+}
+```
+
+#### Mobile-first responsive component
+
+A mobile-first project uses the same component organization but orders `min-width` conditions from narrowest to widest. Each responsive condition shows every affected component level together.
+
+```css
+.filter-panel {
+
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: 1fr;
+
+	.filter-panel__fields {
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: 1fr;
+	}
+
+	.filter-panel__actions {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	&.filter-panel--compact {
+
+		gap: 0.5rem;
+
+		.filter-panel__actions {
+			font-size: 0.875rem;
+		}
+	}
+
+	@media(min-width: 40rem) {
+
+		grid-template-columns: 2fr 1fr;
+
+		.filter-panel__fields {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.filter-panel__actions {
+			flex-direction: row;
+		}
+	}
+
+	@media(min-width: 64rem) {
+
+		gap: 1.25rem;
+
+		.filter-panel__fields {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		&.filter-panel--compact {
+
+			.filter-panel__actions {
+				justify-content: flex-end;
+			}
+		}
+	}
+}
+```
+
+#### Established custom-media aliases
+
+Use a project's existing aliases when they communicate established ranges. Do not invent aliases merely to satisfy this organization. This example is desktop-first, so the effective ranges still move from widest to narrowest.
+
+```css
+@custom-media --below-wide (width < 75rem);
+@custom-media --compact (width < 48rem);
+
+.profile-panel {
+
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: 18rem 1fr;
+
+	.profile-panel__summary {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.profile-panel__details {
+		display: grid;
+		gap: 1rem;
+	}
+
+	&.profile-panel--highlighted {
+
+		border-color: #c08b12;
+
+		.profile-panel__summary {
+			background-color: #fffaf0;
+		}
+	}
+
+	@media(--below-wide) {
+
+		grid-template-columns: 14rem 1fr;
+
+		.profile-panel__details {
+			gap: 0.75rem;
+		}
+	}
+
+	@media(--compact) {
+
+		grid-template-columns: 1fr;
+
+		.profile-panel__summary {
+			gap: 0.5rem;
+		}
+
+		&.profile-panel--highlighted {
+
+			.profile-panel__summary {
+				border-left: 0;
+			}
+		}
+	}
+}
+```
+
+#### Bounded and overlapping responsive conditions
+
+Bounded or overlapping conditions may encode real component behavior. Keep them, order them by effective range where possible, and preserve source order when changing it would alter the cascade.
+
+```css
+.navigation-strip {
+
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+
+	.navigation-strip__item {
+		flex: 0 1 auto;
+	}
+
+	.navigation-strip__label {
+		display: inline;
+	}
+
+	@media(min-width: 48rem) and (max-width: 70rem) {
+
+		gap: 0.75rem;
+
+		.navigation-strip__label {
+			font-size: 0.875rem;
+		}
+	}
+
+	@media(max-width: 47.99rem) {
+
+		flex-direction: column;
+
+		.navigation-strip__item {
+			width: 100%;
+		}
+	}
+}
+```
+
+#### Equivalent organization without native nesting
+
+When project tooling does not support native nesting, preserve the same conceptual order with fully qualified selectors. The organization matters more than forcing unsupported syntax.
+
+```css
+.product-summary {
+
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 1fr 1fr;
+}
+
+.product-summary__title {
+	font-weight: 700;
+}
+
+.product-summary__details {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.product-summary.product-summary--featured {
+	border-color: #c08b12;
+}
+
+.product-summary.product-summary--featured .product-summary__title {
+	color: #7a5600;
+}
+
+@media(max-width: 48rem) {
+
+	.product-summary {
+		grid-template-columns: 1fr;
+	}
+
+	.product-summary__details {
+		gap: 0.5rem;
+	}
+
+	.product-summary.product-summary--featured .product-summary__title {
+		font-size: 1.25rem;
+	}
+}
+```
+
+The fully qualified fallback cannot group variation descendants syntactically, but it preserves the same reading order: base component, ordinary elements, variations, then responsive behavior.
 
 ## HTML
 
@@ -364,10 +713,10 @@ This small example keeps the BEM class names consistent across markup, CSS, and 
 
 		border: 1px solid #374151;
 		padding: 1rem;
+	}
 
-		&[hidden] {
-			display: none;
-		}
+	.command-palette__dialog[hidden] {
+		display: none;
 	}
 
 	.command-palette__close,

@@ -91,30 +91,33 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - CSS property order is functional first, alphabetical second. Group related properties such as layout, flex, typography, colors, spacing, and positioning; alphabetize only within each group. Do not alphabetize across functional groups.
 - CSS colors may use any clear supported notation; do not change color notation without a reason.
 - In CSS only, omit optional whitespace immediately inside function parentheses and media-query or other at-rule condition parentheses. Put the opening condition parenthesis directly after its at-rule keyword. Write `var(--color-olive)`, `max(45%, 600px)`, and `@media(max-width: 619px)`, not `var( --color-olive )`, `max( 45%, 600px )`, or `@media ( max-width: 619px )`. Preserve whitespace required for valid syntax or meaning, including the space after a property colon, spaces between comma-separated values, spaces around arithmetic operators such as the `-` in `calc(100% - 2rem)`, media-query separators, and selector combinators. This overrides the WordPress CSS spacing baseline and the general function-call spacing rule; PHP, JavaScript, and other languages retain their strict spacing rules. Indentation, breathing room, property grouping, nesting, and comment placement retain their existing rules.
-- Prefer CSS nesting for cohesive component concepts such as `.card`, `.dialog`, or `.account_panel`. Nest the styles that belong to the component together, including its states and component-owned media-query adaptations, instead of scattering the component across unrelated selectors.
-- Do not use CSS nesting merely to mirror the HTML tree. Do not nest a component under generic ancestors such as `body`, `main`, `.page`, or `.content`; nest around a stable conceptual thing that can move through the markup without taking its styles apart.
-- Prefer a root component plus one nested level, and generally stop at two nesting levels. Nest deeper only when every deeper level is another meaningful concept inside the component—for example, a card hero with its own image and pill—not merely another wrapper from the markup.
-- Keep a nested component's own declarations together at the top of its block. Place root-level responsive overrides that change the component itself beside those declarations, before nested child concepts; do not make a reader scroll past child blocks to find the parent component's properties. Then organize states, pseudo-selectors, nested parts, and media rules according to the element or concept they modify.
-- Place each media-query override with the selector it changes. A root component's media query contains only root-component changes; a child concept such as `.card__hero` gets its own nested media query. Do not create one component-wide media wrapper that mixes root and child overrides.
-- Verify that the project target and tooling support the CSS nesting syntax before using it. If they do not, use the equivalent flat selectors rather than silently introducing unsupported CSS.
-- When using native CSS nesting, do not rely on selector-name concatenation for modifiers or elements; use explicit selectors such as `&.Button--gold` and `.Button__icon` instead.
+- Follow **Easy To Manage CSS Organization** when the project supports native CSS nesting. Put one conceptual component under its root selector, with the root's declarations first, ordinary component selectors next, same-element variations after the base component rules, and component-owned responsive sections last. When nesting is unavailable, preserve the same order with equivalent fully qualified selectors.
+- Keep ordinary component selectors flat under the component root. Do not nest or visually indent selectors merely to mirror the HTML tree, wrapper depth, or descendant hierarchy. Do not nest a component under generic ancestors such as `body`, `main`, `.page`, or `.content`; organize around a stable component that can move without taking its styles apart.
+- Identify a same-element variation structurally by an `&.` compound selector, such as `&.card--featured` or `&.card--expanded`. The additional class's spelling does not determine whether an existing selector functions as a variation, but newly authored variation classes must follow the applicable naming standard; use BEM in canonical and generic code. Nest the descendants whose styles are extended by that variation inside the `&.` block so the complete variation is readable in one place.
+- Do not flatten variation-owned descendants into repeated selectors such as `&.card--featured .card__title`. Do not move ordinary base descendants into a variation merely because they appear inside the same markup.
+- Put component-owned media queries together at the bottom of the component root. Inside each media query, show every root, element, state, and variation change for that responsive condition together instead of scattering media queries through individual selectors. Nest responsive variation descendants inside their applicable `&.` block.
+- Order width-based media queries consistently according to the project's responsive direction. In a desktop-first or `max-width` stylesheet, order them from the widest boundary to the narrowest. In a mobile-first or `min-width` stylesheet, order them from the narrowest boundary to the widest. Treat named custom-media aliases, raw width queries, and bounded ranges according to their effective ranges, and do not reorder overlapping conditions when doing so changes the cascade.
+- Omit empty media-query blocks. Preserve bounded and one-off conditions when they express real component behavior; do not invent named aliases or force a project's breakpoints into another project's scheme.
+- Verify that the project target and tooling support the CSS nesting syntax before using it. If they do not, use equivalent selectors while preserving component-first ordering. When using native nesting, do not rely on selector-name concatenation for modifiers or elements; use explicit selectors such as `&.Button--gold` and `.Button__icon` instead.
+- Before deleting CSS during cleanup, inspect the component markup, base styles, related component styles, active states, and variations. Remove a declaration only when it is proven unmatched, ineffective, duplicated by the current cascade, inherited unchanged, or equivalent to an existing default. Do not remove an intentional variation merely because its current call site was not found unless removing retained scaffolding is part of the request.
 - For CSS comments that describe a selector's declarations or an at-rule's child blocks, put the comment inside the containing block, after its opening brace and immediately before the code it explains. Keep the surrounding breathing room. Do not put a block comment above the selector when it describes the declarations inside it.
 - For a trivial CSS block with one declaration, keep the block compact and put a concise explanation at the end of that declaration line when a comment is useful: `margin: 0; /* Remove the browser margin. */`. Do not spend extra vertical space on a standalone comment for a one-property block.
 - Add a blank line after a CSS opening brace when the block has meaningful property groups. Keep a trivial one-property block compact:
 
   ```css
-  #overlay {
+  .notice-panel {
 
-  	background: #fff;
-  	color: #777;
+	position: absolute;
+	z-index: 1;
 
-  	padding: 10px;
-  	position: absolute;
-  	z-index: 1;
+	background-color: #ffffff;
+	color: #777777;
+
+	padding: 0.625rem;
   }
 
-  #overlay {
-	background: #fff;
+  .status-badge {
+	background-color: #ffffff;
   }
   ```
 
@@ -122,19 +125,20 @@ Use the applicable WordPress Coding Standards as a strict baseline for accessibi
 - Treat an HTML comment as its own logical child block. When a comment is inside an HTML parent or a PHP-controlled HTML region, leave a blank line after the parent opening tag before the comment and another blank line between the comment and the child it explains. Do not attach the comment directly to either boundary. A comment at the document or fragment root has no containing parent and does not need invented surrounding markup.
 
   ```css
-  @media(forced-colors: active) {
+  .orbit-card {
 
-	.orbit-card {
+	@media(forced-colors: active) {
 
-		border-color: CanvasText;
 		background-color: Canvas;
 		color: CanvasText;
-	}
 
-	.orbit-card__pulse {
+		border-color: CanvasText;
 
-		background-color: CanvasText;
-		box-shadow: none;
+		.orbit-card__pulse {
+
+			background-color: CanvasText;
+			box-shadow: none;
+		}
 	}
   }
   ```
@@ -299,11 +303,15 @@ Review the exact final code that will be shown, not the intended design or an ea
 - CSS functions and media-query or other at-rule conditions omit optional whitespace immediately inside parentheses, and the at-rule keyword touches its opening condition parenthesis. Reject padded forms such as `var( --color-olive )` and `@media ( max-width: 619px )`. Preserve spaces required for syntax or meaning, including property-colon spacing, comma-separated values, arithmetic operators, and media-query separators. This rule applies only to CSS; PHP, JavaScript, and other languages retain their strict spacing rules. Project tooling, indentation, breathing room, grouping, nesting, and comment rules still apply.
 - CSS comments describing declarations or child blocks are inside the containing selector or at-rule, not above it.
 - One-property CSS blocks use an end-of-line comment when a comment is useful; multi-property groups use a separate comment inside the block.
-- CSS nesting groups cohesive component concepts, does not mechanically mirror markup, and normally stays within two nesting levels; deeper nesting requires distinct nested concepts and confirmed syntax/tooling support.
+- Easy To Manage CSS Organization is followed: the root owns its base rules, ordinary component selectors remain flat, same-element `&.` variations own their extended descendants, and responsive sections appear together at the bottom of the component.
 - CSS class casing follows the project-aware BEM rule: verify whether the project is JavaScript-primary, whether the class maps to a JavaScript class, and whether the `__` and `--` delimiters are preserved before approving a selector.
 - CSS component and element rules use class selectors rather than tag selectors; any direct tag selector must be an intentional documented exception with its rationale inside the CSS block.
 - Native CSS nesting does not concatenate modifier or element names; reject selector-name concatenation when native CSS nesting is in use, and require explicit compound or descendant selectors instead.
-- Nested media queries are colocated with the selector they modify and do not mix root and child overrides in one wrapper.
+- CSS nesting and indentation do not mirror DOM or wrapper depth. Ordinary base descendants are not buried inside other element selectors.
+- Same-element variations are recognized by their structural `&.` selector rather than by naming conventions. Variation-owned descendants are nested inside the variation block, including inside responsive sections; ordinary base descendants remain outside it.
+- Component-owned media queries are grouped at the bottom of the root, contain all affected component levels for that condition, and contain no empty placeholders.
+- Width-based responsive conditions follow the project's direction and effective ranges: widest-to-narrowest for desktop-first or `max-width`, narrowest-to-widest for mobile-first or `min-width`, with cascade-sensitive overlaps preserved.
+- Cleanup removed only declarations proven unnecessary after inspecting markup, base styles, related styles, states, and variations. Intentional variation scaffolding was not deleted merely because no current call site was found.
 - JavaScript and PHP function-call spacing follows the exact WordPress form, including spaces inside parentheses and `} );` for multiline calls.
 - One- and two-parameter calls are not split unnecessarily; larger calls use one parameter per line.
 - Trailing commas in function argument lists are present only when target-language and target-version support is confirmed.

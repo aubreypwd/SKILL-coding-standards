@@ -83,7 +83,7 @@ body {
 
 Do not mirror the HTML tree with generic ancestors. Nest around a portable component concept.
 
-### Mixed component levels in one media query
+### Scattered component media queries
 
 ```css
 .booking-card {
@@ -91,23 +91,141 @@ Do not mirror the HTML tree with generic ancestors. Nest around a portable compo
 	display: grid;
 
 	@media(min-width: 48rem) {
-
 		grid-template-columns: 2fr 1fr;
-
-		.booking-card__hero {
-			grid-template-columns: 1fr;
-		}
 	}
 
 	.booking-card__hero {
 
 		display: grid;
 		grid-template-columns: auto 1fr;
+
+		@media(min-width: 48rem) {
+			grid-template-columns: 1fr;
+		}
 	}
 }
 ```
 
-Keep root responsive changes with the root and child responsive changes with the child.
+Do not scatter one component's responsive behavior through individual selectors. Put the responsive condition at the bottom of the component root and show every affected selector together.
+
+### Flattened variation ownership
+
+```css
+.booking-card {
+
+	display: grid;
+
+	&.booking-card--featured {
+		border-color: #c08b12;
+	}
+
+	&.booking-card--featured .booking-card__title {
+		color: #7a5600;
+	}
+}
+```
+
+The `&.` compound selector establishes a same-element variation. Nest all descendants extended by that variation inside its block instead of repeating the variation selector.
+
+### Empty responsive placeholder
+
+```css
+.booking-card {
+
+	display: grid;
+
+	@media(max-width: 48rem) {
+		/* Base styles already apply without an override. */
+	}
+}
+```
+
+Do not add empty media-query blocks merely to list every project breakpoint.
+
+### Variation inferred from naming instead of `&.`
+
+```css
+.booking-card {
+
+	display: grid;
+
+	.booking-card--featured {
+		border-color: #c08b12;
+	}
+}
+```
+
+This selector targets a descendant named `.booking-card--featured`; it does not extend the root booking card. A same-element variation uses `&.booking-card--featured`. The word `featured` and the `--` delimiter do not create the relationship.
+
+### Base element buried inside a variation
+
+```css
+.booking-card {
+
+	display: grid;
+
+	&.booking-card--featured {
+
+		.booking-card__title {
+			font-weight: 700;
+		}
+	}
+}
+```
+
+Do not move an ordinary base element into a variation merely because the variation also affects it. Keep the base title rule flat, then put only the featured override inside the variation.
+
+### Markup-depth indentation
+
+```css
+.booking-card {
+
+	.booking-card__content {
+		display: grid;
+	}
+
+		.booking-card__title {
+			font-weight: 700;
+		}
+}
+```
+
+Indentation must reflect CSS structure, not the current HTML wrapper depth. Keep ordinary component selectors at the same nesting level so moving markup does not require reformatting unrelated CSS.
+
+### Reversed desktop-first conditions
+
+```css
+.booking-card {
+
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+
+	@media(max-width: 40rem) {
+		grid-template-columns: 1fr;
+	}
+
+	@media(max-width: 64rem) {
+		gap: 0.75rem;
+	}
+}
+```
+
+In a desktop-first `max-width` component, order the wider boundary before the narrower boundary unless preserving a deliberate cascade requires otherwise.
+
+### Project-specific breakpoint assumptions
+
+```css
+.booking-card {
+
+	display: grid;
+
+	@media(--mobile) {
+		grid-template-columns: 1fr;
+	}
+}
+```
+
+Do not invent or assume a named alias that the project has not defined. Use the project's established custom media or its ordinary media-query syntax.
 
 ### Trailing blank line before a closing brace
 

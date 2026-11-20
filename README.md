@@ -186,17 +186,29 @@ The canonical markup and CSS describe the same component:
 	border: 0;
 	padding: 0.75rem 1rem;
 
+	.booking-button__icon {
+
+		height: 1rem;
+		width: 1rem;
+	}
+
 	&.booking-button--gold {
 
 		/* Keep the gold action readable against its surrounding surface. */
 
 		background-color: #c08b12;
+
+		.booking-button__icon {
+			color: #1f2937;
+		}
 	}
 
-	.booking-button__icon {
+	@media(max-width: 619px) {
 
-		height: 1rem;
-		width: 1rem;
+		.booking-button__icon {
+			height: 0.875rem;
+			width: 0.875rem;
+		}
 	}
 }
 ```
@@ -207,11 +219,77 @@ CSS underscores are allowed when an existing project convention uses them, but t
 
 Use class selectors for component styling. Reserve direct tag selectors for intentional global defaults, resets, browser normalization, or unavoidable third-party markup, and explain each exception inside the CSS block.
 
-### CSS property order and nesting
+### Easy To Manage CSS Organization
 
-Group CSS properties by function, then alphabetize within each group. Keep a component's declarations and its root responsive changes together before nested child concepts. Place each child or state's media-query changes with that child or state.
+Organize component CSS so its normal behavior, variations, and responsive behavior can be understood by reading the file from top to bottom:
 
-Native CSS nesting is appropriate only when the project's target and tooling support it. Do not nest generic ancestors merely because the HTML is nested that way.
+1. Start with the component root and its declarations.
+2. Keep ordinary component elements and descendants flat beneath the root, even when the HTML has more nesting levels.
+3. Nest a variation when the component root receives an additional class, expressed structurally as `&.booking-card--featured`. Recognize existing variations by this same-element structure rather than by a naming keyword, but use BEM modifiers in newly authored canonical code.
+4. Keep declarations and descendant overrides owned by that variation inside its `&.` block.
+5. Put the component's media queries together at the bottom of the root. Inside each query, include only selectors that change in that range.
+6. Order max-width queries from widest to narrowest. Order min-width queries from narrowest to widest. Preserve intentional bounded or overlapping ranges according to their effective range and cascade behavior.
+7. Use a project's established custom-media names when they exist. Do not invent project-specific breakpoint names for generic code or assume another project has the same aliases.
+8. Omit empty selectors, empty media queries, no-op overrides, and declarations proven unnecessary. Retain intentional variation CSS even when its current markup call site is absent unless removal is explicitly in scope.
+
+```css
+.booking-card {
+
+	display: grid;
+	gap: 1rem;
+
+	background-color: #ffffff;
+	color: #1f2937;
+
+	.booking-card__title {
+		font-size: 1.5rem;
+	}
+
+	.booking-card__details {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.booking-card__action {
+		justify-self: start;
+	}
+
+	&.booking-card--featured {
+
+		border-color: #c08b12;
+
+		.booking-card__title {
+			color: #8a5c00;
+		}
+
+		.booking-card__action {
+			justify-self: stretch;
+		}
+	}
+
+	@media(max-width: 991px) {
+
+		grid-template-columns: 1fr;
+
+		.booking-card__details {
+			gap: 0.5rem;
+		}
+	}
+
+	@media(max-width: 767px) {
+
+		.booking-card__action {
+			width: 100%;
+		}
+	}
+}
+```
+
+The visual indentation of ordinary selectors must not imitate the markup hierarchy. For example, `.booking-card__action` remains aligned with `.booking-card__details` even if the action is nested inside the details element in HTML. This keeps future markup movement from forcing cosmetic CSS reindentation.
+
+Native CSS nesting is required for the preferred `&.` variation form. When a project's supported browsers or tooling cannot compile native nesting, preserve the same conceptual order with explicit selectors instead of introducing unsupported syntax.
+
+The full decision rules and many representative fixtures are in [`references/good-examples.md`](references/good-examples.md). Common failures and counterexamples are in [`references/bad-examples.md`](references/bad-examples.md).
 
 ### Compact CSS parentheses
 
@@ -261,8 +339,11 @@ Good:
 Keep a one-property block compact. Put a useful explanation at the end of the declaration instead of creating a separate vertical comment block.
 
 ```css
-.booking-button__icon {
-	margin: 0; /* Remove the browser margin from this compact icon block. */
+.booking-button {
+
+	.booking-button__icon {
+		margin: 0; /* Remove the browser margin from this compact icon block. */
+	}
 }
 ```
 
